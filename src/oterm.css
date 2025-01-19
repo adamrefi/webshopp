@@ -1,0 +1,205 @@
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header */
+.oterm-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  padding: 10px 20px;
+  background-color: grey;
+  color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Hamburger Menu Button */
+.oterm-nav-toggle {
+  font-size: 30px;
+  cursor: pointer;
+  color: white;
+  position: absolute;
+  left: 20px;
+}
+
+/* Side Menu */
+.oterm-side-menu {
+  position: fixed;
+  top: 0;
+  left: -300px;
+  width: 250px;
+  height: 100%;
+  background-color: white;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: left 0.3s ease-in-out;
+  padding: 20px;
+  z-index: 1001;
+}
+
+.oterm-side-menu.active {
+  left: 0;
+}
+
+.oterm-menu-item {
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.oterm-menu-item a {
+  text-decoration: none;
+  color: #333;
+  display: block;
+  padding: 10px;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.oterm-menu-item a:hover {
+  background-color: #f0f0f0;
+}
+
+.oterm-close-btn {
+  font-size: 24px;
+  color: #333;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+/* Hero Section */
+.oterm-hero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  background-color: #f5f5f5;
+  color: black;
+  text-align: center;
+  margin-top: 60px;
+}
+
+.oterm-hero h1 {
+  font-size: 36px;
+  margin: 0;
+}
+
+/* Product List */
+.oterm-product-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 20px;
+}
+
+.oterm-product-item {
+  background-color: white;
+  padding: 15px;
+  width: 200px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.oterm-product-item:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+.oterm-product-item img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.oterm-product-item h3 {
+  margin-top: 10px;
+  font-size: 18px;
+  color: #333;
+}
+
+.oterm-product-item p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.oterm-price {
+  font-weight: bold;
+  margin-top: 10px;
+  color: #333;
+}
+
+/* Logo */
+.oterm-logo {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Footer */
+.oterm-footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  margin-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .oterm-hero h1 {
+    font-size: 28px;
+  }
+
+  .oterm-product-item {
+    width: 150px;
+  }
+}
+
+@media (max-width: 576px) {
+  .oterm-side-menu {
+    width: 200px;
+  }
+
+  .oterm-menu-item {
+    font-size: 16px;
+  }
+
+  /* Category Buttons */
+.oterm-category-buttons {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.oterm-button {
+  background-color: #333;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+.oterm-button:hover {
+  background-color: #555;
+}
+
+.oterm-button:active {
+  background-color: #777;
+}
+
+}
