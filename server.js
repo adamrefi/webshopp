@@ -43,6 +43,15 @@ app.get('/products', (req, res) => {
   });
 });
 
+app.get('/termekekk', (req, res) => {
+  const query = 'SELECT * FROM termekek';
+  db.query(query, (err, results) => {
+    console.log('Lekért adatok:', results); // Ellenőrzéshez
+    res.json(results);
+  });
+});
+
+
 // Új termék mentése
 app.post('/usertermekek', (req, res) => {
   const { kategoriaId, ar, nev, leiras, meret, imageUrl, images } = req.body;
@@ -175,6 +184,7 @@ app.post('/termekek/create', (req, res) => {
 });
 
 
+
 app.get('/termekek', (req, res) => {
   const query = 'SELECT * FROM termekek';
   db.query(query, (err, results) => {
@@ -188,6 +198,21 @@ app.get('/termekek', (req, res) => {
   });
 });
 
+app.put('/termekek/:id', (req, res) => {
+  const { id } = req.params;
+  const { ar, termekleiras } = req.body;
+  
+  const query = 'UPDATE termekek SET ar = ?, termekleiras = ? WHERE id = ?';
+  
+  db.query(query, [ar, termekleiras, id], (err, result) => {
+    if (err) {
+      console.log('Hiba a termék frissítésénél:', err);
+      res.status(500).json({ error: 'Hiba a frissítés során' });
+      return;
+    }
+    res.json({ message: 'Termék sikeresen frissítve' });
+  });
+});
 
 app.delete('/termekek/:id', (req, res) => {
   const productId = req.params.id;
@@ -209,7 +234,6 @@ const port = 5000;
 app.listen(port, () => {
   console.log(`Server fut a ${port} porton`);
 });
-
 
 
 

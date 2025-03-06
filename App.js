@@ -13,6 +13,9 @@ import ProductDetail from './ProductDetail';
 import Shipping from './shipping';
 import Termekeink from './termekeink';
 import Tadmin from './admin/tadmin';
+import Termadmin from './admin/termadmin';
+
+// In your routes:
 
 const App = () => {
   return (
@@ -31,6 +34,8 @@ const App = () => {
         <Route path="/shipping" element={< Shipping />} />
         <Route path="/termek/:id" element={<Termekeink />} />
         <Route path="/tadmin" element={<Tadmin />} />
+        <Route path="/termadmin" element={<Termadmin />} />
+        
 
         
       </Routes>
