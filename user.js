@@ -224,6 +224,23 @@ export default function User() {
               >
                 Új termék feltöltése
               </Button>
+
+              <Button
+                component={Link}
+                to="/termadmin"
+                sx={{
+                  color: '#fff',
+                  border: '1px solid #fff',
+                  borderRadius: '5px',
+                  padding: '5px 10px',
+                  marginRight: '10px',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  }
+                }}
+              >
+                Termékek szerkesztése
+              </Button>
               <Button component={Link} to="/sign" sx={{ color: 'white', border: '1px solid white' }}>
                 Sign In
               </Button>

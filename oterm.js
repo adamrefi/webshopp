@@ -145,14 +145,15 @@ import bezspull from './bezspull.png';
     const handleCartClick = () => {
       navigate('/kosar');
     };
-
-    return (
-      <div style={{
-        backgroundColor: darkMode ? '#555' : '#f5f5f5',
-        color: darkMode ? 'white' : 'black',
-        minHeight: '100vh',
-        paddingBottom: '100px'
-      }}>
+      return (
+        <div style={{
+          backgroundColor: darkMode ? '#333' : '#f5f5f5',
+          backgroundImage: darkMode ? 'radial-gradient(#444 1px, transparent 1px)' : 'radial-gradient(#e0e0e0 1px, transparent 1px)',
+          backgroundSize: '20px 20px',
+          color: darkMode ? 'white' : 'black',
+          minHeight: '100vh',
+          paddingBottom: '100px'
+        }}>
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -388,15 +389,16 @@ import bezspull from './bezspull.png';
             {filteredProducts.map((product) => (
               <Grid item xs={12} sm={6} md={4} lg={3} key={`product-${product.id}`}>
                 <Link to={`/termek/${product.id}`} style={{ textDecoration: 'none' }}>
-                  <Card sx={{ 
-                    height: '500px',
-                    backgroundColor: darkMode ? '#333' : 'white',
-                    color: darkMode ? 'white' : 'black',
-                    transition: 'transform 0.2s',
-                    '&:hover': {
-                      transform: 'scale(1.02)'
-                    }
-                  }}>
+                <Card sx={{ 
+                      height: '500px',
+                      backgroundColor: darkMode ? '#333' : 'white',
+                      color: darkMode ? 'white' : 'black',
+                      transition: 'transform 0.2s',
+                      border: '1px solid #fff',
+                      '&:hover': {
+                        transform: 'scale(1.02)'
+                      }
+                    }}>
                     <Box sx={{ position: 'relative', height: '350px' }}>
                       <CardMedia
                         component="img"
