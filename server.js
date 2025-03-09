@@ -123,6 +123,19 @@ app.post('/vevo/create', (req, res) => {
   });
 });
 
+app.get('/orders/:userId', (req, res) => {
+  const userId = req.params.userId;
+  const query = 'SELECT * FROM rendeles WHERE vevo_id = ?';
+  
+  db.query(query, [userId], (err, results) => {
+    if (err) {
+      console.log('Database error:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    res.json(results);
+  });
+});
+
 app.post('/orders/create', (req, res) => {
   const { termek, statusz, mennyiseg, vevo_id } = req.body;
   
@@ -226,6 +239,52 @@ app.delete('/termekek/:id', (req, res) => {
       return;
     }
     res.json({ message: 'Termék sikeresen törölve' });
+  });
+});
+
+// Felhasználók lekérése
+app.get('/users', (req, res) => {
+  const query = 'SELECT * FROM user';
+  db.query(query, (err, results) => {
+    if (err) {
+      console.log('Hiba a felhasználók lekérésénél:', err);
+      res.status(500).json({ error: 'Adatbázis hiba' });
+      return;
+    }
+    res.json(results);
+  });
+});
+
+// Felhasználó törlése
+app.delete('/users/:id', (req, res) => {
+  const userId = req.params.id;
+  const query = 'DELETE FROM user WHERE f_azonosito = ?';
+  
+  db.query(query, [userId], (err, result) => {
+    if (err) {
+      console.log('Hiba a felhasználó törlésénél:', err);
+      res.status(500).json({ error: 'Hiba a törlés során' });
+      return;
+    }
+    res.json({ message: 'Felhasználó sikeresen törölve' });
+  });
+});
+app.get('/user/:id', (req, res) => {
+  const userId = req.params.id;
+  console.log("Fetching user data for ID:", userId);
+  
+  const query = 'SELECT felhasznalonev, email FROM user WHERE f_azonosito = ?';
+  db.query(query, [userId], (err, results) => {
+    if (err) {
+      console.log('Database error:', err);
+      return res.status(500).json({ error: 'Database error' });
+    }
+    console.log("Query results:", results);
+    if (results && results.length > 0) {
+      res.json(results[0]);
+    } else {
+      res.status(404).json({ error: 'User not found' });
+    }
   });
 });
 

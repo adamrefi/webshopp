@@ -1,100 +1,94 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const mysql = require('mysql2'); // Az adatbázis kapcsolat
+import express from 'express';
+import mysql from 'mysql2/promise'; 
+import bodyParser from 'body-parser';
+import cors from 'cors';
+import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
-const PORT = 5000;
+const PORT = process.env.PORT || 4000;
 
-// Middleware a JSON-adatok kezeléséhez
 app.use(bodyParser.json());
 app.use(cors({
-  origin: 'http://localhost:3000', // A frontend URL-je
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type'],
-  credentials: true, // Fontos, ha session-t használunk
+  origin: 'http://localhost:3000',
+  credentials: true,
 }));
 
-// Adatbázis kapcsolat beállítása
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'webshoppp',
-  password: 'Premo900',
-  database: 'webshoppp',
+// 📌 Adatbázis kapcsolat
+const db = await mysql.createConnection({
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'webshoppp',
+  password: process.env.DB_PASS || 'Premo900',
+  database: process.env.DB_NAME || 'webshoppp',
 });
 
-db.connect((err) => {
-  if (err) {
-    console.error('Hiba az adatbázishoz való kapcsolódás során:', err.message);
-    return;
-  }
-  console.log('Sikeresen csatlakoztál az adatbázishoz!');
-});
+console.log('✅ Connected to MySQL Database');
 
-// Regisztrációs endpoint
-app.post('/register', (req, res) => {
-  const { email, password } = req.body;
-
-  if (!email || !password) {
+// 🔹 Regisztráció
+app.post('/register', async (req, res) => {
+  const { name, email, password } = req.body;
+  if (!name || !email || !password) {
     return res.status(400).json({ error: 'Hiányzó adatok!' });
   }
 
-  // Ellenőrizzük, hogy létezik-e már a felhasználó
-  db.query('SELECT * FROM user WHERE email = ?', [email], (err, results) => {
-    if (err) {
-      console.error('Hiba a lekérdezés során:', err.message);
-      return res.status(500).json({ error: 'Adatbázis hiba!' });
+  try {
+    const [users] = await db.execute('SELECT * FROM user WHERE email = ?', [email]);
+    if (users.length > 0) {
+      return res.status(400).json({ error: 'Ez az email már regisztrálva van!' });
     }
 
-    if (results.length > 0) {
-      return res.status(400).json({ error: 'Ez az e-mail már regisztrálva van!' });
-    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await db.execute('INSERT INTO user (felhasznalonev, email, jelszo) VALUES (?, ?, ?)', [name, email, hashedPassword]);
 
-    // Felhasználó hozzáadása az adatbázishoz, jelszó titkosítása nélkül
-    const sql = 'INSERT INTO user (email, jelszo) VALUES (?, ?)';
-    db.query(sql, [email, password], (err, result) => {
-      if (err) {
-        console.error('Hiba az adatbázis művelet során:', err.message);
-        return res.status(500).json({ error: 'Adatbázis hiba!' });
+    console.log(`✅ Felhasználó regisztrálva: ${email}`);
+    res.status(201).json({ message: 'Sikeres regisztráció!' });
+  } catch (error) {
+    console.error('🚨 Hiba regisztráció közben:', error.message);
+    res.status(500).json({ error: 'Adatbázis hiba!' });
+  }
+});
+
+// 🔹 Bejelentkezés
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  
+  console.log('Login attempt received:', { email, password });
+
+  try {
+      const [rows] = await db.execute('SELECT * FROM user WHERE email = ?', [email]);
+      console.log('Database query result:', rows);
+
+      if (rows.length === 0) {
+          return res.status(400).json({ error: 'Felhasználó nem található!' });
       }
-      res.status(201).json({ message: 'Sikeres regisztráció!' });
-    });
-  });
-});
 
-// Bejelentkezési endpoint
-app.post('/login', (req, res) => {
-  const { email, password } = req.body;
+      const user = rows[0];
+      const isMatch = await bcrypt.compare(password, user.jelszo);
 
-  if (!email || !password) {
-    return res.status(400).json({ error: 'Hiányzó adatok!' });
+      if (!isMatch) {
+          return res.status(400).json({ error: 'Hibás jelszó!' });
+      }
+
+      if (isMatch) {
+        return res.json({
+          success: true,
+          message: 'Sikeres bejelentkezés!',
+          user: {
+            username: user.felhasznalonev,
+            email: user.email,
+            f_azonosito: user.f_azonosito
+          }
+        });
+      }
+    
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ error: 'Server error' });
   }
-
-  // Ellenőrizzük, hogy létezik-e a felhasználó az adatbázisban
-  db.query('SELECT * FROM user WHERE email = ?', [email], (err, results) => {
-    if (err) {
-      console.error('Hiba a lekérdezés során:', err.message);
-      return res.status(500).json({ error: 'Adatbázis hiba!' });
-    }
-
-    if (results.length === 0) {
-      return res.status(400).json({ error: 'Felhasználó nem található!' });
-    }
-
-    // A felhasználó megtalálva, ellenőrizzük a jelszót
-    const user = results[0];
-
-    // A beírt jelszó összehasonlítása a tárolt jelszóval
-    if (user.jelszo !== password) {
-      return res.status(400).json({ error: 'Hibás jelszó!' });
-    }
-
-    // Ha a jelszó helyes, visszaküldünk egy sikeres üzenetet
-    res.status(200).json({ message: 'Sikeres bejelentkezés!', user: { id: user.sz_azonosito, email: user.email } });
-  });
 });
 
-// Szerver indítása
 app.listen(PORT, () => {
-  console.log(`Szerver fut a következő porton: ${PORT}`);
+  console.log(`🚀 Server running on port: ${PORT}`);
 });

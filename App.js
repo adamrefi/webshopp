@@ -14,6 +14,12 @@ import Shipping from './shipping';
 import Termekeink from './termekeink';
 import Tadmin from './admin/tadmin';
 import Termadmin from './admin/termadmin';
+import Fadmin from './admin/fadmin';
+import Fiokom from './fiokom';
+
+// Add this to your Routes:
+
+
 
 // In your routes:
 
@@ -35,6 +41,8 @@ const App = () => {
         <Route path="/termek/:id" element={<Termekeink />} />
         <Route path="/tadmin" element={<Tadmin />} />
         <Route path="/termadmin" element={<Termadmin />} />
+        <Route path="/fadmin" element={<Fadmin />} />
+        <Route path="/fiokom" element={<Fiokom />} />
         
 
         
