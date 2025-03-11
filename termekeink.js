@@ -1,19 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import Menu from './menu2';
-
-import CloseIcon from '@mui/icons-material/Close';
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
-  Box,
   Container,
+  Box,
   Typography,
-  Card,
-  CardContent,
   Button,
+  Card,
   CardMedia,
+  CardContent,
   IconButton,
-  Grid,
-  Divider,
   FormGroup,
   FormControlLabel,
   Switch,
@@ -23,17 +18,13 @@ import {
   ClickAwayListener,
   MenuList,
   MenuItem,
-  Badge
+  Grid,
+  Badge,
 } from '@mui/material';
+import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useNavigate } from 'react-router-dom';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-// Add these imports at the top
-
-
+import Footer from './footer';
 const imageMap = {};
 const requireContext = require.context('./kep', false, /\.(png|jpe?g)$/);
 
@@ -43,32 +34,39 @@ requireContext.keys().forEach((key) => {
 });
 
 
-
-export default function Kosar() {
+import Menu from './menu2';
+export default function TermekReszletek() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [product, setProduct] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [darkMode, setDarkMode] = useState(true);
+  const [loginAlert, setLoginAlert] = useState(false);
   const [sideMenuActive, setSideMenuActive] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [open, setOpen] = useState(false);
-  const anchorRef = React.useRef(null);
-  const [deleteAlert, setDeleteAlert] = useState(false);
-  const [itemToDelete, setItemToDelete] = useState(null);
-  const navigate = useNavigate();
-  const [userName, setUserName] = useState('');
-  const [quantityAlert, setQuantityAlert] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
-  const [quantityMessage, setQuantityMessage] = useState('');
-  const [cartItems, setCartItems] = useState([]);
-  const cartItemCount = cartItems.reduce((total, item) => total + item.mennyiseg, 0);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [userName, setUserName] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [products, setProducts] = useState([]);
 
-  useEffect(() => {    const items = JSON.parse(localStorage.getItem('cartItems')) || [];
-    setCartItems(items);
-  }, []);
-
+  const filteredProducts = selectedCategory
+    ? products.filter(product => product.kategoriaId === selectedCategory)
+    : products;
   useEffect(() => {
-    const newTotal = cartItems.reduce((sum, item) => sum + (item.ar * item.mennyiseg), 0);
-    setTotalPrice(newTotal);
-  }, [cartItems]);
+    const fetchProduct = async () => {
+      try {
+        const response = await fetch(`http://localhost:5000/termekekk/${id}`);
+        const data = await response.json();
+        setProduct(data);
+      } catch (error) {
+        console.log('Hiba a termék betöltésekor:', error);
+      }
+    };
+    fetchProduct();
+  }, [id]);
+
 
   useEffect(() => {
     const checkLoginStatus = () => {
@@ -82,44 +80,6 @@ export default function Kosar() {
     checkLoginStatus();
   }, []);
 
-  const handleQuantityChange = (id, increase) => {
-    const updatedItems = cartItems.map(item => {
-      if (item.id === id) {
-        const newQuantity = increase ? item.mennyiseg + 1 : Math.max(1, item.mennyiseg - 1);
-        setQuantityMessage(increase ? 'Mennyiség növelve' : 'Mennyiség csökkentve');
-        setQuantityAlert(true);
-        setTimeout(() => setQuantityAlert(false), 1500);
-        return {
-          ...item,
-          mennyiseg: newQuantity
-        };
-      }
-      return item;
-    });
-    setCartItems(updatedItems);
-    localStorage.setItem('cartItems', JSON.stringify(updatedItems));
-  };
-
-  const handleRemoveItem = (id) => {
-    setItemToDelete(id);
-    setDeleteAlert(true);
-  };
-
-  const confirmDelete = () => {
-    const updatedItems = cartItems.filter(item => item.id !== itemToDelete);
-    setCartItems(updatedItems);
-    localStorage.setItem('cartItems', JSON.stringify(updatedItems));
-    setDeleteAlert(false);
-  };
-
-    const handleCheckout = () => {
-      navigate('/shipping', {
-        state: {
-          cartItems: cartItems,
-          totalPrice: totalPrice
-        }
-      });
-    };
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
@@ -140,11 +100,13 @@ export default function Kosar() {
     }
   };
 
+  
+
   const handleLogout = () => {
     setShowLogoutAlert(true);
     setOpen(false);
   };
-  
+
   const confirmLogout = () => {
     localStorage.removeItem('user');
     setIsLoggedIn(false);
@@ -160,11 +122,43 @@ export default function Kosar() {
     navigate('/kosar');
   };
 
+  const handleAddToCart = () => {
+    const userData = localStorage.getItem('user');
+    if (!userData) {
+      setLoginAlert(true);
+      setTimeout(() => {
+        setLoginAlert(false);
+        navigate('/sign');
+      }, 2000);
+      return;
+    }
+  
+    const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+    const existingItem = cartItems.find(item => item.id === product.id);
+  
+    if (existingItem) {
+      existingItem.mennyiseg += 1;
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    } else {
+      const newItem = {
+        ...product,
+        mennyiseg: 1
+      };
+      cartItems.push(newItem);
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    }
+    
+    setCartAlert(true); // Csak beállítjuk true-ra
+  };
+
+  if (!product) return <div>Loading...</div>;
+
   return (
     <div style={{
       backgroundColor: darkMode ? '#555' : '#f5f5f5',
       color: darkMode ? 'white' : 'black',
       minHeight: '100vh',
+      paddingBottom: '100px'
     }}>
       <div style={{
         display: 'flex',
@@ -302,7 +296,9 @@ export default function Kosar() {
             </>
           )}
         </Box>
-      </div>      <Box sx={{
+      </div>
+
+      <Box sx={{
         position: 'fixed',
         top: 0,
         left: sideMenuActive ? 0 : '-250px',
@@ -329,107 +325,118 @@ export default function Kosar() {
         />
       </FormGroup>
 
-      <Container maxWidth="lg" sx={{ py: 4 }}>
-        <Typography variant="h4" gutterBottom>
-          Kosár tartalma
-        </Typography>
-
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={8}>
-            {cartItems.map((item) => (
-              <Card key={item.id} sx={{ 
-                mb: 2,
-                backgroundColor: darkMode ? '#333' : '#fff',
-                color: darkMode ? 'white' : 'black'
-              }}>
-                <CardContent>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                    <img 
-  src={imageMap[item.imageUrl] || item.imageUrl} 
-  alt={item.nev} 
-  style={{ width: 100, height: 100, objectFit: 'contain' }}
-/>
-
-                      <Typography variant="h6">{item.nev}</Typography>
-                    </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-                      <IconButton 
-                        onClick={() => handleQuantityChange(item.id, false)}
-                        size="small"
-                        sx={{ color: darkMode ? 'white' : 'inherit' }}
-                      >
-                        <RemoveIcon />
-                      </IconButton>
-                      <Typography>{item.mennyiseg}</Typography>
-                      <IconButton 
-                        onClick={() => handleQuantityChange(item.id, true)}
-                        size="small"
-                        sx={{ color: darkMode ? 'white' : 'inherit' }}
-                      >
-                        <AddIcon />
-                      </IconButton>
-                      <Typography sx={{ minWidth: 100 }}>
-                        {(item.ar * item.mennyiseg).toLocaleString()} Ft
-                      </Typography>
-                      <IconButton 
-                        onClick={() => handleRemoveItem(item.id)}
-                        color="error"
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </Box>
-                  </Box>
-                </CardContent>
-              </Card>
-            ))}
-          </Grid>
-
-          <Grid item xs={12} md={4}>
-            <Card sx={{
-              backgroundColor: darkMode ? '#333' : '#fff',
-              color: darkMode ? 'white' : 'black'
+      <Container maxWidth="lg" sx={{ mt: 8, mb: 12 }}>
+        <Card sx={{ 
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          backgroundColor: darkMode ? '#333' : 'white',
+          color: darkMode ? 'white' : 'black',
+          borderRadius: '16px',
+          overflow: 'hidden',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
+        }}>
+          <Box sx={{ 
+            flex: '1.5',
+            p: 3,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 3
+          }}>
+            <Box sx={{
+              width: '100%',
+              height: '500px',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
             }}>
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  Összegzés
-                </Typography>
-                <Divider sx={{ my: 2 }} />
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                  <Typography>Részösszeg:</Typography>
-                  <Typography>{totalPrice.toLocaleString()} Ft</Typography>
-                </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                  <Typography>Szállítási költség:</Typography>
-                  <Typography>1590 Ft</Typography>
-                </Box>
-                <Divider sx={{ my: 2 }} />
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
-                  <Typography variant="h6">Végösszeg:</Typography>
-                  <Typography variant="h6">
-                    {(totalPrice + 1590).toLocaleString()} Ft
-                  </Typography>
-                </Box>
-                <Button 
-                  variant="contained" 
-                  fullWidth 
-                  size="large"
-                  onClick={handleCheckout}
-                  sx={{ 
-                    mt: 2,
-                    backgroundColor: darkMode ? '#555' : 'primary.main',
-                    '&:hover': {
-                      backgroundColor: darkMode ? '#666' : 'primary.dark',
-                    }
-                  }}
-                >
-                  Megrendelés
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-        </Grid>
-        {deleteAlert && (
+                <Grid container spacing={3}>
+  {filteredProducts.map((product) => (
+    <Grid item xs={12} sm={6} md={4} lg={3} key={product.id}>
+      <Card sx={{ height: '500px', backgroundColor: darkMode ? '#333' : 'white' }}>
+        <Box sx={{ position: 'relative', height: '350px' }}>
+          <CardMedia
+            component="img"
+            sx={{ 
+              height: '100%',
+              width: '100%',
+              objectFit: 'contain'
+            }}
+            image={imageMap[product.imageUrl]}
+            alt={product.nev}
+          />
+        </Box>
+        <CardContent>
+          {/* Rest of your card content */}
+        </CardContent>
+      </Card>
+    </Grid>
+  ))}
+</Grid>
+            </Box>
+          </Box>
+
+          <Box sx={{ 
+            flex: '1',
+            p: 4,
+            backgroundColor: darkMode ? '#444' : '#f8f8f8',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 3
+          }}>
+            <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+              {product.nev}
+            </Typography>
+            
+            <Typography variant="h5" sx={{ 
+              color: darkMode ? '#90caf9' : '#1976d2',
+              fontWeight: 'bold'
+            }}>
+              {product.ar} Ft
+            </Typography>
+
+            <Typography variant="body1" sx={{ 
+              backgroundColor: darkMode ? '#333' : '#fff',
+              p: 2,
+              borderRadius: '8px',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+            }}>
+              {product.termekleiras}
+            </Typography>
+
+            <Box sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 2,
+              p: 2,
+              backgroundColor: darkMode ? '#333' : '#fff',
+              borderRadius: '8px'
+            }}>
+              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                Kategória:
+              </Typography>
+              <Typography variant="body1">
+                {product.kategoria}
+              </Typography>
+            </Box>
+
+            <Button 
+              variant="contained"
+              onClick={handleAddToCart}
+              sx={{ 
+                mt: 'auto',
+                py: 2,
+                backgroundColor: darkMode ? '#90caf9' : '#1976d2',
+                '&:hover': {
+                  backgroundColor: darkMode ? '#42a5f5' : '#1565c0',
+                }
+              }}
+            >
+              Kosárba
+            </Button>
+          </Box>
+        </Card>
+      </Container>
+      {showAlert && (
   <Box
     sx={{
       position: 'fixed',
@@ -473,7 +480,7 @@ export default function Kosar() {
           left: 0,
           right: 0,
           height: '4px',
-          background: 'linear-gradient(90deg, #FF5252, #FF1744)',
+          background: 'linear-gradient(90deg, #00C853, #B2FF59)',
           animation: 'loadingBar 2s ease-in-out',
           '@keyframes loadingBar': {
             '0%': { width: '0%' },
@@ -489,18 +496,16 @@ export default function Kosar() {
               fontWeight: 600,
               mb: 1,
               background: darkMode 
-                ? 'linear-gradient(45deg, #FF5252, #FF1744)' 
-                : 'linear-gradient(45deg, #D32F2F, #C62828)',
+                ? 'linear-gradient(45deg, #90caf9, #42a5f5)' 
+                : 'linear-gradient(45deg, #1976d2, #1565c0)',
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
             }}
           >
-            Termék törlése
+            Sikeres hozzáadás!
           </Typography>
-          <Typography variant="body1" sx={{ color: darkMode ? '#aaa' : '#666' }}>
-            Biztosan törölni szeretnéd ezt a terméket a kosárból?
-          </Typography>
+        
         </Box>
         <Box 
           sx={{ 
@@ -510,7 +515,7 @@ export default function Kosar() {
           }}
         >
           <Button
-            onClick={() => setDeleteAlert(false)}
+            onClick={() => setShowAlert(false)}
             sx={{
               flex: 1,
               py: 1.5,
@@ -524,17 +529,17 @@ export default function Kosar() {
               }
             }}
           >
-            Mégse
+            Vásárlás folytatása
           </Button>
           <Button
-            onClick={confirmDelete}
+            onClick={() => navigate('/kosar')}
             sx={{
               flex: 1,
               py: 1.5,
               borderRadius: '12px',
               background: darkMode 
-                ? 'linear-gradient(45deg, #FF5252, #FF1744)' 
-                : 'linear-gradient(45deg, #D32F2F, #C62828)',
+                ? 'linear-gradient(45deg, #90caf9, #42a5f5)' 
+                : 'linear-gradient(45deg, #1976d2, #1565c0)',
               color: '#fff',
               transition: 'all 0.2s ease',
               '&:hover': {
@@ -543,40 +548,48 @@ export default function Kosar() {
               }
             }}
           >
-            Törlés
+            Rendelés leadása
           </Button>
         </Box>
       </CardContent>
     </Card>
   </Box>
 )}
-{quantityAlert && (
+
+{cartAlert && (
   <Box
     sx={{
       position: 'fixed',
-      bottom: '2rem',
-      right: '2rem',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
       zIndex: 1400,
-      animation: 'slideIn 0.3s ease-out',
-      '@keyframes slideIn': {
+      animation: 'popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+      '@keyframes popIn': {
         '0%': {
           opacity: 0,
-          transform: 'translateX(100%)',
+          transform: 'translate(-50%, -50%) scale(0.5)',
+        },
+        '50%': {
+          transform: 'translate(-50%, -50%) scale(1.05)',
         },
         '100%': {
           opacity: 1,
-          transform: 'translateX(0)',
+          transform: 'translate(-50%, -50%) scale(1)',
         },
       },
     }}
   >
     <Card
       sx={{
+        minWidth: 350,
         backgroundColor: darkMode ? 'rgba(45, 45, 45, 0.95)' : 'rgba(255, 255, 255, 0.95)',
         backdropFilter: 'blur(10px)',
         color: darkMode ? '#fff' : '#000',
-        boxShadow: '0 4px 20px rgba(0,0,0,0.2)',
-        borderRadius: '12px',
+        boxShadow: darkMode 
+          ? '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)' 
+          : '0 8px 32px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)',
+        borderRadius: '20px',
         overflow: 'hidden',
       }}
     >
@@ -586,30 +599,84 @@ export default function Kosar() {
           top: 0,
           left: 0,
           right: 0,
-          height: '3px',
-          background: 'linear-gradient(90deg, #64B5F6, #2196F3)',
-          animation: 'loadingBar 1.5s ease-in-out',
+          height: '4px',
+          background: 'linear-gradient(90deg, #00C853, #B2FF59)',
+          animation: 'loadingBar 2s ease-in-out',
           '@keyframes loadingBar': {
             '0%': { width: '0%' },
             '100%': { width: '100%' }
           }
         }}
       />
-      <CardContent sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-        <Typography 
-          variant="body1" 
+      <CardContent sx={{ p: 4 }}>
+        <Box sx={{ textAlign: 'center', mb: 3 }}>
+          <Typography 
+            variant="h5" 
+            sx={{ 
+              fontWeight: 600,
+              mb: 1,
+              background: darkMode 
+                ? 'linear-gradient(45deg, #90caf9, #42a5f5)' 
+                : 'linear-gradient(45deg, #1976d2, #1565c0)',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+            }}
+          >
+            Sikeres hozzáadás!
+          </Typography>
+          <Typography variant="body1" sx={{ color: darkMode ? '#aaa' : '#666' }}>
+            A termék sikeresen a kosárba került
+          </Typography>
+        </Box>
+        <Box 
           sx={{ 
-            fontWeight: 500,
-            background: darkMode 
-              ? 'linear-gradient(45deg, #64B5F6, #2196F3)' 
-              : 'linear-gradient(45deg, #1976d2, #1565c0)',
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
+            display: 'flex', 
+            gap: 2,
+            justifyContent: 'space-between'
           }}
         >
-          {quantityMessage}
-        </Typography>
+          <Button
+            onClick={() => setCartAlert(false)}
+            sx={{
+              flex: 1,
+              py: 1.5,
+              borderRadius: '12px',
+              backgroundColor: darkMode ? 'rgba(144, 202, 249, 0.1)' : 'rgba(25, 118, 210, 0.1)',
+              color: darkMode ? '#90caf9' : '#1976d2',
+              transition: 'all 0.2s ease',
+              '&:hover': {
+                backgroundColor: darkMode ? 'rgba(144, 202, 249, 0.2)' : 'rgba(25, 118, 210, 0.2)',
+                transform: 'translateY(-2px)',
+              }
+            }}
+          >
+            Vásárlás folytatása
+          </Button>
+          <Button
+            onClick={() => {
+              setCartAlert(false);
+              navigate('/kosar');
+              // Kosár esetén bezárjuk és navigálunk
+            }}
+            sx={{
+              flex: 1,
+              py: 1.5,
+              borderRadius: '12px',
+              background: darkMode 
+                ? 'linear-gradient(45deg, #90caf9, #42a5f5)' 
+                : 'linear-gradient(45deg, #1976d2, #1565c0)',
+              color: '#fff',
+              transition: 'all 0.2s ease',
+              '&:hover': {
+                transform: 'translateY(-2px)',
+                boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
+              }
+            }}
+          >
+            Rendelés leadása
+          </Button>
+        </Box>
       </CardContent>
     </Card>
   </Box>
@@ -737,7 +804,8 @@ export default function Kosar() {
   </Box>
 )}
 
-      </Container>
+      <Footer />
     </div>
   );
 }
+

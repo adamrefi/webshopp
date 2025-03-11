@@ -26,21 +26,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Menu from './menu2';
-import fehgatya from './fehgatya.png';
-import fehpolo from './fehpolo.png';
-import fehpull from './fehpull.png';
-import kekgatya from './kekgatya.png';
-import kekpolo from './kekpolo.png';
-import kekpull from './kekpull.png';
-import fekgatya from './fekgatya.png';
-import fekpolo from './fekpolo.png';
-import fekpull from './fekpull.png';
-import zoldgatya from './zoldgatya.png';
-import zoldpolo from './zoldpolo.png';
-import zoldpull from './zoldpull.png';
-import bezsgatya from './bezsgatya.png';
-import bezspolo from './bezspolo.png';
-import bezspull from './bezspull.png';
+
   const Oterm = () => {
     const [products, setProducts] = useState([]);
     const [darkMode, setDarkMode] = useState(true);
@@ -55,23 +41,16 @@ import bezspull from './bezspull.png';
     const anchorRef = useRef(null);
     const navigate = useNavigate();
 
-    const imageMap = {
-      'fehgatya.png': fehgatya,
-      'fehpolo.png': fehpolo,
-      'fehpull.png': fehpull,
-      'kekgatya.png': kekgatya,
-      'kekpolo.png': kekpolo,
-      'kekpull.png': kekpull,
-      'fekgatya.png': fekgatya,
-      'fekpolo.png': fekpolo,
-      'fekpull.png': fekpull,
-      'zoldgatya.png': zoldgatya,
-      'zoldpolo.png': zoldpolo,
-      'zoldpull.png': zoldpull,
-      'bezsgatya.png': bezsgatya,
-      'bezspolo.png': bezspolo,
-      'bezspull.png': bezspull
-    };
+   // Remove all individual image imports
+
+// Add this dynamic image loading
+const imageMap = {};
+const images = require.context('./kep', false, /\.(png|jpg|jpeg)$/);
+
+images.keys().forEach((key) => {
+  const imageName = key.replace('./', '');
+  imageMap[imageName] = images(key);
+});
 
     useEffect(() => {
       const fetchProducts = async () => {

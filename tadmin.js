@@ -52,30 +52,21 @@ export default function Tadmin() {
       });
     }
   };
-
   const handleImageUpload = (event) => {
     const files = Array.from(event.target.files);
     
     files.forEach(file => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const img = new Image();
-        img.src = reader.result;
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 800;
-          const scaleSize = MAX_WIDTH / img.width;
-          canvas.width = MAX_WIDTH;
-          canvas.height = img.height * scaleSize;
-          
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-          const compressedImage = canvas.toDataURL('image/jpeg', 0.7);
-          
-          setSelectedImages(prev => [...prev, compressedImage]);
-        };
-      };
-      reader.readAsDataURL(file);
+      const formData = new FormData();
+      formData.append('image', file);
+      
+      fetch('http://localhost:5000/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        setSelectedImages(prev => [...prev, file.name]);
+      });
     });
   };
 
@@ -85,16 +76,22 @@ export default function Tadmin() {
 
   const handleDrop = (event) => {
     event.preventDefault();
-    const file = event.dataTransfer.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        setSelectedImages(prev => [...prev, reader.result]);
-      };
-      reader.readAsDataURL(file);
-    }
+    const files = Array.from(event.dataTransfer.files);
+  
+    files.forEach(file => {
+      const formData = new FormData();
+      formData.append('image', file);
+    
+      fetch('http://localhost:5000/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        setSelectedImages(prev => [...prev, file.name]);
+      });
+    });
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
   
