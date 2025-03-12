@@ -19,9 +19,10 @@ import {
   Badge,
   Grid,
   Card,
-  CardContent,
-  FormHelperText
+  CardContent
 } from '@mui/material';
+import { FormHelperText } from '@mui/material';
+
 import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -46,12 +47,14 @@ const cartItemCount = cartItems.reduce((total, item) => total + item.mennyiseg, 
   const [sideMenuActive, setSideMenuActive] = useState(false);
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+ 
   const navigate = useNavigate();
+
   const handleSubmit = async () => {
     if (!validateForm()) {
       return;
     }
-  
+    
     const termekAdatok = {
       kategoriaId: parseInt(selectedCategory),
       ar: parseInt(price),
@@ -61,7 +64,6 @@ const cartItemCount = cartItems.reduce((total, item) => total + item.mennyiseg, 
       imageUrl: selectedImages[0],
       images: selectedImages
     };
-  
     try {
       const response = await fetch('http://localhost:5000/usertermekek', {
         method: 'POST',
@@ -72,84 +74,100 @@ const cartItemCount = cartItems.reduce((total, item) => total + item.mennyiseg, 
       });
   
       if (response.ok) {
-        setTitle('');
-        setPrice('');
-        setDescription('');
-        setSize('');
-        setSelectedCategory('');
-        setSelectedImages([]);
-        alert('Sikeres feltöltés!');
-        navigate('/vinted');
-      } else {
-        alert('Hiba történt a feltöltés során!');
+        const alertBox = document.createElement('div');
+        alertBox.style.cssText = `
+          position: fixed;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          background: ${darkMode ? '#333' : '#fff'};
+          color: ${darkMode ? '#fff' : '#333'};
+          padding: 30px 50px;
+          border-radius: 15px;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+          z-index: 9999;
+          animation: fadeIn 0.5s ease-in-out;
+          text-align: center;
+          min-width: 300px;
+          border: 1px solid ${darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'};
+          backdrop-filter: blur(10px);
+        `;
+  
+        alertBox.innerHTML = `
+          <div style="
+            width: 60px;
+            height: 60px;
+            background: #4CAF50;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          ">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <h3 style="
+            margin: 0 0 10px 0;
+            font-size: 24px;
+            font-weight: 600;
+            color: ${darkMode ? '#90caf9' : '#1976d2'};
+          ">Sikeres feltöltés!</h3>
+          <p style="
+            margin: 0;
+            font-size: 16px;
+            color: ${darkMode ? '#aaa' : '#666'};
+          ">Köszönjük, hogy használod az Adali Clothing-ot!</p>
+        `;
+  
+        document.body.appendChild(alertBox);
+  
+        setTimeout(() => {
+          alertBox.style.animation = 'fadeOut 0.5s ease-in-out';
+          setTimeout(() => {
+            document.body.removeChild(alertBox);
+            navigate('/vinted');
+          }, 500);
+        }, 2000);
+  
+        const style = document.createElement('style');
+        style.textContent = `
+          @keyframes fadeIn {
+            from { 
+              opacity: 0; 
+              transform: translate(-50%, -60%) scale(0.8); 
+            }
+            to { 
+              opacity: 1; 
+              transform: translate(-50%, -50%) scale(1); 
+            }
+          }
+          @keyframes fadeOut {
+            from { 
+              opacity: 1; 
+              transform: translate(-50%, -50%) scale(1); 
+            }
+            to { 
+              opacity: 0; 
+              transform: translate(-50%, -40%) scale(0.8); 
+            }
+          }
+        `;
+        document.head.appendChild(style);
       }
     } catch (error) {
       console.error('Hiba:', error);
-      alert('Hiba történt a feltöltés során!');
     }
   };
+  
   const [categories, setCategories] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [open, setOpen] = useState(false);
   const [userName, setUserName] = useState('');
   const fileInputRef = React.useRef(null);
   const anchorRef = React.useRef(null);
-
-  const [errors, setErrors] = useState({
-    title: false,
-    price: false,
-    description: false,
-    size: false,
-    selectedCategory: false,
-    selectedImages: false
-  });
   
-  const validateForm = () => {
-    const newErrors = {};
-    let isValid = true;
-
-    if (!title.trim()) {
-      newErrors.title = true;
-      isValid = false;
-    }
-    // Check price
-  if (!price || price <= 0) {
-    newErrors.price = true;
-    isValid = false;
-  }
-
-  // Check description
-  if (!description.trim()) {
-    newErrors.description = true;
-    isValid = false;
-  }
-
-  // Check size
-  if (!size) {
-    newErrors.size = true;
-    isValid = false;
-  }
-
-  // Check category
-  if (!selectedCategory) {
-    newErrors.selectedCategory = true;
-    isValid = false;
-  }
-   if (selectedImages.length < 2) {
-    newErrors.selectedImages = true;
-    isValid = false;
-  }
-
-  // Check images
-  if (selectedImages.length === 0) {
-    newErrors.selectedImages = true;
-    isValid = false;
-  }
-
-  setErrors(newErrors);
-  return isValid;
-};
-
 
   useEffect(() => {
     const checkLoginStatus = () => {
@@ -185,6 +203,46 @@ useEffect(() => {
 
 const [selectedImages, setSelectedImages] = useState([]);
 
+const [errors, setErrors] = useState({
+  title: false,
+  price: false,
+  description: false,
+  size: false,
+  selectedCategory: false
+});
+
+const validateForm = () => {
+  const newErrors = {};
+  let isValid = true;
+
+  if (!title.trim()) {
+    newErrors.title = true;
+    isValid = false;
+  }
+  if (!price.trim()) {
+    newErrors.price = true;
+    isValid = false;
+  }
+  if (!description.trim()) {
+    newErrors.description = true;
+    isValid = false;
+  }
+  if (!size.trim()) {
+    newErrors.size = true;
+    isValid = false;
+  }
+  if (!selectedCategory) {
+    newErrors.selectedCategory = true;
+    isValid = false;
+  }
+  if (!selectedImages || selectedImages.length < 2) {
+    newErrors.images = true;
+    isValid = false;
+  }
+
+  setErrors(newErrors);
+  return isValid;
+};
 const handleImageUpload = (event) => {
   const files = Array.from(event.target.files);
   
@@ -294,12 +352,16 @@ const handleListKeyDown = (event) => {
 
   return (
 <div style={{
-  backgroundColor: darkMode ? '#555' : '#f5f5f5',
+  backgroundColor: darkMode ? '#333' : '#f5f5f5',
+  backgroundImage: darkMode 
+    ? 'radial-gradient(#444 1px, transparent 1px)'
+    : 'radial-gradient(#e0e0e0 1px, transparent 1px)',
+  backgroundSize: '20px 20px',
   color: darkMode ? 'white' : 'black',
   minHeight: '100vh',
-  paddingBottom: '100px'  // Új sor
+  paddingBottom: '100px',
+  transition: 'all 0.3s ease-in-out' // Ez adja az átmenetet
 }}>
-
       <div style={{
         display: 'flex',
         alignItems: 'center',
@@ -488,10 +550,20 @@ const handleListKeyDown = (event) => {
         Ruha feltöltése
       </Typography>
 
+
+
+      <input
+  type="file"
+  hidden
+  multiple
+  ref={fileInputRef}
+  onChange={handleImageUpload}
+  accept="image/*"
+/>
       <Box
   sx={{
     border: '2px dashed',
-    borderColor: errors.selectedImages ? '#ff6b6b' : (darkMode ? 'grey.500' : 'grey.300'),
+    borderColor: errors.images ? '#ff6b6b' : (darkMode ? 'grey.500' : 'grey.300'),
     borderRadius: 2,
     p: 3,
     mb: 3,
@@ -503,61 +575,71 @@ const handleListKeyDown = (event) => {
   onDragOver={handleDragOver}
   onDrop={handleDrop}
 >
-  <input
-    type="file"
-    hidden
-    multiple
-    ref={fileInputRef}
-    onChange={handleImageUpload}
-    accept="image/*"
-  />
-  
   {selectedImages && selectedImages.length > 0 ? (
-    <Grid container spacing={3}>
-      {selectedImages.map((image, index) => (
-        <Grid item xs={12} sm={6} md={4} key={index}>
-          <Box sx={{
-            position: 'relative',
-            height: '300px',
-            width: '100%',
-            borderRadius: '12px',
-            overflow: 'hidden',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
-          }}>
-            <img
-              src={image}
-              alt={`Feltöltött kép ${index + 1}`}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'contain'
-              }}
-            />
-          </Box>
-        </Grid>
-      ))}
-    </Grid>
+    <>
+      <Grid container spacing={3}>
+        {selectedImages.map((image, index) => (
+          <Grid item xs={12} sm={6} md={4} key={index}>
+            <Box sx={{
+              position: 'relative',
+              height: '300px',
+              width: '100%',
+              borderRadius: '12px',
+              overflow: 'hidden',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+            }}>
+              <img
+                src={image}
+                alt={`Feltöltött kép ${index + 1}`}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain'
+                }}
+              />
+            </Box>
+          </Grid>
+        ))}
+      </Grid>
+      {errors.images && (
+        <Typography sx={{ color: '#ff6b6b', mt: 2 }}>
+          Minimum 2 képet kell feltölteni
+        </Typography>
+      )}
+    </>
   ) : (
     <Box>
-      <CloudUploadIcon sx={{ fontSize: 60, mb: 2, color: darkMode ? 'grey.400' : 'grey.600' }} />
-      <Typography sx={{ 
-        color: errors.selectedImages ? '#ff6b6b' : (darkMode ? 'grey.400' : 'grey.600'),
-        fontWeight: errors.selectedImages ? 'bold' : 'normal'
-      }}>
-        Legalább 2 kép feltöltése kötelező!
+      <CloudUploadIcon sx={{ fontSize: 60, mb: 2, color: errors.images ? '#ff6b6b' : (darkMode ? 'grey.400' : 'grey.600') }} />
+      <Typography sx={{ color: errors.images ? '#ff6b6b' : (darkMode ? 'grey.400' : 'grey.600') }}>
+        Húzd ide a képeket vagy kattints a feltöltéshez (minimum 2 kép)
       </Typography>
     </Box>
   )}
 </Box>
+
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-       
-        <TextField
+      <FormControl fullWidth error={errors.selectedCategory} sx={textFieldStyle}>
+  <InputLabel>Kategória</InputLabel>
+  <Select
+    value={selectedCategory}
+    onChange={(e) => setSelectedCategory(e.target.value)}
+  >
+    {categories.map((category) => (
+      <MenuItem key={category.cs_azonosito} value={category.cs_azonosito}>
+        {category.cs_nev}
+      </MenuItem>
+    ))}
+  </Select>
+  {errors.selectedCategory && <FormHelperText>Válassza ki a ruha kategoriáját!</FormHelperText>}
+</FormControl>
+
+<TextField
   fullWidth
   label="Ruha neve"
   value={title}
   onChange={(e) => setTitle(e.target.value)}
   error={errors.title}
-  helperText={errors.title ? "Kötelező mező!" : ""}
+  helperText={errors.title ? "Adja meg a ruha nevét!" : ""}
   sx={textFieldStyle}
 />
 
@@ -567,8 +649,7 @@ const handleListKeyDown = (event) => {
   value={price}
   onChange={(e) => setPrice(e.target.value)}
   error={errors.price}
-  helperText={errors.price ? "Érvényes árat adjon meg!" : ""}
-  type="number"
+  helperText={errors.price ? "Adja meg a ruha árát!" : ""}
   sx={textFieldStyle}
 />
 
@@ -578,11 +659,10 @@ const handleListKeyDown = (event) => {
   value={description}
   onChange={(e) => setDescription(e.target.value)}
   error={errors.description}
-  helperText={errors.description ? "Kötelező mező!" : ""}
+  helperText={errors.description ? "Adja meg a ruha leírását!" : ""}
   sx={textFieldStyle}
 />
-
-<FormControl fullWidth error={errors.size}>
+<FormControl fullWidth error={errors.size} sx={textFieldStyle}>
   <InputLabel>Méret</InputLabel>
   <Select
     value={size}
@@ -595,22 +675,7 @@ const handleListKeyDown = (event) => {
     <MenuItem value="XL">XL</MenuItem>
     <MenuItem value="XXL">XXL</MenuItem>
   </Select>
-  {errors.size && <FormHelperText>Válasszon méretet!</FormHelperText>}
-</FormControl>
-
-<FormControl fullWidth error={errors.selectedCategory}>
-  <InputLabel>Kategória</InputLabel>
-  <Select
-    value={selectedCategory}
-    onChange={(e) => setSelectedCategory(e.target.value)}
-  >
-    {categories.map((category) => (
-      <MenuItem key={category.cs_azonosito} value={category.cs_azonosito}>
-        {category.cs_nev}
-      </MenuItem>
-    ))}
-  </Select>
-  {errors.selectedCategory && <FormHelperText>Válasszon kategóriát!</FormHelperText>}
+  {errors.size && <FormHelperText>Válassza ki a ruha méretét!</FormHelperText>}
 </FormControl>
 
         <Button
