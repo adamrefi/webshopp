@@ -193,194 +193,194 @@ import Footer from './footer';
 }}>
   {isLoggedIn ? (
                <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-               <IconButton
-                 onClick={handleCartClick}
-                 sx={{
-                   color: '#fff',
-                   '&:hover': {
-                     backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                   }
-                 }}
-               >
-                 <Badge 
-                   badgeContent={cartItemCount} 
-                   color="primary"
-                   sx={{ 
-                     '& .MuiBadge-badge': { 
-                       backgroundColor: '#fff', 
-                       color: '#333' 
-                     } 
-                   }}
-                 >
-                   <ShoppingCartIcon />
-                 </Badge>
-               </IconButton>
+              <IconButton
+                onClick={handleCartClick}
+                sx={{
+                  color: '#fff',
+                  '&:hover': {
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                  }
+                }}
+              >
+                <Badge 
+                  badgeContent={cartItemCount} 
+                  color="primary"
+                  sx={{ 
+                    '& .MuiBadge-badge': { 
+                      backgroundColor: '#fff', 
+                      color: '#333' 
+                    } 
+                  }}
+                >
+                  <ShoppingCartIcon />
+                </Badge>
+              </IconButton>
+            <Button
+                              ref={anchorRef}
+                              onClick={handleToggle}
+                              sx={{
+                                color: '#fff',
+                                zIndex: 1300,
+                                border: '1px solid #fff',
+                                borderRadius: '5px',
+                                padding: '5px 10px',
+                              }}
+                            >
+                              Profil
+                            </Button>
+                            <Popper
+              open={open}
+              anchorEl={anchorRef.current}
+              placement="bottom-start"
+              transition
+              disablePortal
+              sx={{ 
+                zIndex: 1300,
+                mt: 1, // Margin top for spacing
+                '& .MuiPaper-root': {
+                  overflow: 'hidden',
+                  borderRadius: '12px',
+                  boxShadow: darkMode 
+                    ? '0 8px 32px rgba(0, 0, 0, 0.4)'
+                    : '0 8px 32px rgba(0, 0, 0, 0.1)',
+                  border: darkMode 
+                    ? '1px solid rgba(255, 255, 255, 0.1)'
+                    : '1px solid rgba(0, 0, 0, 0.05)',
+                }
+              }}
+            >
+              {({ TransitionProps, placement }) => (
+                <Grow
+                  {...TransitionProps}
+                  style={{
+                    transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
+                  }}
+                >
+                  <Paper
+                    sx={{
+                      backgroundColor: darkMode ? '#2d2d2d' : '#ffffff',
+                      minWidth: '200px',
+                    }}
+                  >
+                    <ClickAwayListener onClickAway={handleClose}>
+                      <MenuList 
+                        autoFocusItem={open} 
+                        onKeyDown={handleListKeyDown}
+                        sx={{ py: 1 }}
+                      >
+                        <MenuItem 
+                          onClick={handleClose}
+                          sx={{
+                            py: 1.5,
+                            px: 2,
+                            color: darkMode ? '#fff' : '#333',
+                            '&:hover': {
+                              backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)',
+                            },
+                            gap: 2,
+                          }}
+                        >
+                          <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                            {userName} profilja
+                          </Typography>
+                        </MenuItem>
+            
+                        <MenuItem 
+                          onClick={() => {
+                            handleClose();
+                            navigate('/fiokom');
+                          }}
+                          sx={{
+                            py: 1.5,
+                            px: 2,
+                            color: darkMode ? '#fff' : '#333',
+                            '&:hover': {
+                              backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)',
+                            },
+                            gap: 2,
+                          }}
+                        >
+                          <Typography variant="body1">Fiókom</Typography>
+                        </MenuItem>
+            
+                        <MenuItem 
+                          onClick={handleLogout}
+                          sx={{
+                            py: 1.5,
+                            px: 2,
+                            color: '#ff4444',
+                            '&:hover': {
+                              backgroundColor: 'rgba(255,68,68,0.1)',
+                            },
+                            gap: 2,
+                            borderTop: '1px solid',
+                            borderColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                            mt: 1,
+                          }}
+                        >
+                          <Typography variant="body1">Kijelentkezés</Typography>
+                        </MenuItem>
+                      </MenuList>
+                    </ClickAwayListener>
+                  </Paper>
+                </Grow>
+              )}
+            </Popper>
+            </Box>
+          ) : (
+            <>
              <Button
-                               ref={anchorRef}
-                               onClick={handleToggle}
-                               sx={{
-                                 color: '#fff',
-                                 zIndex: 1300,
-                                 border: '1px solid #fff',
-                                 borderRadius: '5px',
-                                 padding: '5px 10px',
-                               }}
-                             >
-                               Profil
-                             </Button>
-                             <Popper
-               open={open}
-               anchorEl={anchorRef.current}
-               placement="bottom-start"
-               transition
-               disablePortal
-               sx={{ 
-                 zIndex: 1300,
-                 mt: 1, // Margin top for spacing
-                 '& .MuiPaper-root': {
-                   overflow: 'hidden',
-                   borderRadius: '12px',
-                   boxShadow: darkMode 
-                     ? '0 8px 32px rgba(0, 0, 0, 0.4)'
-                     : '0 8px 32px rgba(0, 0, 0, 0.1)',
-                   border: darkMode 
-                     ? '1px solid rgba(255, 255, 255, 0.1)'
-                     : '1px solid rgba(0, 0, 0, 0.05)',
-                 }
-               }}
-             >
-               {({ TransitionProps, placement }) => (
-                 <Grow
-                   {...TransitionProps}
-                   style={{
-                     transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
-                   }}
-                 >
-                   <Paper
-                     sx={{
-                       backgroundColor: darkMode ? '#2d2d2d' : '#ffffff',
-                       minWidth: '200px',
-                     }}
-                   >
-                     <ClickAwayListener onClickAway={handleClose}>
-                       <MenuList 
-                         autoFocusItem={open} 
-                         onKeyDown={handleListKeyDown}
-                         sx={{ py: 1 }}
-                       >
-                         <MenuItem 
-                           onClick={handleClose}
-                           sx={{
-                             py: 1.5,
-                             px: 2,
-                             color: darkMode ? '#fff' : '#333',
-                             '&:hover': {
-                               backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)',
-                             },
-                             gap: 2,
-                           }}
-                         >
-                           <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                             {userName} profilja
-                           </Typography>
-                         </MenuItem>
-             
-                         <MenuItem 
-                           onClick={() => {
-                             handleClose();
-                             navigate('/fiokom');
-                           }}
-                           sx={{
-                             py: 1.5,
-                             px: 2,
-                             color: darkMode ? '#fff' : '#333',
-                             '&:hover': {
-                               backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)',
-                             },
-                             gap: 2,
-                           }}
-                         >
-                           <Typography variant="body1">Fiókom</Typography>
-                         </MenuItem>
-             
-                         <MenuItem 
-                           onClick={handleLogout}
-                           sx={{
-                             py: 1.5,
-                             px: 2,
-                             color: '#ff4444',
-                             '&:hover': {
-                               backgroundColor: 'rgba(255,68,68,0.1)',
-                             },
-                             gap: 2,
-                             borderTop: '1px solid',
-                             borderColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-                             mt: 1,
-                           }}
-                         >
-                           <Typography variant="body1">Kijelentkezés</Typography>
-                         </MenuItem>
-                       </MenuList>
-                     </ClickAwayListener>
-                   </Paper>
-                 </Grow>
-               )}
-             </Popper>
-             </Box>
-           ) : (
-             <>
-              <Button
-   component={Link}
-   to="/sign"
-   sx={{
-     color: '#fff',
-     border: '1px solid #fff',
-     borderRadius: '5px',
-     padding: {
-       xs: '2px 6px',   // Smaller padding for mobile
-       sm: '5px 10px'
-     },
-     fontSize: {
-       xs: '0.7rem',    // Smaller font for mobile
-       sm: '1rem'
-     },
-     whiteSpace: 'nowrap',
-     '&:hover': {
-       backgroundColor: '#fff',
-       color: '#333',
-     },
-   }}
- >
-   Sign In
- </Button>
- 
- <Button
-   component={Link}
-   to="/signup"
-   sx={{
-     color: '#fff',
-     border: '1px solid #fff',
-     borderRadius: '5px',
-     padding: {
-       xs: '2px 6px',   // Smaller padding for mobile
-       sm: '5px 10px'
-     },
-     fontSize: {
-       xs: '0.7rem',    // Smaller font for mobile
-       sm: '1rem'
-     },
-     whiteSpace: 'nowrap',
-     '&:hover': {
-       backgroundColor: '#fff',
-       color: '#333',
-     },
-   }}
- >
-   Sign Up
- </Button>
-             </>
-           )}
-         </Box>
+  component={Link}
+  to="/sign"
+  sx={{
+    color: '#fff',
+    border: '1px solid #fff',
+    borderRadius: '5px',
+    padding: {
+      xs: '2px 6px',   // Smaller padding for mobile
+      sm: '5px 10px'
+    },
+    fontSize: {
+      xs: '0.7rem',    // Smaller font for mobile
+      sm: '1rem'
+    },
+    whiteSpace: 'nowrap',
+    '&:hover': {
+      backgroundColor: '#fff',
+      color: '#333',
+    },
+  }}
+>
+  Sign In
+</Button>
+
+<Button
+  component={Link}
+  to="/signup"
+  sx={{
+    color: '#fff',
+    border: '1px solid #fff',
+    borderRadius: '5px',
+    padding: {
+      xs: '2px 6px',   // Smaller padding for mobile
+      sm: '5px 10px'
+    },
+    fontSize: {
+      xs: '0.7rem',    // Smaller font for mobile
+      sm: '1rem'
+    },
+    whiteSpace: 'nowrap',
+    '&:hover': {
+      backgroundColor: '#fff',
+      color: '#333',
+    },
+  }}
+>
+  Sign Up
+</Button>
+            </>
+          )}
+        </Box>
 
         </div>
 
@@ -493,41 +493,103 @@ import Footer from './footer';
     </Typography>
   </Box>
 ) : (
-  <Grid container spacing={3}>
+  <Grid 
+    container 
+    spacing={{xs: 1, sm: 2, md: 3}} 
+    sx={{ 
+      mt: 2,
+      width: '100%',
+      margin: '0 auto'
+    }}
+  >
     {filteredProducts.map((product) => (
-      <Grid item xs={12} sm={6} md={4} lg={3} key={`product-${product.id}`}>
-        <Link to={`/termek/${product.id}`} style={{ textDecoration: 'none' }}>
+      <Grid 
+        item 
+        xs={6} 
+        sm={6} 
+        md={4} 
+        lg={3} 
+        key={`product-${product.id}`}
+        sx={{
+          padding: { xs: '4px', sm: '8px', md: '12px' }
+        }}
+      >
+        <Link to={`/termek/${product.id}`} style={{ textDecoration: 'none', display: 'block', width: '100%' }}>
           <Card sx={{
-            height: '500px',
+            height: { xs: '300px', sm: '400px', md: '500px' },
             backgroundColor: darkMode ? '#333' : 'white',
             color: darkMode ? 'white' : 'black',
             transition: 'transform 0.2s',
             border: '1px solid #fff',
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
             '&:hover': {
               transform: 'scale(1.02)'
             }
           }}>
-            <Box sx={{ position: 'relative', height: '350px' }}>
-            <CardMedia
-  component="img"
-  sx={{
-    height: '100%',
-    width: '100%',
-    objectFit: 'contain'
-  }}
-  image={imageMap[product.imageUrl]}
-  alt={product.nev}
-/>
-
+            <Box sx={{ 
+              position: 'relative', 
+              height: { xs: '150px', sm: '200px', md: '300px' },
+              width: '100%'
+            }}>
+              <CardMedia
+                component="img"
+                sx={{
+                  height: '100%',
+                  width: '100%',
+                  objectFit: 'contain'
+                }}
+                image={imageMap[product.imageUrl]}
+                alt={product.nev}
+              />
             </Box>
-            <CardContent>
-              <Typography variant="h6" color={darkMode ? 'white' : 'black'}>
+            <CardContent sx={{ 
+              flexGrow: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              p: { xs: '8px', sm: '16px' }
+            }}>
+              <Typography 
+                variant="h6" 
+                color={darkMode ? 'white' : 'black'}
+                sx={{ 
+                  fontSize: { xs: '0.8rem', sm: '1rem', md: '1.25rem' },
+                  mb: 0.5,
+                  fontWeight: 'bold',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 1,
+                  WebkitBoxOrient: 'vertical'
+                }}
+              >
                 {product.nev}
               </Typography>
-              <Typography variant="h6" color="primary">
+              <Typography 
+                variant="h6" 
+                color="primary"
+                sx={{ 
+                  fontSize: { xs: '0.9rem', sm: '1.1rem', md: '1.25rem' },
+                  fontWeight: 'bold',
+                  mb: 0.5
+                }}
+              >
                 {product.ar} Ft
               </Typography>
-              <Typography variant="body2" color={darkMode ? 'grey.300' : 'text.secondary'}>
+              <Typography 
+                variant="body2" 
+                color={darkMode ? 'grey.300' : 'text.secondary'}
+                sx={{ 
+                  fontSize: { xs: '0.7rem', sm: '0.8rem', md: '0.875rem' },
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: 'vertical'
+                }}
+              >
                 {product.termekleiras}
               </Typography>
             </CardContent>
@@ -537,6 +599,8 @@ import Footer from './footer';
     ))}
   </Grid>
 )}
+
+
 
 
           
