@@ -27,6 +27,9 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Menu from './menu2';
 
+import { CircularProgress } from '@mui/material';
+import Footer from './footer';
+
   const Oterm = () => {
     const [products, setProducts] = useState([]);
     const [darkMode, setDarkMode] = useState(true);
@@ -39,31 +42,36 @@ import Menu from './menu2';
     const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
     const cartItemCount = cartItems.reduce((total, item) => total + item.mennyiseg, 0);
     const anchorRef = useRef(null);
+    const [isLoading, setIsLoading] = useState(true);
+
     const navigate = useNavigate();
 
-   // Remove all individual image imports
-
-// Add this dynamic image loading
-const imageMap = {};
-const images = require.context('./kep', false, /\.(png|jpg|jpeg)$/);
-
-images.keys().forEach((key) => {
-  const imageName = key.replace('./', '');
-  imageMap[imageName] = images(key);
-});
+    const imageMap = {};
+    const images = require.context('../../backend/kep', false, /\.(png|jpg|jpeg)$/);
+    images.keys().forEach((key) => {
+      const imageName = key.replace('./', '');
+      imageMap[imageName] = images(key);
+    });
+    
 
     useEffect(() => {
       const fetchProducts = async () => {
         try {
+          setIsLoading(true);
           const response = await fetch('http://localhost:5000/termekek');
           const data = await response.json();
+          // Kis késleltetés a loading animáció megjelenítéséhez
+          await new Promise(resolve => setTimeout(resolve, 1500));
           setProducts(data);
         } catch (error) {
           console.log('Hiba:', error);
+        } finally {
+          setIsLoading(false);
         }
       };
       fetchProducts();
     }, []);
+    
   
     const filteredProducts = selectedCategory 
       ? products.filter(product => {
@@ -125,14 +133,18 @@ images.keys().forEach((key) => {
       navigate('/kosar');
     };
       return (
-        <div style={{
-          backgroundColor: darkMode ? '#333' : '#f5f5f5',
-          backgroundImage: darkMode ? 'radial-gradient(#444 1px, transparent 1px)' : 'radial-gradient(#e0e0e0 1px, transparent 1px)',
-          backgroundSize: '20px 20px',
-          color: darkMode ? 'white' : 'black',
-          minHeight: '100vh',
-          paddingBottom: '100px'
-        }}>
+        // A fő div-nél adjuk hozzá a transition tulajdonságot:
+<div style={{
+  backgroundColor: darkMode ? '#333' : '#f5f5f5',
+  backgroundImage: darkMode 
+    ? 'radial-gradient(#444 1px, transparent 1px)'
+    : 'radial-gradient(#e0e0e0 1px, transparent 1px)',
+  backgroundSize: '20px 20px',
+  color: darkMode ? 'white' : 'black',
+  minHeight: '100vh',
+  transition: 'all 0.3s ease-in-out' // Ez adja az átmenetet
+}}>
+
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -150,125 +162,226 @@ images.keys().forEach((key) => {
             <MenuIcon />
           </IconButton>
 
-          <Typography
-            variant="h1"
-            style={{
-              position: 'absolute',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              fontWeight: 'bold',
-              fontSize: '2rem',
-              color: darkMode ? 'white' : 'white',
-              margin: 0,
-            }}
-          >
-            Adali Clothing
-          </Typography>
+         <Typography 
+           variant="h1"
+           sx={{
+             fontWeight: 'bold',
+             fontSize: {
+               xs: '1.1rem',    // Increased size for mobile
+               sm: '1.5rem',    // Tablet size stays the same
+               md: '2rem'       // Desktop size stays the same
+             },
+             textAlign: 'center',
+             color: 'white',
+             position: 'absolute',
+             left: '45%',
+             transform: 'translateX(-50%)',
+             width: 'auto',
+             pointerEvents: 'none'
+           }}
+         >
+           Adali Clothing
+         </Typography>
 
-          <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-            {isLoggedIn ? (
-              <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                <IconButton
-                  onClick={handleCartClick}
-                  sx={{
-                    color: '#fff',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    }
-                  }}
-                >
-                  <Badge 
-                    badgeContent={cartItemCount} 
-                    color="primary"
-                    sx={{ 
-                      '& .MuiBadge-badge': { 
-                        backgroundColor: '#fff', 
-                        color: '#333' 
-                      } 
-                    }}
-                  >
-                    <ShoppingCartIcon />
-                  </Badge>
-                </IconButton>
-                <Button
-                  ref={anchorRef}
-                  onClick={handleToggle}
-                  sx={{
-                    color: '#fff',
-                    zIndex: 1300,
-                    border: '1px solid #fff',
-                    borderRadius: '5px',
-                    padding: '5px 10px',
-                  }}
-                >
-                  Profil
-                </Button>
-                <Popper
-                  open={open}
-                  anchorEl={anchorRef.current}
-                  placement="bottom-start"
-                  transition
-                  disablePortal
-                  sx={{ zIndex: 1300 }}
-                >
-                  {({ TransitionProps, placement }) => (
-                    <Grow
-                      {...TransitionProps}
-                      style={{
-                        transformOrigin:
-                          placement === 'bottom-start' ? 'left top' : 'left bottom',
-                      }}
-                    >
-                      <Paper>
-                        <ClickAwayListener onClickAway={handleClose}>
-                          <MenuList autoFocusItem={open} onKeyDown={handleListKeyDown}>
-                            <MenuItem onClick={handleClose}>{userName} profilja</MenuItem>
-                            <MenuItem onClick={handleClose}>Fiókom</MenuItem>
-                            <MenuItem onClick={handleLogout}>Kijelentkezés</MenuItem>
-                          </MenuList>
-                        </ClickAwayListener>
-                      </Paper>
-                    </Grow>
-                  )}
-                </Popper>
-              </Box>
-            ) : (
-              <>
-                <Button
-                  component={Link}
-                  to="/sign"
-                  sx={{
-                    color: '#fff',
-                    border: '1px solid #fff',
-                    borderRadius: '5px',
-                    padding: '5px 10px',
-                    '&:hover': {
-                      backgroundColor: '#fff',
-                      color: '#333',
-                    },
-                  }}
-                >
-                  Sign In
-                </Button>
-                <Button
-                  component={Link}
-                  to="/signup"
-                  sx={{
-                    color: '#fff',
-                    border: '1px solid #fff',
-                    borderRadius: '5px',
-                    padding: '5px 10px',
-                    '&:hover': {
-                      backgroundColor: '#fff',
-                      color: '#333',
-                    },
-                  }}
-                >
-                  Sign Up
-                </Button>
-              </>
-            )}
-          </Box>
+         <Box sx={{ 
+  display: 'flex', 
+  gap: {
+    xs: '5px',
+    sm: '10px'
+  }, 
+  alignItems: 'center' 
+}}>
+  {isLoggedIn ? (
+               <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+               <IconButton
+                 onClick={handleCartClick}
+                 sx={{
+                   color: '#fff',
+                   '&:hover': {
+                     backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                   }
+                 }}
+               >
+                 <Badge 
+                   badgeContent={cartItemCount} 
+                   color="primary"
+                   sx={{ 
+                     '& .MuiBadge-badge': { 
+                       backgroundColor: '#fff', 
+                       color: '#333' 
+                     } 
+                   }}
+                 >
+                   <ShoppingCartIcon />
+                 </Badge>
+               </IconButton>
+             <Button
+                               ref={anchorRef}
+                               onClick={handleToggle}
+                               sx={{
+                                 color: '#fff',
+                                 zIndex: 1300,
+                                 border: '1px solid #fff',
+                                 borderRadius: '5px',
+                                 padding: '5px 10px',
+                               }}
+                             >
+                               Profil
+                             </Button>
+                             <Popper
+               open={open}
+               anchorEl={anchorRef.current}
+               placement="bottom-start"
+               transition
+               disablePortal
+               sx={{ 
+                 zIndex: 1300,
+                 mt: 1, // Margin top for spacing
+                 '& .MuiPaper-root': {
+                   overflow: 'hidden',
+                   borderRadius: '12px',
+                   boxShadow: darkMode 
+                     ? '0 8px 32px rgba(0, 0, 0, 0.4)'
+                     : '0 8px 32px rgba(0, 0, 0, 0.1)',
+                   border: darkMode 
+                     ? '1px solid rgba(255, 255, 255, 0.1)'
+                     : '1px solid rgba(0, 0, 0, 0.05)',
+                 }
+               }}
+             >
+               {({ TransitionProps, placement }) => (
+                 <Grow
+                   {...TransitionProps}
+                   style={{
+                     transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
+                   }}
+                 >
+                   <Paper
+                     sx={{
+                       backgroundColor: darkMode ? '#2d2d2d' : '#ffffff',
+                       minWidth: '200px',
+                     }}
+                   >
+                     <ClickAwayListener onClickAway={handleClose}>
+                       <MenuList 
+                         autoFocusItem={open} 
+                         onKeyDown={handleListKeyDown}
+                         sx={{ py: 1 }}
+                       >
+                         <MenuItem 
+                           onClick={handleClose}
+                           sx={{
+                             py: 1.5,
+                             px: 2,
+                             color: darkMode ? '#fff' : '#333',
+                             '&:hover': {
+                               backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)',
+                             },
+                             gap: 2,
+                           }}
+                         >
+                           <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                             {userName} profilja
+                           </Typography>
+                         </MenuItem>
+             
+                         <MenuItem 
+                           onClick={() => {
+                             handleClose();
+                             navigate('/fiokom');
+                           }}
+                           sx={{
+                             py: 1.5,
+                             px: 2,
+                             color: darkMode ? '#fff' : '#333',
+                             '&:hover': {
+                               backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)',
+                             },
+                             gap: 2,
+                           }}
+                         >
+                           <Typography variant="body1">Fiókom</Typography>
+                         </MenuItem>
+             
+                         <MenuItem 
+                           onClick={handleLogout}
+                           sx={{
+                             py: 1.5,
+                             px: 2,
+                             color: '#ff4444',
+                             '&:hover': {
+                               backgroundColor: 'rgba(255,68,68,0.1)',
+                             },
+                             gap: 2,
+                             borderTop: '1px solid',
+                             borderColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                             mt: 1,
+                           }}
+                         >
+                           <Typography variant="body1">Kijelentkezés</Typography>
+                         </MenuItem>
+                       </MenuList>
+                     </ClickAwayListener>
+                   </Paper>
+                 </Grow>
+               )}
+             </Popper>
+             </Box>
+           ) : (
+             <>
+              <Button
+   component={Link}
+   to="/sign"
+   sx={{
+     color: '#fff',
+     border: '1px solid #fff',
+     borderRadius: '5px',
+     padding: {
+       xs: '2px 6px',   // Smaller padding for mobile
+       sm: '5px 10px'
+     },
+     fontSize: {
+       xs: '0.7rem',    // Smaller font for mobile
+       sm: '1rem'
+     },
+     whiteSpace: 'nowrap',
+     '&:hover': {
+       backgroundColor: '#fff',
+       color: '#333',
+     },
+   }}
+ >
+   Sign In
+ </Button>
+ 
+ <Button
+   component={Link}
+   to="/signup"
+   sx={{
+     color: '#fff',
+     border: '1px solid #fff',
+     borderRadius: '5px',
+     padding: {
+       xs: '2px 6px',   // Smaller padding for mobile
+       sm: '5px 10px'
+     },
+     fontSize: {
+       xs: '0.7rem',    // Smaller font for mobile
+       sm: '1rem'
+     },
+     whiteSpace: 'nowrap',
+     '&:hover': {
+       backgroundColor: '#fff',
+       color: '#333',
+     },
+   }}
+ >
+   Sign Up
+ </Button>
+             </>
+           )}
+         </Box>
+
         </div>
 
         <Box sx={{
@@ -364,48 +477,69 @@ images.keys().forEach((key) => {
               Pulóverek
             </Button>
           </Box>
-          <Grid container spacing={3}>
-            {filteredProducts.map((product) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={`product-${product.id}`}>
-                <Link to={`/termek/${product.id}`} style={{ textDecoration: 'none' }}>
-                <Card sx={{ 
-                      height: '500px',
-                      backgroundColor: darkMode ? '#333' : 'white',
-                      color: darkMode ? 'white' : 'black',
-                      transition: 'transform 0.2s',
-                      border: '1px solid #fff',
-                      '&:hover': {
-                        transform: 'scale(1.02)'
-                      }
-                    }}>
-                    <Box sx={{ position: 'relative', height: '350px' }}>
-                      <CardMedia
-                        component="img"
-                        sx={{ 
-                          height: '100%',
-                          width: '100%',
-                          objectFit: 'contain'
-                        }}
-                        image={imageMap[product.imageUrl]}
-                        alt={product.nev}
-                      />
-                    </Box>
-                    <CardContent>
-                      <Typography variant="h6" color={darkMode ? 'white' : 'black'}>
-                        {product.nev}
-                      </Typography>
-                      <Typography variant="h6" color="primary">
-                        {product.ar} Ft
-                      </Typography>
-                      <Typography variant="body2" color={darkMode ? 'grey.300' : 'text.secondary'}>
-                        {product.termekleiras}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Link>
-              </Grid>
-            ))}
-          </Grid>
+
+          {isLoading ? (
+  <Box sx={{ 
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    height: '50vh',
+    flexDirection: 'column',
+    gap: 2
+  }}>
+    <CircularProgress />
+    <Typography variant="h6" sx={{ color: darkMode ? '#fff' : '#333' }}>
+      Termékek betöltése...
+    </Typography>
+  </Box>
+) : (
+  <Grid container spacing={3}>
+    {filteredProducts.map((product) => (
+      <Grid item xs={12} sm={6} md={4} lg={3} key={`product-${product.id}`}>
+        <Link to={`/termek/${product.id}`} style={{ textDecoration: 'none' }}>
+          <Card sx={{
+            height: '500px',
+            backgroundColor: darkMode ? '#333' : 'white',
+            color: darkMode ? 'white' : 'black',
+            transition: 'transform 0.2s',
+            border: '1px solid #fff',
+            '&:hover': {
+              transform: 'scale(1.02)'
+            }
+          }}>
+            <Box sx={{ position: 'relative', height: '350px' }}>
+            <CardMedia
+  component="img"
+  sx={{
+    height: '100%',
+    width: '100%',
+    objectFit: 'contain'
+  }}
+  image={imageMap[product.imageUrl]}
+  alt={product.nev}
+/>
+
+            </Box>
+            <CardContent>
+              <Typography variant="h6" color={darkMode ? 'white' : 'black'}>
+                {product.nev}
+              </Typography>
+              <Typography variant="h6" color="primary">
+                {product.ar} Ft
+              </Typography>
+              <Typography variant="body2" color={darkMode ? 'grey.300' : 'text.secondary'}>
+                {product.termekleiras}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Link>
+      </Grid>
+    ))}
+  </Grid>
+)}
+
+
+          
           {showLogoutAlert && (
   <Box
     sx={{
@@ -529,6 +663,16 @@ images.keys().forEach((key) => {
 )}
 
         </Container>
+        <Box sx={{ 
+      backgroundColor: darkMode ? '#333' : '#f5f5f5',
+      backgroundImage: darkMode 
+        ? 'radial-gradient(#444 1px, transparent 1px)'
+        : 'radial-gradient(#e0e0e0 1px, transparent 1px)',
+      backgroundSize: '20px 20px',
+      pb: 8 
+    }}>
+    </Box>
+        <Footer />
       </div>
     );
   };

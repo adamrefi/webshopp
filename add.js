@@ -379,124 +379,217 @@ const handleListKeyDown = (event) => {
           <MenuIcon />
         </IconButton>
 
-        <Typography
-          variant="h1"
-          style={{
-            position: 'absolute',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            fontWeight: 'bold',
-            fontSize: '2rem',
-            color: darkMode ? 'white' : 'white',
-            margin: 0,
-          }}
-        >
-          Adali Clothing
-        </Typography>
+       <Typography 
+         variant="h1"
+         sx={{
+           fontWeight: 'bold',
+           fontSize: {
+             xs: '1.1rem',    // Increased size for mobile
+             sm: '1.5rem',    // Tablet size stays the same
+             md: '2rem'       // Desktop size stays the same
+           },
+           textAlign: 'center',
+           color: 'white',
+           position: 'absolute',
+           left: '45%',
+           transform: 'translateX(-50%)',
+           width: 'auto',
+           pointerEvents: 'none'
+         }}
+       >
+         Adali Clothing
+       </Typography>
         <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           {isLoggedIn ? (
-            <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <IconButton
-                onClick={handleCartClick}
-                sx={{
-                  color: '#fff',
-                  '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  }
-                }}
-              >
-                <Badge 
-                  badgeContent={cartItemCount} 
-                  color="primary"
-                  sx={{ 
-                    '& .MuiBadge-badge': { 
-                      backgroundColor: '#fff', 
-                      color: '#333' 
-                    } 
-                  }}
-                >
-                  <ShoppingCartIcon />
-                </Badge>
-              </IconButton>
-              <Button
-                ref={anchorRef}
-                onClick={handleToggle}
-                sx={{
-                  color: '#fff',
-                  zIndex: 1300,
-                  border: '1px solid #fff',
-                  borderRadius: '5px',
-                  padding: '5px 10px',
-                }}
-              >
-                Profil
-              </Button>
-              <Popper
-                open={open}
-                anchorEl={anchorRef.current}
-                placement="bottom-start"
-                transition
-                disablePortal
-                sx={{ zIndex: 1300 }}
-              >
-                {({ TransitionProps, placement }) => (
-                  <Grow
-                    {...TransitionProps}
-                    style={{
-                      transformOrigin:
-                        placement === 'bottom-start' ? 'left top' : 'left bottom',
-                    }}
-                  >
-                    <Paper>
-                      <ClickAwayListener onClickAway={handleClose}>
-                        <MenuList autoFocusItem={open} onKeyDown={handleListKeyDown}>
-                          <MenuItem onClick={handleClose}>{userName} profilja</MenuItem>
-                          <MenuItem onClick={handleClose}>Fiókom</MenuItem>
-                          <MenuItem onClick={handleLogout}>Kijelentkezés</MenuItem>
-                        </MenuList>
-                      </ClickAwayListener>
-                    </Paper>
-                  </Grow>
-                )}
-              </Popper>
-            </Box>
-          ) : (
-            <>
-              <Button
-                component={Link}
-                to="/sign"
-                sx={{
-                  color: '#fff',
-                  border: '1px solid #fff',
-                  borderRadius: '5px',
-                  padding: '5px 10px',
-                  '&:hover': {
-                    backgroundColor: '#fff',
-                    color: '#333',
-                  },
-                }}
-              >
-                Sign In
-              </Button>
-              <Button
-                component={Link}
-                to="/signup"
-                sx={{
-                  color: '#fff',
-                  border: '1px solid #fff',
-                  borderRadius: '5px',
-                  padding: '5px 10px',
-                  '&:hover': {
-                    backgroundColor: '#fff',
-                    color: '#333',
-                  },
-                }}
-              >
-                Sign Up
-              </Button>
-            </>
-          )}
-        </Box>
+                        <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                        <IconButton
+                          onClick={handleCartClick}
+                          sx={{
+                            color: '#fff',
+                            '&:hover': {
+                              backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                            }
+                          }}
+                        >
+                          <Badge 
+                            badgeContent={cartItemCount} 
+                            color="primary"
+                            sx={{ 
+                              '& .MuiBadge-badge': { 
+                                backgroundColor: '#fff', 
+                                color: '#333' 
+                              } 
+                            }}
+                          >
+                            <ShoppingCartIcon />
+                          </Badge>
+                        </IconButton>
+                      <Button
+                                        ref={anchorRef}
+                                        onClick={handleToggle}
+                                        sx={{
+                                          color: '#fff',
+                                          zIndex: 1300,
+                                          border: '1px solid #fff',
+                                          borderRadius: '5px',
+                                          padding: '5px 10px',
+                                        }}
+                                      >
+                                        Profil
+                                      </Button>
+                                      <Popper
+                        open={open}
+                        anchorEl={anchorRef.current}
+                        placement="bottom-start"
+                        transition
+                        disablePortal
+                        sx={{ 
+                          zIndex: 1300,
+                          mt: 1, // Margin top for spacing
+                          '& .MuiPaper-root': {
+                            overflow: 'hidden',
+                            borderRadius: '12px',
+                            boxShadow: darkMode 
+                              ? '0 8px 32px rgba(0, 0, 0, 0.4)'
+                              : '0 8px 32px rgba(0, 0, 0, 0.1)',
+                            border: darkMode 
+                              ? '1px solid rgba(255, 255, 255, 0.1)'
+                              : '1px solid rgba(0, 0, 0, 0.05)',
+                          }
+                        }}
+                      >
+                        {({ TransitionProps, placement }) => (
+                          <Grow
+                            {...TransitionProps}
+                            style={{
+                              transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
+                            }}
+                          >
+                            <Paper
+                              sx={{
+                                backgroundColor: darkMode ? '#2d2d2d' : '#ffffff',
+                                minWidth: '200px',
+                              }}
+                            >
+                              <ClickAwayListener onClickAway={handleClose}>
+                                <MenuList 
+                                  autoFocusItem={open} 
+                                  onKeyDown={handleListKeyDown}
+                                  sx={{ py: 1 }}
+                                >
+                                  <MenuItem 
+                                    onClick={handleClose}
+                                    sx={{
+                                      py: 1.5,
+                                      px: 2,
+                                      color: darkMode ? '#fff' : '#333',
+                                      '&:hover': {
+                                        backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)',
+                                      },
+                                      gap: 2,
+                                    }}
+                                  >
+                                    <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                                      {userName} profilja
+                                    </Typography>
+                                  </MenuItem>
+                      
+                                  <MenuItem 
+                                    onClick={() => {
+                                      handleClose();
+                                      navigate('/fiokom');
+                                    }}
+                                    sx={{
+                                      py: 1.5,
+                                      px: 2,
+                                      color: darkMode ? '#fff' : '#333',
+                                      '&:hover': {
+                                        backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)',
+                                      },
+                                      gap: 2,
+                                    }}
+                                  >
+                                    <Typography variant="body1">Fiókom</Typography>
+                                  </MenuItem>
+                      
+                                  <MenuItem 
+                                    onClick={handleLogout}
+                                    sx={{
+                                      py: 1.5,
+                                      px: 2,
+                                      color: '#ff4444',
+                                      '&:hover': {
+                                        backgroundColor: 'rgba(255,68,68,0.1)',
+                                      },
+                                      gap: 2,
+                                      borderTop: '1px solid',
+                                      borderColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                                      mt: 1,
+                                    }}
+                                  >
+                                    <Typography variant="body1">Kijelentkezés</Typography>
+                                  </MenuItem>
+                                </MenuList>
+                              </ClickAwayListener>
+                            </Paper>
+                          </Grow>
+                        )}
+                      </Popper>
+                      </Box>
+                    ) : (
+                      <>
+                       <Button
+            component={Link}
+            to="/sign"
+            sx={{
+              color: '#fff',
+              border: '1px solid #fff',
+              borderRadius: '5px',
+              padding: {
+                xs: '2px 6px',   // Smaller padding for mobile
+                sm: '5px 10px'
+              },
+              fontSize: {
+                xs: '0.7rem',    // Smaller font for mobile
+                sm: '1rem'
+              },
+              whiteSpace: 'nowrap',
+              '&:hover': {
+                backgroundColor: '#fff',
+                color: '#333',
+              },
+            }}
+          >
+            Sign In
+          </Button>
+          
+          <Button
+            component={Link}
+            to="/signup"
+            sx={{
+              color: '#fff',
+              border: '1px solid #fff',
+              borderRadius: '5px',
+              padding: {
+                xs: '2px 6px',   // Smaller padding for mobile
+                sm: '5px 10px'
+              },
+              fontSize: {
+                xs: '0.7rem',    // Smaller font for mobile
+                sm: '1rem'
+              },
+              whiteSpace: 'nowrap',
+              '&:hover': {
+                backgroundColor: '#fff',
+                color: '#333',
+              },
+            }}
+          >
+            Sign Up
+          </Button>
+                      </>
+                    )}
+                  </Box>
       </div>
 
       <Box sx={{

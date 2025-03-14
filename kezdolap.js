@@ -517,37 +517,26 @@ import { useNavigate } from 'react-router-dom';
         >
           <MenuIcon />
         </IconButton>
-
-        <Typography
-  variant="h1"
-  sx={{
-    position: 'absolute',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    fontWeight: 'bold',
-    fontSize: {
-      xs: '1rem',     // Mobil nézeten még kisebb betűméret
-      sm: '1.5rem',   // Tablet nézeten közepes betűméret
-      md: '2rem'      // Asztali nézeten eredeti betűméret
-    },
-    color: 'white',   // Mindkét módban fehér
-    margin: 0,
-    whiteSpace: 'nowrap',  // Ne törjön sort
-    // Kisebb képernyőkön csökkentjük a szöveg méretét, de nem rejtjük el
-    display: 'block',
-    // Opcionális: kisebb képernyőkön feljebb helyezzük, hogy ne ütközzön más elemekkel
-    top: {
-      xs: '45%',      // Mobil nézeten kicsit feljebb
-      sm: '50%',      // Tablet és asztali nézeten középen
-    },
-    transform: {
-      xs: 'translate(-50%, -50%) scale(0.9)',  // Mobil nézeten kicsit kisebb
-      sm: 'translate(-50%, -50%)',             // Tablet és asztali nézeten eredeti méret
-    }
-  }}
->
-  Adali Clothing
-</Typography>
+ <Typography 
+           variant="h1"
+           sx={{
+             fontWeight: 'bold',
+             fontSize: {
+               xs: '1.1rem',    // Increased size for mobile
+               sm: '1.5rem',    // Tablet size stays the same
+               md: '2rem'       // Desktop size stays the same
+             },
+             textAlign: 'center',
+             color: 'white',
+             position: 'absolute',
+             left: '45%',
+             transform: 'translateX(-50%)',
+             width: 'auto',
+             pointerEvents: 'none'
+           }}
+         >
+           Adali Clothing
+         </Typography>
 
 
           <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
