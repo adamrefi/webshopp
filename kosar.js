@@ -176,24 +176,29 @@ export default function Kosar() {
       paddingBottom: '100px', // Ez biztosítja, hogy a footer ne takarja el a tartalmat
       transition: 'all 0.3s ease-in-out' // Ez adja az átmenetet
     }}>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: darkMode ? '#333' : '#333',
-        padding: '10px 20px',
-        position: 'relative',
-        width: '100%',
-        boxSizing: 'border-box',
-      }}>
+       <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          backgroundColor: darkMode ? '#333' : '#333',
+          padding: '10px 20px',
+          position: 'relative',
+          width: '100%',
+          boxSizing: 'border-box',
+          borderBottom: '3px solid #ffffff', // Add this border style
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Add shadow for better separation
+          marginBottom: '10px', // Add some space below the header
+        }}
+      >
         <IconButton
           onClick={toggleSideMenu}
           style={{ color: darkMode ? 'white' : 'white' }}
         >
           <MenuIcon />
         </IconButton>
-
- <Typography 
+      
+        <Typography
            variant="h1"
            sx={{
              fontWeight: 'bold',
@@ -209,11 +214,11 @@ export default function Kosar() {
              transform: 'translateX(-50%)',
              width: 'auto',
              pointerEvents: 'none'
-           }}
-         >
-           Adali Clothing
-         </Typography>
-        <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+          }}
+        >
+          Adali Clothing
+        </Typography>
+          <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           {isLoggedIn ? (
             <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               <IconButton
@@ -439,163 +444,249 @@ export default function Kosar() {
     ...fadeInAnimation
   }}
 >
-<Typography 
-    variant="h3" 
-    gutterBottom
-    sx={{
-      fontWeight: 600,
-      background: darkMode 
-        ? 'linear-gradient(45deg, #fff, #ccc)' 
-        : 'linear-gradient(45deg, #333, #666)',
-      backgroundClip: 'text',
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-      mb: 4
-    }}
-  >
-    Kosár tartalma
-  </Typography>
+<Typography
+  variant="h3"
+  gutterBottom
+  sx={{
+    fontWeight: 600,
+    fontSize: {
+      xs: '1.75rem',    // Mobil nézeten kisebb betűméret
+      sm: '2.25rem',    // Tablet nézeten közepes betűméret
+      md: '2.75rem'     // Asztali nézeten nagyobb betűméret
+    },
+    textAlign: {
+      xs: 'center',     // Mobil nézeten középre igazítás
+      sm: 'left'        // Tablet és asztali nézeten balra igazítás
+    },
+    background: darkMode
+      ? 'linear-gradient(45deg, #fff, #ccc)'
+      : 'linear-gradient(45deg, #333, #666)',
+    backgroundClip: 'text',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    mb: {
+      xs: 2,            // Mobil nézeten kisebb alsó margó
+      sm: 3,            // Tablet nézeten közepes alsó margó
+      md: 4             // Asztali nézeten nagyobb alsó margó
+    },
+    padding: {
+      xs: '0 15px',     // Mobil nézeten oldalirányú padding
+      sm: 0             // Tablet és asztali nézeten nincs extra padding
+    },
+    lineHeight: {
+      xs: 1.3,          // Mobil nézeten kisebb sormagasság
+      sm: 1.4,          // Tablet nézeten közepes sormagasság
+      md: 1.5           // Asztali nézeten nagyobb sormagasság
+    },
+    letterSpacing: {
+      xs: '-0.5px',     // Mobil nézeten kisebb betűköz
+      sm: 'normal'      // Tablet és asztali nézeten normál betűköz
+    },
+    animation: 'fadeIn 0.8s ease-out',
+    '@keyframes fadeIn': {
+      from: { opacity: 0, transform: 'translateY(-10px)' },
+      to: { opacity: 1, transform: 'translateY(0)' }
+    }
+  }}
+>
+  Kosár tartalma
+</Typography>
 
-  <Grid container spacing={4}>
-    <Grid item xs={12} md={8}>
-      {cartItems.map((item, index) => (
-        <Card 
-          key={item.id} 
-          sx={{ 
-            mb: 2,
-            backgroundColor: darkMode ? 'rgba(51, 51, 51, 0.9)' : 'rgba(255, 255, 255, 0.9)',
-            backdropFilter: 'blur(10px)',
-            borderRadius: '16px',
-            boxShadow: darkMode 
-              ? '0 8px 32px rgba(0, 0, 0, 0.3)' 
-              : '0 8px 32px rgba(0, 0, 0, 0.1)',
-            transform: 'translateY(0)',
-            transition: 'all 0.3s ease',
-            '&:hover': {
-              transform: 'translateY(-4px)',
-              boxShadow: darkMode 
-                ? '0 12px 40px rgba(0, 0, 0, 0.4)' 
-                : '0 12px 40px rgba(0, 0, 0, 0.15)'
-            },
-            animation: `fadeIn 0.6s ease-out ${index * 0.1}s`
-          }}
-        >
-          <CardContent sx={{ p: 3 }}>
-            <Box sx={{ 
-              display: 'flex', 
-              justifyContent: 'space-between', 
+
+<Grid container spacing={{ xs: 2, sm: 3, md: 4 }}>
+  <Grid item xs={12} md={8}>
+    {cartItems.map((item, index) => (
+      <Card
+        key={item.id}
+        sx={{
+          mb: 2,
+          backgroundColor: darkMode ? 'rgba(51, 51, 51, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+          backdropFilter: 'blur(10px)',
+          borderRadius: { xs: '12px', sm: '16px' },
+          boxShadow: darkMode
+            ? '0 8px 32px rgba(0, 0, 0, 0.3)'
+            : '0 8px 32px rgba(0, 0, 0, 0.1)',
+          transform: 'translateY(0)',
+          transition: 'all 0.3s ease',
+          '&:hover': {
+            transform: { xs: 'none', sm: 'translateY(-4px)' },
+            boxShadow: darkMode
+              ? '0 12px 40px rgba(0, 0, 0, 0.4)'
+              : '0 12px 40px rgba(0, 0, 0, 0.15)'
+          },
+          animation: `fadeIn 0.6s ease-out ${index * 0.1}s`
+        }}
+      >
+        <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
+          <Box sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' }, // Mobilon oszlopos elrendezés
+            justifyContent: 'space-between',
+            alignItems: { xs: 'stretch', sm: 'center' },
+            gap: { xs: 2, sm: 3 }
+          }}>
+            {/* Termék információk (kép és szöveg) */}
+            <Box sx={{
+              display: 'flex',
               alignItems: 'center',
-              gap: 3 
+              flexDirection: 'row',
+              gap: { xs: 2, sm: 3 },
+              flex: { xs: 1, sm: '0 1 65%' }, // Növeltem a termék info arányát
+              width: '100%'
             }}>
-              <Box sx={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: 3,
-                flex: 1 
-              }}>
-                <img 
-                  src={imageMap[item.imageUrl] || item.imageUrl} 
-                  alt={item.nev} 
-                  style={{ 
-                    width: 120, 
-                    height: 120, 
-                    objectFit: 'contain',
-                    borderRadius: '12px',
-                    backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
-                    padding: '8px'
-                  }}
-                />
-                <Box>
-                  <Typography 
-                    variant="h6" 
-                    sx={{ 
-                      fontWeight: 600,
-                      color: darkMode ? '#fff' : '#333'
-                    }}
-                  >
-                    {item.nev}
-                  </Typography>
-                  <Typography 
-                    variant="body1" 
-                    sx={{ 
-                      color: darkMode ? '#aaa' : '#666',
-                      mt: 1 
-                    }}
-                  >
-                    Ruha ára: {item.ar.toLocaleString()} Ft
-                  </Typography>
-                </Box>
-              </Box>
-
-              <Box sx={{ 
-                display: 'flex', 
-                alignItems: 'center', 
-                gap: 2 
-              }}>
-                <Box sx={{ 
-                  display: 'flex', 
-                  alignItems: 'center',
-                  bgcolor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-                  borderRadius: '30px',
-                  padding: '4px'
-                }}>
-                  <IconButton 
-                    onClick={() => handleQuantityChange(item.id, false)}
-                    sx={{ 
-                      color: darkMode ? '#fff' : '#333',
-                      '&:hover': {
-                        bgcolor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
-                      }
-                    }}
-                  >
-                    <RemoveIcon />
-                  </IconButton>
-                  <Typography sx={{ 
-                    mx: 2,
-                    color: darkMode ? '#fff' : '#333',
-                    fontWeight: 600
-                  }}>
-                    {item.mennyiseg}
-                  </Typography>
-                  <IconButton 
-                    onClick={() => handleQuantityChange(item.id, true)}
-                    sx={{ 
-                      color: darkMode ? '#fff' : '#333',
-                      '&:hover': {
-                        bgcolor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
-                      }
-                    }}
-                  >
-                    <AddIcon />
-                  </IconButton>
-                </Box>
-
-                <Typography sx={{ 
-                  minWidth: 120,
-                  textAlign: 'right',
-                  fontWeight: 600,
-                  color: darkMode ? '#fff' : '#333'
-                }}>
-                  {(item.ar * item.mennyiseg).toLocaleString()} Ft
-                </Typography>
-
-                <IconButton 
-                  onClick={() => handleRemoveItem(item.id)}
+              <img
+                src={imageMap[item.imageUrl] || item.imageUrl}
+                alt={item.nev}
+                style={{
+                  width: '100%',
+                  maxWidth: '120px',
+                  height: 'auto',
+                  aspectRatio: '1/1',
+                  objectFit: 'contain',
+                  borderRadius: '12px',
+                  backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
+                  padding: '8px'
+                }}
+              />
+              <Box sx={{ width: 'auto' }}>
+                <Typography
+                  variant="h6"
                   sx={{
-                    color: '#ff4444',
+                    fontWeight: 600,
+                    color: darkMode ? '#fff' : '#333',
+                    fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' }
+                  }}
+                >
+                  {item.nev}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: darkMode ? '#aaa' : '#666',
+                    mt: 1,
+                    fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' }
+                  }}
+                >
+                  Méret: {item.size}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: darkMode ? '#aaa' : '#666',
+                    mt: 1,
+                    fontSize: { xs: '0.85rem', sm: '0.9rem', md: '1rem' }
+                  }}
+                >
+                  Ruha ára: {item.ar.toLocaleString()} Ft
+                </Typography>
+              </Box>
+            </Box>
+
+            {/* Mennyiség, ár és törlés gombok */}
+            <Box sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: { xs: 'space-between', sm: 'flex-end' }, // Asztali módban jobbra igazítás
+              gap: { xs: 2, sm: 3, md: 4 }, // Nagyobb képernyőn nagyobb térköz
+              width: { xs: '100%', sm: 'auto' }, // Mobilon teljes szélesség
+              flexWrap: { xs: 'nowrap', sm: 'nowrap' }, // Nincs törés
+              flex: { xs: 1, sm: '0 1 35%' }, // Csökkentettem a gombok arányát
+              minWidth: { sm: '280px' }, // Csökkentettem a minimum szélességet
+              pl: { sm: 2 } // Bal padding asztali módban
+            }}>
+              {/* Mennyiség szabályozó */}
+              <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                bgcolor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+                borderRadius: '30px',
+                padding: { xs: '4px', sm: '2px' }, // Csökkentettem a padding-ot asztali módban
+                flexShrink: 0, // Nem zsugorodik
+                mr: { sm: 2, md: 3 }, // Asztali módban jobb margó
+                transform: { sm: 'scale(0.9)' } // Kicsit kisebb méret asztali módban
+              }}>
+                <IconButton
+                  onClick={() => handleQuantityChange(item.id, false)}
+                  size="small" // Kisebb gomb méret
+                  sx={{
+                    color: darkMode ? '#fff' : '#333',
                     '&:hover': {
-                      bgcolor: 'rgba(255,68,68,0.1)'
+                      bgcolor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
                     }
                   }}
                 >
-                  <DeleteIcon />
+                  <RemoveIcon fontSize="small" /> {/* Kisebb ikon méret */}
+                </IconButton>
+                <Typography sx={{
+                  mx: { xs: 1, sm: 1 }, // Csökkentettem a margót asztali módban
+                  color: darkMode ? '#fff' : '#333',
+                  fontWeight: 600,
+                  fontSize: { xs: '0.9rem', sm: '0.85rem' }, // Csökkentettem a betűméretet asztali módban
+                  padding: { xs: '0 2px', sm: '0 2px' }, // Csökkentettem a padding-ot asztali módban
+                  lineHeight: { xs: 1.2, sm: 1.2 }, // Csökkentettem a sormagasságot asztali módban
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minWidth: { xs: '20px', sm: '18px' } // Csökkentettem a minimum szélességet asztali módban
+                }}>
+                  {item.mennyiseg}
+                </Typography>
+                <IconButton
+                  onClick={() => handleQuantityChange(item.id, true)}
+                  size="small" // Kisebb gomb méret
+                  sx={{
+                    color: darkMode ? '#fff' : '#333',
+                    '&:hover': {
+                      bgcolor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+                    }
+                  }}
+                >
+                  <AddIcon fontSize="small" /> {/* Kisebb ikon méret */}
                 </IconButton>
               </Box>
+
+              {/* Ár */}
+              <Typography sx={{
+                minWidth: { xs: '80px', sm: '100px' }, // Csökkentettem a minimum szélességet asztali módban
+                textAlign: 'right',
+                fontWeight: 600,
+                color: darkMode ? '#fff' : '#333',
+                fontSize: { xs: '0.9rem', sm: '0.95rem' }, // Csökkentettem a betűméretet asztali módban
+                flexGrow: { xs: 1, sm: 0 }, // Csak mobilon tölti ki a helyet
+                display: 'flex',
+                justifyContent: 'flex-end', // Jobbra igazítás
+                alignItems: 'center',
+                mr: { sm: 2 } // Asztali módban jobb margó
+              }}>
+                {(item.ar * item.mennyiseg).toLocaleString()} Ft
+              </Typography>
+
+              {/* Törlés gomb */}
+              <IconButton
+                onClick={() => handleRemoveItem(item.id)}
+                size="small" // Kisebb gomb méret
+                sx={{
+                  color: '#ff4444',
+                  flexShrink: 0, // Nem zsugorodik
+                  '&:hover': {
+                    bgcolor: 'rgba(255,68,68,0.1)'
+                  }
+                }}
+              >
+                <DeleteIcon fontSize="small" /> {/* Kisebb ikon méret */}
+              </IconButton>
             </Box>
-          </CardContent>
-        </Card>
-      ))}
-    </Grid>
+          </Box>
+        </CardContent>
+      </Card>
+    ))}
+  </Grid>
+
+
+
+
+
+
 
     <Grid item xs={12} md={4}>
       <Card sx={{

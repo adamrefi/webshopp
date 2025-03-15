@@ -416,7 +416,6 @@ import { useNavigate } from 'react-router-dom';
       checkLoginStatus();
     }, []);
       const [isAnimating, setIsAnimating] = useState(false);
-
       useEffect(() => {
         const timer = setInterval(() => {
           if (!isAnimating) {
@@ -446,14 +445,10 @@ import { useNavigate } from 'react-router-dom';
             }
           }
         }, 4500);
-
-        
-        
-        
-        
         
         return () => clearInterval(timer);
-      }, [isAnimating]);  
+      }, [isAnimating]);
+      
 
     return (
 
@@ -499,37 +494,41 @@ import { useNavigate } from 'react-router-dom';
         <Menu sideMenuActive={sideMenuActive} toggleSideMenu={toggleSideMenu} />
       </Box>
 
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          backgroundColor: darkMode ? '#333' : '#333',
-          padding: '10px 20px',
-          position: 'relative',
-          width: '100%',
-          boxSizing: 'border-box',
-        }}
+     <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        backgroundColor: darkMode ? '#333' : '#333',
+        padding: '10px 20px',
+        position: 'relative',
+        width: '100%',
+        boxSizing: 'border-box',
+        borderBottom: '3px solid #ffffff', // Add this border style
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Add shadow for better separation
+        marginBottom: '10px', // Add some space below the header
+      }}
+    >
+      <IconButton
+        onClick={toggleSideMenu}
+        style={{ color: darkMode ? 'white' : 'white' }}
       >
-        <IconButton
-          onClick={toggleSideMenu}
-          style={{ color: darkMode ? 'white' : 'white' }}
-        >
-          <MenuIcon />
-        </IconButton>
- <Typography 
+        <MenuIcon />
+      </IconButton>
+    
+      <Typography 
            variant="h1"
            sx={{
              fontWeight: 'bold',
              fontSize: {
-               xs: '1.1rem',    // Increased size for mobile
-               sm: '1.5rem',    // Tablet size stays the same
-               md: '2rem'       // Desktop size stays the same
-             },
+              xs: '1.1rem',    // Increased size for mobile
+              sm: '1.5rem',    // Tablet size stays the same
+              md: '2rem'       // Desktop size stays the same
+            },
              textAlign: 'center',
              color: 'white',
              position: 'absolute',
-             left: '45%',
+            left: '50%',
              transform: 'translateX(-50%)',
              width: 'auto',
              pointerEvents: 'none'
@@ -537,9 +536,7 @@ import { useNavigate } from 'react-router-dom';
          >
            Adali Clothing
          </Typography>
-
-
-          <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             {isLoggedIn ? (
               <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
            <IconButton
@@ -1237,7 +1234,6 @@ import { useNavigate } from 'react-router-dom';
       width: '90%',
       maxWidth: '1400px',
       margin: '0 auto',
-      animation: 'slideIn 1.5s ease-in-out',
       overflow: 'hidden'
     }}
   >
@@ -1299,11 +1295,11 @@ import { useNavigate } from 'react-router-dom';
         }
       }}
     >
-      <Typography 
-        variant="h2" 
-        sx={{ 
-          mb: 3, 
-          color: darkMode ? 'white' : 'black', 
+      <Typography
+        variant="h2"
+        sx={{
+          mb: 3,
+          color: darkMode ? 'white' : 'black',
           fontSize: {
             xs: '1.5rem',
             sm: '2rem',
@@ -1313,10 +1309,10 @@ import { useNavigate } from 'react-router-dom';
       >
         {images[currentImageIndex].title}
       </Typography>
-      <Typography 
-        variant="h4" 
-        sx={{ 
-          color: darkMode ? 'grey.300' : 'grey.700', 
+      <Typography
+        variant="h4"
+        sx={{
+          color: darkMode ? 'grey.300' : 'grey.700',
           fontSize: {
             xs: '1rem',
             sm: '1.25rem',
@@ -1332,43 +1328,43 @@ import { useNavigate } from 'react-router-dom';
   <style>
   {`
     @keyframes slideInLeft {
-      from { 
-        transform: translateX(-100%) translateY(${currentImageIndex === 1 ? '-50px' : '0'}); 
-        opacity: 0; 
+      from {
+        transform: translateX(-100%) translateY(${currentImageIndex === 1 ? '-50px' : '0'});
+        opacity: 0;
       }
-      to { 
-        transform: translateX(0) translateY(${currentImageIndex === 1 ? '-50px' : '0'}); 
-        opacity: 1; 
+      to {
+        transform: translateX(0) translateY(${currentImageIndex === 1 ? '-50px' : '0'});
+        opacity: 1;
       }
     }
     @keyframes slideOutLeft {
-      from { 
-        transform: translateX(0) translateY(${currentImageIndex === 1 ? '-50px' : '0'}); 
-        opacity: 1; 
+      from {
+        transform: translateX(0) translateY(${currentImageIndex === 1 ? '-50px' : '0'});
+        opacity: 1;
       }
-      to { 
-        transform: translateX(-100%) translateY(${currentImageIndex === 1 ? '-50px' : '0'}); 
-        opacity: 0; 
+      to {
+        transform: translateX(-100%) translateY(${currentImageIndex === 1 ? '-50px' : '0'});
+        opacity: 0;
       }
     }
     @keyframes slideInRight {
-      from { 
-        transform: translateX(100%); 
-        opacity: 0; 
+      from {
+        transform: translateX(100%);
+        opacity: 0;
       }
-      to { 
-        transform: translateX(0); 
-        opacity: 1; 
+      to {
+        transform: translateX(0);
+        opacity: 1;
       }
     }
     @keyframes slideOutRight {
-      from { 
-        transform: translateX(0); 
-        opacity: 1; 
+      from {
+        transform: translateX(0);
+        opacity: 1;
       }
-      to { 
-        transform: translateX(100%); 
-        opacity: 0; 
+      to {
+        transform: translateX(100%);
+        opacity: 0;
       }
     }
     @keyframes fadeInUp {
@@ -1381,40 +1377,9 @@ import { useNavigate } from 'react-router-dom';
         transform: translateY(0);
       }
     }
-    
-    /* Mobil nézet animációk - oldalról jönnek be */
-    @media (max-width: 900px) {
-      #slideImage {
-        animation: mobileSlideInLeft 1.5s ease-in-out !important;
-      }
-      #slideText {
-        animation: mobileSlideInRight 1.5s ease-in-out !important;
-      }
-      @keyframes mobileSlideInLeft {
-        from {
-          transform: translateX(-100%);
-          opacity: 0;
-        }
-        to {
-          transform: translateX(0);
-          opacity: 1;
-        }
-      }
-      @keyframes mobileSlideInRight {
-        from {
-          transform: translateX(100%);
-          opacity: 0;
-        }
-        to {
-          transform: translateX(0);
-          opacity: 1;
-        }
-      }
-    }
   `}
   </style>
 </Box>
-
 
 {showLogoutAlert && (
   <Box
