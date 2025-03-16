@@ -1,7 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-
-import Footer from './footer';
-
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
@@ -11,16 +8,16 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
-import logo from './logo02.png';
+import logo from './fehlogo.png';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import { Card, CardContent } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Dialog } from '@mui/material';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import darkLogo from './logo02.png';
 
 const randomColor = () => {
   const r = Math.floor(Math.random() * 256);
@@ -28,19 +25,15 @@ const randomColor = () => {
   const b = Math.floor(Math.random() * 256);
   return `rgb(${r}, ${g}, ${b})`; 
 };
-
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [darkMode, setDarkMode] = useState(true);
   const [showRegistrationSuccess, setShowRegistrationSuccess] = useState(false);
-
-
 
   const dvdLogoRef = useRef({
     x: window.innerWidth * 0.1,  // 10% from left
@@ -56,7 +49,7 @@ export default function SignUpForm() {
     const canvas = document.getElementById('dvdCanvas');
     const ctx = canvas.getContext('2d');
     const img = new Image(); 
-    img.src = logo; 
+    img.src = darkMode ? logo : darkLogo;  
     
     let animationFrameId;
     let isComponentMounted = true;
@@ -126,9 +119,8 @@ export default function SignUpForm() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
     };
-  }, []);
+  }, [darkMode]);
 
-  
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
   const toggleConfirmPasswordVisibility = () =>
     setShowConfirmPassword((prev) => !prev);
@@ -136,6 +128,12 @@ export default function SignUpForm() {
      
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    if (password !== confirmPassword) {
+      alert('A jelszavak nem egyeznek!');
+      return;
+    }
+    
     try {
       const response = await fetch('http://localhost:4000/register', {
         method: 'POST',
@@ -150,102 +148,103 @@ export default function SignUpForm() {
           isNewRegistration: true
         }));
         setShowRegistrationSuccess(true);
+        
         setTimeout(() => {
           navigate('/kezdolap');
         }, 2000);
-      }
-    } catch (error) {
-      console.error('Registration error:', error);
-    }
-  };
-
-  return (
-    <div
-  style={{
-    background: darkMode 
-      ? `linear-gradient(135deg, #151515 0%, #1a1a1a 100%)`
-      : `linear-gradient(135deg, #c8c8c8 0%, #d0d0d0 100%)`,
-    color: darkMode ? 'white' : 'black',
-    height: '100vh',
-    zIndex: 0,
-    position: 'relative',
-    overflow: 'hidden',
-    backgroundImage: darkMode
-      ? `linear-gradient(to right, rgba(18,18,18,0.9) 0%, rgba(25,25,25,0.4) 50%, rgba(18,18,18,0.9) 100%),
-         linear-gradient(to bottom, rgba(18,18,18,0.9) 0%, rgba(25,25,25,0.4) 50%, rgba(18,18,18,0.9) 100%)`
-      : `linear-gradient(to right, rgba(200,200,200,0.8) 0%, rgba(208,208,208,0.4) 50%, rgba(200,200,200,0.8) 100%),
-         linear-gradient(to bottom, rgba(200,200,200,0.8) 0%, rgba(208,208,208,0.4) 50%, rgba(200,200,200,0.8) 100%)`,
-    backgroundBlendMode: 'multiply'
-  }}
->
-  
-
-  
-      {/* Header */}
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          backgroundColor: '#333',
-          color: '#fff',
-          padding: '10px 20px',
-        }}
-      >
-        <IconButton sx={{ color: 'white' }}>
-          <MenuIcon />
-        </IconButton>
-        <Typography 
-  variant="h1"
-  sx={{
-    fontWeight: 'bold',
-    fontSize: {
-      xs: '1.1rem',    // Increased size for mobile
-      sm: '1.5rem',    // Tablet size stays the same
-      md: '2rem'       // Desktop size stays the same
-    },
-    textAlign: 'center',
-    color: 'white',
-    position: 'absolute',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    width: 'auto',
-    pointerEvents: 'none'
-  }}
->
-  Adali Clothing
-</Typography>
-<Box sx={{ 
-  display: 'flex', 
-  gap: {
-    xs: '3px',    // Smaller gap for mobile
-    sm: '10px'
-  },
-  flex: '0 0 auto',
-  zIndex: 1,
-  marginLeft: '50px'
-}}>
-  <Button
-    component={Link}
-    to="/sign"
-    sx={{
-      color: '#fff',
-      border: '1px solid #fff',
-      borderRadius: '5px',
-      padding: {
-        xs: '2px 6px',   // Smaller padding for mobile
-        sm: '5px 10px'
-      },
-      fontSize: {
-        xs: '0.7rem',    // Smaller font for mobile
-        sm: '1rem'
-      },
-      whiteSpace: 'nowrap',
-      '&:hover': {
-        backgroundColor: '#fff',
-        color: '#333',
-      },
-    }}
+        } else {
+          alert(data.error || 'Regisztrációs hiba történt!');
+        }
+        } catch (error) {
+          console.error('Registration error:', error);
+          alert('Hiba történt a regisztráció során. Kérjük, próbálja újra később.');
+        }
+        };
+        
+        return (
+          <div
+            style={{
+              background: darkMode
+                ? `linear-gradient(135deg, #151515 0%, #1a1a1a 100%)`
+                : `linear-gradient(135deg, #c8c8c8 0%, #d0d0d0 100%)`,
+              color: darkMode ? 'white' : 'black',
+              height: '100vh',
+              zIndex: 0,
+              position: 'relative',
+              overflow: 'hidden',
+              backgroundImage: darkMode
+                ? `linear-gradient(to right, rgba(18,18,18,0.9) 0%, rgba(25,25,25,0.4) 50%, rgba(18,18,18,0.9) 100%),
+                   linear-gradient(to bottom, rgba(18,18,18,0.9) 0%, rgba(25,25,25,0.4) 50%, rgba(18,18,18,0.9) 100%)`
+                : `linear-gradient(to right, rgba(200,200,200,0.8) 0%, rgba(208,208,208,0.4) 50%, rgba(200,200,200,0.8) 100%),
+                   linear-gradient(to bottom, rgba(200,200,200,0.8) 0%, rgba(208,208,208,0.4) 50%, rgba(200,200,200,0.8) 100%)`,
+              backgroundBlendMode: 'multiply'
+            }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                backgroundColor: '#333',
+                color: '#fff',
+                padding: '10px 20px',
+              }}
+            >
+              <IconButton sx={{ color: 'white' }}>
+                <MenuIcon />
+              </IconButton>
+              <Typography
+                variant="h1"
+                sx={{
+                  fontWeight: 'bold',
+                  fontSize: {
+                    xs: '1.1rem',
+                    sm: '1.5rem',
+                    md: '2rem'
+                  },
+                  textAlign: 'center',
+                  color: 'white',
+                  position: 'absolute',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: 'auto',
+                  pointerEvents: 'none'
+                }}
+              >
+                Adali Clothing
+              </Typography>
+              <Box sx={{
+                display: 'flex',
+                gap: {
+                  xs: '3px',
+                  sm: '10px'
+                },
+                flex: '0 0 auto',
+                zIndex: 1,
+                marginLeft: '50px'
+              }}>
+                <Button
+                  component={Link}
+                  to="/sign"
+                  sx={{
+                    color: '#fff',
+                    border: '1px solid #fff',
+                    borderRadius: '5px',
+                    padding: {
+                      xs: '2px 6px',
+                      sm: '5px 10px'
+                    },
+                    fontSize: {
+                      xs: '0.7rem',
+                      sm: '1rem'
+                    },
+                    whiteSpace: 'nowrap',
+                    '&:hover': {
+                      backgroundColor: '#fff',
+                      color: '#333',
+                    },
+                  }}
+        
   >
     Sign In
   </Button>
@@ -257,11 +256,11 @@ export default function SignUpForm() {
       border: '1px solid #fff',
       borderRadius: '5px',
       padding: {
-        xs: '2px 6px',   // Smaller padding for mobile
+        xs: '2px 6px',  
         sm: '5px 10px'
       },
       fontSize: {
-        xs: '0.7rem',    // Smaller font for mobile
+        xs: '0.7rem',  
         sm: '1rem'
       },
       whiteSpace: 'nowrap',
@@ -482,7 +481,7 @@ export default function SignUpForm() {
               <Switch
               color="default"
               sx={{ color: 'black' }}
-              checked={darkMode}  // Keep the checked prop
+              checked={darkMode} 
               onChange={() => setDarkMode((prev) => !prev)}
           />
             }
@@ -490,18 +489,20 @@ export default function SignUpForm() {
           />
         </FormGroup>
 
-                  <canvas
-            id="dvdCanvas"
-            style={{
-              position: 'absolute',
-              zIndex: -1,
-              width: '100vw',
-              height: '100vh',
-              top: '4%',
-            }}
-          />
-        
+        <canvas
+          id="dvdCanvas"
+          style={{
+            position: 'absolute',
+            zIndex: -1,
+            width: '104%',
+            height: '100%',
+            bottom: '',
+            top: '4%',
+          }}
+        />
+
       </Container>
+    
       <Dialog
   open={showRegistrationSuccess}
   sx={{
@@ -530,7 +531,6 @@ export default function SignUpForm() {
     }
   }}
 >
-
   <Box
     sx={{
       position: 'absolute',
@@ -547,28 +547,27 @@ export default function SignUpForm() {
     }}
   />
   <Box sx={{ position: 'relative' }}>    
-  <Typography 
-  variant="h4" 
-  sx={{ 
-    color: darkMode ? '#60BA97' : '#4e9d7e',
-    mb: 3,
-    fontWeight: 800,
-    letterSpacing: '1px',
-    textTransform: 'uppercase',
-    fontSize: {
-      xs: '1.2rem',
-      sm: '1.5rem',
-      md: '2rem'
-    },
-    padding: {
-      xs: '0.5rem',
-      sm: '1rem'
-    }
-  }}
->
-  Sikeres regisztráció!
-</Typography>
-
+    <Typography 
+      variant="h4" 
+      sx={{ 
+        color: darkMode ? '#60BA97' : '#4e9d7e',
+        mb: 3,
+        fontWeight: 800,
+        letterSpacing: '1px',
+        textTransform: 'uppercase',
+        fontSize: {
+          xs: '1.2rem',
+          sm: '1.5rem',
+          md: '2rem'
+        },
+        padding: {
+          xs: '0.5rem',
+          sm: '1rem'
+        }
+      }}
+    >
+      Sikeres regisztráció!
+    </Typography>
 
     <Typography 
       variant="h6" 
@@ -580,6 +579,17 @@ export default function SignUpForm() {
       }}
     >
       Köszönjük, hogy csatlakoztál az Adali Clothing közösségéhez!
+    </Typography>
+    
+    <Typography 
+      variant="body1" 
+      sx={{ 
+        color: darkMode ? '#ccc' : '#555',
+        mb: 2,
+        fontWeight: 400
+      }}
+    >
+      Visszaigazoló e-mailt küldtünk a megadott e-mail címre.
     </Typography>
   </Box>
 </Dialog>

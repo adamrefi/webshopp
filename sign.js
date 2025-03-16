@@ -9,7 +9,7 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
-import logo from './logo02.png';
+import logo from './fehlogo.png';
 import { Card, CardContent } from '@mui/material';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -18,6 +18,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import darkLogo from './logo02.png';
 
 const randomColor = () => {
   const r = Math.floor(Math.random() * 256);
@@ -35,25 +36,24 @@ export default function SignInForm() {
   const [loggedInUsername, setLoggedInUsername] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [darkMode, setDarkMode] = useState(true);
-  const [email, setEmail] = useState(''); // E-mail hozzáadása
-
+  const [email, setEmail] = useState(''); // E-mail hozzáadása 
   const navigate = useNavigate();
 
   const dvdLogoRef = useRef({
-    x: window.innerWidth * 0.1,
-    y: window.innerHeight * 0.1,
-    width: Math.min(150, window.innerWidth * 0.15),
-    height: Math.min(150, window.innerWidth * 0.15),
-    dx: Math.min(2, window.innerWidth * 0.003),
-    dy: Math.min(2, window.innerHeight * 0.003),
-    color: randomColor(),
-  });
+      x: window.innerWidth * 0.1,  // 10% from left
+      y: window.innerHeight * 0.1, // 10% from top
+      width: Math.min(150, window.innerWidth * 0.2), // Responsive width
+      height: Math.min(150, window.innerWidth * 0.2), // Responsive height
+      dx: Math.min(2, window.innerWidth * 0.003), // Responsive speed X
+      dy: Math.min(2, window.innerHeight * 0.003), // Responsive speed Y
+      color: randomColor(),
+    });
 
   useEffect(() => {
     const canvas = document.getElementById('dvdCanvas');
     const ctx = canvas.getContext('2d');
     const img = new Image(); 
-    img.src = logo; 
+    img.src = darkMode ? logo : darkLogo;
     
     let animationFrameId;
     let isComponentMounted = true;  // Új flag a komponens életciklusának követésére
@@ -63,8 +63,8 @@ export default function SignInForm() {
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
         
-        dvdLogoRef.current.width = Math.min(150, window.innerWidth * 0.15);
-        dvdLogoRef.current.height = Math.min(150, window.innerWidth * 0.15);
+        dvdLogoRef.current.width = Math.min(150, window.innerWidth * 0.2);
+        dvdLogoRef.current.height = Math.min(150, window.innerWidth * 0.2);
         
         dvdLogoRef.current.dx = Math.min(2, window.innerWidth * 0.003);
         dvdLogoRef.current.dy = Math.min(2, window.innerHeight * 0.003);
@@ -99,12 +99,13 @@ export default function SignInForm() {
       
       dvdLogoRef.current.x += dvdLogoRef.current.dx;
       dvdLogoRef.current.y += dvdLogoRef.current.dy;
-      if (dvdLogoRef.current.y <= 72 || dvdLogoRef.current.y + dvdLogoRef.current.height >= canvas.height - 2) {
-        dvdLogoRef.current.dy *= -1;
+      
+      if (dvdLogoRef.current.x <= 0 || dvdLogoRef.current.x + dvdLogoRef.current.width >= canvas.width) {
+        dvdLogoRef.current.dx *= -1;
       }
       
-      if (dvdLogoRef.current.x <= 2 || dvdLogoRef.current.x + dvdLogoRef.current.width >= canvas.width - 2) {
-        dvdLogoRef.current.dx *= -1;
+      if (dvdLogoRef.current.y <= 0 || dvdLogoRef.current.y + dvdLogoRef.current.height >= canvas.height) {
+        dvdLogoRef.current.dy *= -1;
       }
       
       animationFrameId = requestAnimationFrame(update);
@@ -124,7 +125,7 @@ export default function SignInForm() {
           ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
       };
-    }, []);
+    }, [darkMode]);
     
   
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
@@ -170,133 +171,132 @@ export default function SignInForm() {
 
   return (
    <div
-  style={{
-    background: darkMode 
-      ? `linear-gradient(135deg, #151515 0%, #1a1a1a 100%)`
-      : `linear-gradient(135deg, #c8c8c8 0%, #d0d0d0 100%)`,
-    color: darkMode ? 'white' : 'black',
-    height: '100vh',
-    zIndex: 0,
-    position: 'relative',
-    overflow: 'hidden',
-    backgroundImage: darkMode
-      ? `linear-gradient(to right, rgba(18,18,18,0.9) 0%, rgba(25,25,25,0.4) 50%, rgba(18,18,18,0.9) 100%),
-         linear-gradient(to bottom, rgba(18,18,18,0.9) 0%, rgba(25,25,25,0.4) 50%, rgba(18,18,18,0.9) 100%)`
-      : `linear-gradient(to right, rgba(200,200,200,0.8) 0%, rgba(208,208,208,0.4) 50%, rgba(200,200,200,0.8) 100%),
-         linear-gradient(to bottom, rgba(200,200,200,0.8) 0%, rgba(208,208,208,0.4) 50%, rgba(200,200,200,0.8) 100%)`,
-    backgroundBlendMode: 'multiply'
-  }}
->
-    
-      {/* Header */}
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          backgroundColor: '#333',
-          color: '#fff',
-          padding: '10px 20px',
-        }}
-      >
-        <IconButton sx={{ color: 'white' }}>
-          <MenuIcon />
-        </IconButton>
-        <Typography 
-  variant="h1"
-  sx={{
-    fontWeight: 'bold',
-    fontSize: {
-      xs: '1.1rem',    // Increased size for mobile
-      sm: '1.5rem',    // Tablet size stays the same
-      md: '2rem'       // Desktop size stays the same
-    },
-    textAlign: 'center',
-    color: 'white',
-    position: 'absolute',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    width: 'auto',
-    pointerEvents: 'none'
-  }}
->
-  Adali Clothing
-</Typography>
-<Box sx={{ 
-  display: 'flex', 
-  gap: {
-    xs: '3px',    // Smaller gap for mobile
-    sm: '10px'
-  },
-  flex: '0 0 auto',
-  zIndex: 1,
-  marginLeft: '50px'
-}}>
-  <Button
-    component={Link}
-    to="/sign"
-    sx={{
-      color: '#fff',
-      border: '1px solid #fff',
-      borderRadius: '5px',
-      padding: {
-        xs: '2px 6px',   // Smaller padding for mobile
-        sm: '5px 10px'
-      },
-      fontSize: {
-        xs: '0.7rem',    // Smaller font for mobile
-        sm: '1rem'
-      },
-      whiteSpace: 'nowrap',
-      '&:hover': {
-        backgroundColor: '#fff',
-        color: '#333',
-      },
-    }}
-  >
-    Sign In
-  </Button>
-  <Button
-    component={Link}
-    to="/signup"
-    sx={{
-      color: '#fff',
-      border: '1px solid #fff',
-      borderRadius: '5px',
-      padding: {
-        xs: '2px 6px',   // Smaller padding for mobile
-        sm: '5px 10px'
-      },
-      fontSize: {
-        xs: '0.7rem',    // Smaller font for mobile
-        sm: '1rem'
-      },
-      whiteSpace: 'nowrap',
-      '&:hover': {
-        backgroundColor: '#fff',
-        color: '#333',
-      },
-    }}
-  >
-    Sign Up
-  </Button>
-</Box>
-      </Box>
+     style={{
+       background: darkMode 
+         ? `linear-gradient(135deg, #151515 0%, #1a1a1a 100%)`
+         : `linear-gradient(135deg, #c8c8c8 0%, #d0d0d0 100%)`,
+       color: darkMode ? 'white' : 'black',
+       height: '100vh',
+       zIndex: 0,
+       position: 'relative',
+       overflow: 'hidden',
+       backgroundImage: darkMode
+         ? `linear-gradient(to right, rgba(18,18,18,0.9) 0%, rgba(25,25,25,0.4) 50%, rgba(18,18,18,0.9) 100%),
+            linear-gradient(to bottom, rgba(18,18,18,0.9) 0%, rgba(25,25,25,0.4) 50%, rgba(18,18,18,0.9) 100%)`
+         : `linear-gradient(to right, rgba(200,200,200,0.8) 0%, rgba(208,208,208,0.4) 50%, rgba(200,200,200,0.8) 100%),
+            linear-gradient(to bottom, rgba(200,200,200,0.8) 0%, rgba(208,208,208,0.4) 50%, rgba(200,200,200,0.8) 100%)`,
+       backgroundBlendMode: 'multiply'
+     }}
+   >
+     
+   
+     
+         {/* Header */}
+         <Box
+           sx={{
+             display: 'flex',
+             alignItems: 'center',
+             justifyContent: 'space-between',
+             backgroundColor: '#333',
+             color: '#fff',
+             padding: '10px 20px',
+           }}
+         >
+           <IconButton sx={{ color: 'white' }}>
+             <MenuIcon />
+           </IconButton>
+           <Typography 
+     variant="h1"
+     sx={{
+       fontWeight: 'bold',
+       fontSize: {
+         xs: '1.1rem',    // Increased size for mobile
+         sm: '1.5rem',    // Tablet size stays the same
+         md: '2rem'       // Desktop size stays the same
+       },
+       textAlign: 'center',
+       color: 'white',
+       position: 'absolute',
+       left: '50%',
+       transform: 'translateX(-50%)',
+       width: 'auto',
+       pointerEvents: 'none'
+     }}
+   >
+     Adali Clothing
+   </Typography>
+   <Box sx={{ 
+     display: 'flex', 
+     gap: {
+       xs: '3px',    // Smaller gap for mobile
+       sm: '10px'
+     },
+     flex: '0 0 auto',
+     zIndex: 1,
+     marginLeft: '50px'
+   }}>
+     <Button
+       component={Link}
+       to="/sign"
+       sx={{
+         color: '#fff',
+         border: '1px solid #fff',
+         borderRadius: '5px',
+         padding: {
+           xs: '2px 6px',   // Smaller padding for mobile
+           sm: '5px 10px'
+         },
+         fontSize: {
+           xs: '0.7rem',    // Smaller font for mobile
+           sm: '1rem'
+         },
+         whiteSpace: 'nowrap',
+         '&:hover': {
+           backgroundColor: '#fff',
+           color: '#333',
+         },
+       }}
+     >
+       Sign In
+     </Button>
+     <Button
+       component={Link}
+       to="/signup"
+       sx={{
+         color: '#fff',
+         border: '1px solid #fff',
+         borderRadius: '5px',
+         padding: {
+           xs: '2px 6px',   // Smaller padding for mobile
+           sm: '5px 10px'
+         },
+         fontSize: {
+           xs: '0.7rem',    // Smaller font for mobile
+           sm: '1rem'
+         },
+         whiteSpace: 'nowrap',
+         '&:hover': {
+           backgroundColor: '#fff',
+           color: '#333',
+         },
+       }}
+     >
+       Sign Up
+     </Button>
+   </Box>
+   
+         </Box>
 
       <Menu />
       <Container
-  sx={{
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '100%',
-    width: {
-      xs: '90%',
-      sm: '70%',
-      md: '35%'
-    }
-  }}
->
+              maxWidth="sm"
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '100%',
+              }}
+            >
         <Box
     id="form-box"
     sx={{
@@ -476,17 +476,16 @@ export default function SignInForm() {
         </FormGroup>
 
         <canvas
-  id="dvdCanvas"
-  style={{
-    position: 'absolute',
-    zIndex: -1,
-    width: '100%',
-    height: '100%',
-    top: '0',
-    left: '0',
-    touchAction: 'none'
-  }}
-/>
+          id="dvdCanvas"
+          style={{
+            position: 'absolute',
+            zIndex: -1,
+            width: '104%',
+            height: '100%',
+            bottom: '',
+            top: '4%',
+          }}
+        />
 
         {successAlert && (
   <Box

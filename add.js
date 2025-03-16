@@ -22,7 +22,6 @@ import {
   CardContent
 } from '@mui/material';
 import { FormHelperText } from '@mui/material';
-
 import { Link } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -34,7 +33,6 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 
 function Add() {
- 
 const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
 const cartItemCount = cartItems.reduce((total, item) => total + item.mennyiseg, 0);
   const [title, setTitle] = useState('');
@@ -46,15 +44,13 @@ const cartItemCount = cartItems.reduce((total, item) => total + item.mennyiseg, 
   const [darkMode, setDarkMode] = useState(true);
   const [sideMenuActive, setSideMenuActive] = useState(false);
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
-  const [selectedImage, setSelectedImage] = useState(null);
- 
+
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
     if (!validateForm()) {
       return;
     }
-    
     const termekAdatok = {
       kategoriaId: parseInt(selectedCategory),
       ar: parseInt(price),
@@ -92,7 +88,6 @@ const cartItemCount = cartItems.reduce((total, item) => total + item.mennyiseg, 
           border: 1px solid ${darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'};
           backdrop-filter: blur(10px);
         `;
-  
         alertBox.innerHTML = `
           <div style="
             width: 60px;
@@ -168,7 +163,6 @@ const cartItemCount = cartItems.reduce((total, item) => total + item.mennyiseg, 
   const fileInputRef = React.useRef(null);
   const anchorRef = React.useRef(null);
   
-
   useEffect(() => {
     const checkLoginStatus = () => {
       const userData = localStorage.getItem('user');
@@ -192,7 +186,6 @@ const cartItemCount = cartItems.reduce((total, item) => total + item.mennyiseg, 
       .catch(error => console.log('Error:', error));
   }, []);
 
-  // Adjuk hozzá ezt a useEffect-et
 useEffect(() => {
   if (sideMenuActive) {
     document.body.style.overflow = 'hidden';
@@ -360,46 +353,51 @@ const handleListKeyDown = (event) => {
   color: darkMode ? 'white' : 'black',
   minHeight: '100vh',
   paddingBottom: '100px',
-  transition: 'all 0.3s ease-in-out' // Ez adja az átmenetet
+  transition: 'all 0.3s ease-in-out' 
 }}>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: darkMode ? '#333' : '#333',
-        padding: '10px 20px',
-        position: 'relative',
-        width: '100%',
-        boxSizing: 'border-box',
-      }}>
-        <IconButton
-          onClick={toggleSideMenu}
-          style={{ color: darkMode ? 'white' : 'white' }}
-        >
-          <MenuIcon />
-        </IconButton>
+      <div
+  style={{
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: darkMode ? '#333' : '#333',
+    padding: '10px 20px',
+    position: 'relative',
+    width: '100%',
+    boxSizing: 'border-box',
+    borderBottom: '3px solid #ffffff',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
+    marginBottom: '10px', 
+  }}
+>
+  <IconButton
+    onClick={toggleSideMenu}
+    style={{ color: darkMode ? 'white' : 'white' }}
+  >
+    <MenuIcon />
+  </IconButton>
 
-       <Typography 
-         variant="h1"
-         sx={{
-           fontWeight: 'bold',
-           fontSize: {
-             xs: '1.1rem',    // Increased size for mobile
-             sm: '1.5rem',    // Tablet size stays the same
-             md: '2rem'       // Desktop size stays the same
-           },
-           textAlign: 'center',
-           color: 'white',
-           position: 'absolute',
-           left: '45%',
-           transform: 'translateX(-50%)',
-           width: 'auto',
-           pointerEvents: 'none'
-         }}
-       >
-         Adali Clothing
-       </Typography>
-        <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+  <Typography
+    variant="h1"
+    sx={{
+      fontWeight: 'bold',
+      fontSize: {
+        xs: '1.1rem',   
+        sm: '1.5rem',    
+        md: '2rem'       
+      },
+      textAlign: 'center',
+      color: 'white',
+      position: 'absolute',
+      left: '50%',
+      transform: 'translateX(-50%)',
+      width: 'auto',
+      pointerEvents: 'none'
+    }}
+  >
+    Adali Clothing
+  </Typography>
+    <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           {isLoggedIn ? (
                         <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                         <IconButton
@@ -445,7 +443,7 @@ const handleListKeyDown = (event) => {
                         disablePortal
                         sx={{ 
                           zIndex: 1300,
-                          mt: 1, // Margin top for spacing
+                          mt: 1,
                           '& .MuiPaper-root': {
                             overflow: 'hidden',
                             borderRadius: '12px',
@@ -546,11 +544,11 @@ const handleListKeyDown = (event) => {
               border: '1px solid #fff',
               borderRadius: '5px',
               padding: {
-                xs: '2px 6px',   // Smaller padding for mobile
+                xs: '2px 6px',   
                 sm: '5px 10px'
               },
               fontSize: {
-                xs: '0.7rem',    // Smaller font for mobile
+                xs: '0.7rem',    
                 sm: '1rem'
               },
               whiteSpace: 'nowrap',
@@ -571,11 +569,11 @@ const handleListKeyDown = (event) => {
               border: '1px solid #fff',
               borderRadius: '5px',
               padding: {
-                xs: '2px 6px',   // Smaller padding for mobile
+                xs: '2px 6px',  
                 sm: '5px 10px'
               },
               fontSize: {
-                xs: '0.7rem',    // Smaller font for mobile
+                xs: '0.7rem',   
                 sm: '1rem'
               },
               whiteSpace: 'nowrap',
@@ -916,83 +914,226 @@ const handleListKeyDown = (event) => {
 
 {showUploadInfo && (
   <Box
-    sx={{
-      position: 'fixed',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      zIndex: 1400,
-      width: '95%',
-      maxWidth: 600,
-    }}
-  >
+  sx={{
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    zIndex: 1400,
+    width: {
+      xs: '95%',
+      sm: '85%',
+      md: '70%'
+    },
+    maxWidth: {
+      xs: 350,
+      sm: 450,
+      md: 600
+    },
+    animation: 'fadeIn 0.3s ease-out',
+    '@keyframes fadeIn': {
+      from: { opacity: 0, transform: 'translate(-50%, -55%)' },
+      to: { opacity: 1, transform: 'translate(-50%, -50%)' }
+    }
+    }}>
     <Card sx={{
       backgroundColor: darkMode ? 'rgba(45, 45, 45, 0.98)' : 'rgba(255, 255, 255, 0.98)',
       color: darkMode ? '#fff' : '#000',
-      borderRadius: 4,
+      borderRadius: {
+        xs: 3,
+        sm: 4
+      },
       boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
       overflow: 'hidden'
     }}>
       <Box sx={{
-        height: '4px',
+        height: {
+          xs: '3px',
+          sm: '4px'
+        },
         background: 'linear-gradient(90deg, #2196F3, #64B5F6)',
       }} />
-      
-      <Box sx={{ p: 4 }}>
-        <Typography variant="h4" sx={{ 
-          mb: 3, 
+     
+      <Box sx={{
+        p: {
+          xs: 2.5,
+          sm: 3,
+          md: 4
+        }
+      }}>
+        <Typography variant="h4" sx={{
+          mb: {
+            xs: 2,
+            sm: 2.5,
+            md: 3
+          },
           fontWeight: 'bold',
           textAlign: 'center',
-          color: darkMode ? '#90CAF9' : '#1976D2'
+          color: darkMode ? '#90CAF9' : '#1976D2',
+          fontSize: {
+            xs: '1.5rem',
+            sm: '1.75rem',
+            md: '2rem'
+          }
         }}>
           Feltöltési követelmények
         </Typography>
-
-        <Box sx={{ mb: 3 }}>
-          <Typography variant="h6" sx={{ mb: 2, color: darkMode ? '#81D4FA' : '#0D47A1' }}>
+    
+        <Box sx={{
+          mb: {
+            xs: 2,
+            sm: 2.5,
+            md: 3
+          }
+        }}>
+          <Typography variant="h6" sx={{
+            mb: {
+              xs: 1,
+              sm: 1.5,
+              md: 2
+            },
+            color: darkMode ? '#81D4FA' : '#0D47A1',
+            fontSize: {
+              xs: '1.1rem',
+              sm: '1.2rem',
+              md: '1.25rem'
+            }
+          }}>
             Képfeltöltés:
           </Typography>
-          <Box sx={{ pl: 2, mb: 2 }}>
-            <Typography sx={{ mb: 1 }}>• Ajánlott képméret: 1200x1200 pixel</Typography>
-            <Typography sx={{ mb: 1 }}>• Maximum fájlméret: 8MB</Typography>
-            <Typography>• Elfogadott formátumok: JPG, PNG</Typography>
+          <Box sx={{
+            pl: {
+              xs: 1,
+              sm: 1.5,
+              md: 2
+            },
+            mb: 2
+          }}>
+            <Typography sx={{
+              mb: 1,
+              fontSize: {
+                xs: '0.9rem',
+                sm: '0.95rem',
+                md: '1rem'
+              }
+            }}>• Ajánlott képméret: 1200x1200 pixel</Typography>
+            <Typography sx={{
+              mb: 1,
+              fontSize: {
+                xs: '0.9rem',
+                sm: '0.95rem',
+                md: '1rem'
+              }
+            }}>• Maximum fájlméret: 8MB</Typography>
+            <Typography sx={{
+              fontSize: {
+                xs: '0.9rem',
+                sm: '0.95rem',
+                md: '1rem'
+              }
+            }}>• Elfogadott formátumok: JPG, PNG</Typography>
           </Box>
         </Box>
-
-        <Box sx={{ mb: 4 }}>
-          <Typography variant="h6" sx={{ mb: 2, color: darkMode ? '#81D4FA' : '#0D47A1' }}>
+    
+        <Box sx={{
+          mb: {
+            xs: 3,
+            sm: 3.5,
+            md: 4
+          }
+        }}>
+          <Typography variant="h6" sx={{
+            mb: {
+              xs: 1,
+              sm: 1.5,
+              md: 2
+            },
+            color: darkMode ? '#81D4FA' : '#0D47A1',
+            fontSize: {
+              xs: '1.1rem',
+              sm: '1.2rem',
+              md: '1.25rem'
+            }
+          }}>
             Termékadatok:
           </Typography>
-          <Box sx={{ pl: 2 }}>
-            <Typography sx={{ mb: 1 }}>• Pontos terméknév megadása</Typography>
-            <Typography sx={{ mb: 1 }}>• Valós ár feltüntetése</Typography>
-            <Typography sx={{ mb: 1 }}>• Részletes termékleírás</Typography>
-            <Typography>• Megfelelő méret kiválasztása</Typography>
+          <Box sx={{
+            pl: {
+              xs: 1,
+              sm: 1.5,
+              md: 2
+            }
+          }}>
+            <Typography sx={{
+              mb: 1,
+              fontSize: {
+                xs: '0.9rem',
+                sm: '0.95rem',
+                md: '1rem'
+              }
+            }}>• Pontos terméknév megadása</Typography>
+            <Typography sx={{
+              mb: 1,
+              fontSize: {
+                xs: '0.9rem',
+                sm: '0.95rem',
+                md: '1rem'
+              }
+            }}>• Valós ár feltüntetése</Typography>
+            <Typography sx={{
+              mb: 1,
+              fontSize: {
+                xs: '0.9rem',
+                sm: '0.95rem',
+                md: '1rem'
+              }
+            }}>• Részletes termékleírás</Typography>
+            <Typography sx={{
+              fontSize: {
+                xs: '0.9rem',
+                sm: '0.95rem',
+                md: '1rem'
+              }
+            }}>• Megfelelő méret kiválasztása</Typography>
           </Box>
         </Box>
-
-        <Button 
+    
+        <Button
           fullWidth
           variant="contained"
           onClick={() => setShowUploadInfo(false)}
           sx={{
-            mt: 3,
-            py: 2,
-            backgroundColor: darkMode ? '#90CAF9' : '#1976D2',
-            fontSize: '1.1rem',
-            '&:hover': {
-              backgroundColor: darkMode ? '#64B5F6' : '#1565C0',
-              transform: 'translateY(-2px)',
-              boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
+            mt: {
+              xs: 2,
+              sm: 2.5,
+              md: 3
             },
-            transition: 'all 0.2s ease'
-          }}
-        >
-          Értettem
-        </Button>
-      </Box>
-    </Card>
-  </Box>
+            py: {
+              xs: 1.5,
+              sm: 1.75,
+              md: 2
+            },
+            backgroundColor: darkMode ? '#90CAF9' : '#1976D2',
+            fontSize: {
+              xs: '0.95rem',
+              sm: '1rem',
+              md: '1.1rem'
+            }
+    ,
+          '&:hover': {
+            backgroundColor: darkMode ? '#64B5F6' : '#1565C0',
+            transform: 'translateY(-2px)',
+            boxShadow: '0 5px 15px rgba(0,0,0,0.3)',
+          },
+          transition: 'all 0.2s ease'
+        }}
+      >
+        Értettem
+      </Button>
+    </Box>
+  </Card>
+</Box>
+
 )}
 
       <Footer />

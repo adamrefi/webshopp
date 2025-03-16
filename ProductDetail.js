@@ -2,12 +2,11 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  Container,
   Box,
   Typography,
   Button,
   Card,
-  CardMedia,
+  Badge,
   CardContent,
   IconButton,
   FormGroup,
@@ -29,12 +28,10 @@ import Menu from './menu2';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-
 export default function ProductDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(product?.imageUrl);
   const [darkMode, setDarkMode] = useState(true);
   const [sideMenuActive, setSideMenuActive] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -46,14 +43,10 @@ export default function ProductDetail() {
   const [error, setError] = useState(null);
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
   const anchorRef = React.useRef(null);
-  const [mainImage, setMainImage] = useState('');
-  const [additionalImages, setAdditionalImages] = useState([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const uniqueImages = [...new Set([product?.imageUrl, ...(product?.images || [])])];
-
-
-
-
+  const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
+  const cartItemCount = cartItems.reduce((total, item) => total + item.mennyiseg, 0);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -73,9 +66,9 @@ export default function ProductDetail() {
           images: imagesArray
         });
         
-        // Set the first image as main image
+      
         setMainImage(data.imageUrl);
-        // Set additional images
+       
         setAdditionalImages(imagesArray);
       } catch (error) {
         console.error('Error:', error);
@@ -105,9 +98,6 @@ export default function ProductDetail() {
     }
     setOpen(false);
   };
-    
-  
-  
   const handleImageNavigation = (direction) => {
     if (direction === 'next') {
       setCurrentImageIndex((prev) => (prev + 1) % uniqueImages.length);
@@ -115,16 +105,9 @@ export default function ProductDetail() {
       setCurrentImageIndex((prev) => (prev - 1 + uniqueImages.length) % uniqueImages.length);
     }
   };
-  
-  // For thumbnail clicks
   const handleThumbnailClick = (index) => {
     setCurrentImageIndex(index);
   };
-  
-  
-  
-  
-
   const handleListKeyDown = (event) => {
     if (event.key === 'Tab') {
       event.preventDefault();
@@ -163,9 +146,6 @@ export default function ProductDetail() {
       }, 2000);
       return;
     }
-    // meglévő kosár logika...
-  
-  
     const cartItems = JSON.parse(localStorage.getItem('cartItems')) || [];
     const existingItem = cartItems.find(item => item.id === product.id);
   
@@ -199,7 +179,7 @@ export default function ProductDetail() {
       backgroundSize: '20px 20px',
       color: darkMode ? 'white' : 'black',
       minHeight: '100vh',
-      transition: 'all 0.3s ease-in-out' // Ez adja az átmenetet
+      transition: 'all 0.3s ease-in-out'
     }}>
         <div
   style={{
@@ -211,9 +191,9 @@ export default function ProductDetail() {
     position: 'relative',
     width: '100%',
     boxSizing: 'border-box',
-    borderBottom: '3px solid #ffffff', // Add this border style
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Add shadow for better separation
-    marginBottom: '10px', // Add some space below the header
+    borderBottom: '3px solid #ffffff', 
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
+    marginBottom: '10px', 
   }}
 >
   <IconButton
@@ -228,14 +208,14 @@ export default function ProductDetail() {
            sx={{
              fontWeight: 'bold',
              fontSize: {
-               xs: '1.1rem',    // Increased size for mobile
-               sm: '1.5rem',    // Tablet size stays the same
-               md: '2rem'       // Desktop size stays the same
+               xs: '1.1rem',   
+               sm: '1.5rem',   
+               md: '2rem'      
              },
              textAlign: 'center',
              color: 'white',
              position: 'absolute',
-             left: '45%',
+             left: '50%',
              transform: 'translateX(-50%)',
              width: 'auto',
              pointerEvents: 'none'
@@ -289,7 +269,7 @@ export default function ProductDetail() {
                         disablePortal
                         sx={{ 
                           zIndex: 1300,
-                          mt: 1, // Margin top for spacing
+                          mt: 1, 
                           '& .MuiPaper-root': {
                             overflow: 'hidden',
                             borderRadius: '12px',
@@ -390,11 +370,11 @@ export default function ProductDetail() {
               border: '1px solid #fff',
               borderRadius: '5px',
               padding: {
-                xs: '2px 6px',   // Smaller padding for mobile
+                xs: '2px 6px',  
                 sm: '5px 10px'
               },
               fontSize: {
-                xs: '0.7rem',    // Smaller font for mobile
+                xs: '0.7rem',    
                 sm: '1rem'
               },
               whiteSpace: 'nowrap',
@@ -415,11 +395,11 @@ export default function ProductDetail() {
               border: '1px solid #fff',
               borderRadius: '5px',
               padding: {
-                xs: '2px 6px',   // Smaller padding for mobile
+                xs: '2px 6px',  
                 sm: '5px 10px'
               },
               fontSize: {
-                xs: '0.7rem',    // Smaller font for mobile
+                xs: '0.7rem',   
                 sm: '1rem'
               },
               whiteSpace: 'nowrap',

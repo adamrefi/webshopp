@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Menu from './menu2';
-
-import CloseIcon from '@mui/icons-material/Close';
 import {
   Box,
   Container,
@@ -10,10 +8,8 @@ import {
   Card,
   CardContent,
   Button,
-  CardMedia,
   IconButton,
   Grid,
-  Divider,
   FormGroup,
   FormControlLabel,
   Switch,
@@ -31,15 +27,13 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-// Add these imports at the top
+
 const imageMap = {};
 const images = require.context('../../backend/kep', false, /\.(png|jpg|jpeg)$/);
 images.keys().forEach((key) => {
   const imageName = key.replace('./', '');
   imageMap[imageName] = images(key);
 });
-
-
 
 export default function Kosar() {
   const [darkMode, setDarkMode] = useState(true);
@@ -173,8 +167,8 @@ export default function Kosar() {
       backgroundSize: '20px 20px',
       color: darkMode ? 'white' : 'black',
       minHeight: '100vh',
-      paddingBottom: '100px', // Ez biztosítja, hogy a footer ne takarja el a tartalmat
-      transition: 'all 0.3s ease-in-out' // Ez adja az átmenetet
+      paddingBottom: '100px', 
+      transition: 'all 0.3s ease-in-out'
     }}>
        <div
         style={{
@@ -186,9 +180,9 @@ export default function Kosar() {
           position: 'relative',
           width: '100%',
           boxSizing: 'border-box',
-          borderBottom: '3px solid #ffffff', // Add this border style
-          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Add shadow for better separation
-          marginBottom: '10px', // Add some space below the header
+          borderBottom: '3px solid #ffffff',
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
+          marginBottom: '10px', 
         }}
       >
         <IconButton
@@ -203,9 +197,9 @@ export default function Kosar() {
            sx={{
              fontWeight: 'bold',
              fontSize: {
-               xs: '1.1rem',    // Increased size for mobile
-               sm: '1.5rem',    // Tablet size stays the same
-               md: '2rem'       // Desktop size stays the same
+               xs: '1.1rem',    
+               sm: '1.5rem',   
+               md: '2rem'      
              },
              textAlign: 'center',
              color: 'white',
@@ -264,7 +258,7 @@ export default function Kosar() {
               disablePortal
               sx={{ 
                 zIndex: 1300,
-                mt: 1, // Margin top for spacing
+                mt: 1, 
                 '& .MuiPaper-root': {
                   overflow: 'hidden',
                   borderRadius: '12px',
@@ -365,11 +359,11 @@ export default function Kosar() {
     border: '1px solid #fff',
     borderRadius: '5px',
     padding: {
-      xs: '2px 6px',   // Smaller padding for mobile
+      xs: '2px 6px',   
       sm: '5px 10px'
     },
     fontSize: {
-      xs: '0.7rem',    // Smaller font for mobile
+      xs: '0.7rem',    
       sm: '1rem'
     },
     whiteSpace: 'nowrap',
@@ -390,11 +384,11 @@ export default function Kosar() {
     border: '1px solid #fff',
     borderRadius: '5px',
     padding: {
-      xs: '2px 6px',   // Smaller padding for mobile
+      xs: '2px 6px',   
       sm: '5px 10px'
     },
     fontSize: {
-      xs: '0.7rem',    // Smaller font for mobile
+      xs: '0.7rem',  
       sm: '1rem'
     },
     whiteSpace: 'nowrap',
@@ -450,13 +444,13 @@ export default function Kosar() {
   sx={{
     fontWeight: 600,
     fontSize: {
-      xs: '1.75rem',    // Mobil nézeten kisebb betűméret
-      sm: '2.25rem',    // Tablet nézeten közepes betűméret
-      md: '2.75rem'     // Asztali nézeten nagyobb betűméret
+      xs: '1.75rem',   
+      sm: '2.25rem',    
+      md: '2.75rem'  
     },
     textAlign: {
-      xs: 'center',     // Mobil nézeten középre igazítás
-      sm: 'left'        // Tablet és asztali nézeten balra igazítás
+      xs: 'center', 
+      sm: 'left'      
     },
     background: darkMode
       ? 'linear-gradient(45deg, #fff, #ccc)'
@@ -465,22 +459,22 @@ export default function Kosar() {
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     mb: {
-      xs: 2,            // Mobil nézeten kisebb alsó margó
-      sm: 3,            // Tablet nézeten közepes alsó margó
-      md: 4             // Asztali nézeten nagyobb alsó margó
+      xs: 2,          
+      sm: 3,        
+      md: 4            
     },
     padding: {
-      xs: '0 15px',     // Mobil nézeten oldalirányú padding
-      sm: 0             // Tablet és asztali nézeten nincs extra padding
+      xs: '0 15px',     
+      sm: 0           
     },
     lineHeight: {
-      xs: 1.3,          // Mobil nézeten kisebb sormagasság
-      sm: 1.4,          // Tablet nézeten közepes sormagasság
-      md: 1.5           // Asztali nézeten nagyobb sormagasság
+      xs: 1.3,        
+      sm: 1.4,         
+      md: 1.5          
     },
     letterSpacing: {
-      xs: '-0.5px',     // Mobil nézeten kisebb betűköz
-      sm: 'normal'      // Tablet és asztali nézeten normál betűköz
+      xs: '-0.5px',     
+      sm: 'normal'      
     },
     animation: 'fadeIn 0.8s ease-out',
     '@keyframes fadeIn': {
@@ -520,18 +514,17 @@ export default function Kosar() {
         <CardContent sx={{ p: { xs: 2, sm: 3 } }}>
           <Box sx={{
             display: 'flex',
-            flexDirection: { xs: 'column', sm: 'row' }, // Mobilon oszlopos elrendezés
+            flexDirection: { xs: 'column', sm: 'row' }, 
             justifyContent: 'space-between',
             alignItems: { xs: 'stretch', sm: 'center' },
             gap: { xs: 2, sm: 3 }
           }}>
-            {/* Termék információk (kép és szöveg) */}
             <Box sx={{
               display: 'flex',
               alignItems: 'center',
               flexDirection: 'row',
               gap: { xs: 2, sm: 3 },
-              flex: { xs: 1, sm: '0 1 65%' }, // Növeltem a termék info arányát
+              flex: { xs: 1, sm: '0 1 65%' },
               width: '100%'
             }}>
               <img
@@ -582,105 +575,102 @@ export default function Kosar() {
               </Box>
             </Box>
 
-            {/* Mennyiség, ár és törlés gombok */}
+           
             <Box sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: { xs: 'space-between', sm: 'flex-end' }, // Asztali módban jobbra igazítás
-              gap: { xs: 2, sm: 3, md: 4 }, // Nagyobb képernyőn nagyobb térköz
-              width: { xs: '100%', sm: 'auto' }, // Mobilon teljes szélesség
-              flexWrap: { xs: 'nowrap', sm: 'nowrap' }, // Nincs törés
-              flex: { xs: 1, sm: '0 1 35%' }, // Csökkentettem a gombok arányát
-              minWidth: { sm: '280px' }, // Csökkentettem a minimum szélességet
-              pl: { sm: 2 } // Bal padding asztali módban
-            }}>
-              {/* Mennyiség szabályozó */}
-              <Box sx={{
-                display: 'flex',
-                alignItems: 'center',
-                bgcolor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
-                borderRadius: '30px',
-                padding: { xs: '4px', sm: '2px' }, // Csökkentettem a padding-ot asztali módban
-                flexShrink: 0, // Nem zsugorodik
-                mr: { sm: 2, md: 3 }, // Asztali módban jobb margó
-                transform: { sm: 'scale(0.9)' } // Kicsit kisebb méret asztali módban
-              }}>
-                <IconButton
-                  onClick={() => handleQuantityChange(item.id, false)}
-                  size="small" // Kisebb gomb méret
-                  sx={{
-                    color: darkMode ? '#fff' : '#333',
-                    '&:hover': {
-                      bgcolor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
-                    }
-                  }}
-                >
-                  <RemoveIcon fontSize="small" /> {/* Kisebb ikon méret */}
-                </IconButton>
-                <Typography sx={{
-                  mx: { xs: 1, sm: 1 }, // Csökkentettem a margót asztali módban
-                  color: darkMode ? '#fff' : '#333',
-                  fontWeight: 600,
-                  fontSize: { xs: '0.9rem', sm: '0.85rem' }, // Csökkentettem a betűméretet asztali módban
-                  padding: { xs: '0 2px', sm: '0 2px' }, // Csökkentettem a padding-ot asztali módban
-                  lineHeight: { xs: 1.2, sm: 1.2 }, // Csökkentettem a sormagasságot asztali módban
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  minWidth: { xs: '20px', sm: '18px' } // Csökkentettem a minimum szélességet asztali módban
-                }}>
-                  {item.mennyiseg}
-                </Typography>
-                <IconButton
-                  onClick={() => handleQuantityChange(item.id, true)}
-                  size="small" // Kisebb gomb méret
-                  sx={{
-                    color: darkMode ? '#fff' : '#333',
-                    '&:hover': {
-                      bgcolor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
-                    }
-                  }}
-                >
-                  <AddIcon fontSize="small" /> {/* Kisebb ikon méret */}
-                </IconButton>
-              </Box>
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: { xs: 'space-between', sm: 'flex-end' },
+  gap: { xs: 2, sm: 3, md: 4 },
+  width: { xs: '100%', sm: 'auto' },
+  flexWrap: { xs: 'nowrap', sm: 'nowrap' },
+  flex: { xs: 1, sm: '0 1 35%' },
+  minWidth: { sm: '280px' },
+  pl: { sm: 2 }
+}}>
+  <Box sx={{
+    display: 'flex',
+    alignItems: 'center',
+    bgcolor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+    borderRadius: '30px',
+    padding: { xs: '4px', sm: '2px' },
+    flexShrink: 0,
+    mr: { sm: 2, md: 3 },
+    transform: { sm: 'scale(0.9)' }
+  }}>
+    <IconButton
+      onClick={() => handleQuantityChange(item.id, false)}
+      size="small"
+      sx={{
+        color: darkMode ? '#fff' : '#333',
+        '&:hover': {
+          bgcolor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+        }
+      }}
+    >
+      <RemoveIcon fontSize="small" />
+    </IconButton>
+    <Typography sx={{
+      mx: { xs: 1, sm: 1 },
+      color: darkMode ? '#fff' : '#333',
+      fontWeight: 600,
+      fontSize: { xs: '0.9rem', sm: '0.85rem' },
+      padding: { xs: '0 2px', sm: '0 2px' },
+      lineHeight: { xs: 1.2, sm: 1.2 },
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minWidth: { xs: '20px', sm: '18px' }
+    }}>
+      {item.mennyiseg}
+    </Typography>
+    <IconButton
+      onClick={() => handleQuantityChange(item.id, true)}
+      size="small"
+      sx={{
+        color: darkMode ? '#fff' : '#333',
+        '&:hover': {
+          bgcolor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+        }
+      }}
+    >
+      <AddIcon fontSize="small" />
+    </IconButton>
+  </Box>
 
-              {/* Ár */}
-              <Typography sx={{
-                minWidth: { xs: '80px', sm: '100px' }, // Csökkentettem a minimum szélességet asztali módban
-                textAlign: 'right',
-                fontWeight: 600,
-                color: darkMode ? '#fff' : '#333',
-                fontSize: { xs: '0.9rem', sm: '0.95rem' }, // Csökkentettem a betűméretet asztali módban
-                flexGrow: { xs: 1, sm: 0 }, // Csak mobilon tölti ki a helyet
-                display: 'flex',
-                justifyContent: 'flex-end', // Jobbra igazítás
-                alignItems: 'center',
-                mr: { sm: 2 } // Asztali módban jobb margó
-              }}>
-                {(item.ar * item.mennyiseg).toLocaleString()} Ft
-              </Typography>
+  <Typography sx={{
+    minWidth: { xs: '80px', sm: '100px' },
+    textAlign: 'right',
+    fontWeight: 600,
+    color: darkMode ? '#fff' : '#333',
+    fontSize: { xs: '0.9rem', sm: '0.95rem' },
+    flexGrow: { xs: 1, sm: 0 },
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    mr: { sm: 2 }
+  }}>
+    {(item.ar * item.mennyiseg).toLocaleString()} Ft
+  </Typography>
 
-              {/* Törlés gomb */}
-              <IconButton
-                onClick={() => handleRemoveItem(item.id)}
-                size="small" // Kisebb gomb méret
-                sx={{
-                  color: '#ff4444',
-                  flexShrink: 0, // Nem zsugorodik
-                  '&:hover': {
-                    bgcolor: 'rgba(255,68,68,0.1)'
-                  }
-                }}
-              >
-                <DeleteIcon fontSize="small" /> {/* Kisebb ikon méret */}
-              </IconButton>
-            </Box>
-          </Box>
-        </CardContent>
-      </Card>
-    ))}
-  </Grid>
+  <IconButton
+    onClick={() => handleRemoveItem(item.id)}
+    size="small"
+    sx={{
+      color: '#ff4444',
+      flexShrink: 0,
+      '&:hover': {
+        bgcolor: 'rgba(255,68,68,0.1)'
+      }
+    }}
+  >
+    <DeleteIcon fontSize="small" />
+  </IconButton>
+</Box>
+</Box>
+</CardContent>
+</Card>
+))}
+</Grid>
 
 
 
