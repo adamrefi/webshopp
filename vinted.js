@@ -154,7 +154,6 @@ export default function Vinted() {
     checkLoginStatus();
   }, []);
     return (
-      // A fő div-nél adjuk hozzá a transition tulajdonságot:
 <div style={{
   backgroundColor: darkMode ? '#333' : '#f5f5f5',
   backgroundImage: darkMode 
@@ -163,48 +162,52 @@ export default function Vinted() {
   backgroundSize: '20px 20px',
   color: darkMode ? 'white' : 'black',
   minHeight: '100vh',
-  transition: 'all 0.3s ease-in-out' // Ez adja az átmenetet
+  transition: 'all 0.3s ease-in-out' 
 }}>
 
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        backgroundColor: darkMode ? '#333' : '#333',
-        padding: '10px 20px',
-        position: 'relative',
-        width: '100%',
-        boxSizing: 'border-box',
-      }}>
+       <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          backgroundColor: darkMode ? '#333' : '#333',
+          padding: '10px 20px',
+          position: 'relative',
+          width: '100%',
+          boxSizing: 'border-box',
+          borderBottom: '3px solid #ffffff', 
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
+          marginBottom: '10px',
+        }}
+      >
         <IconButton
           onClick={toggleSideMenu}
           style={{ color: darkMode ? 'white' : 'white' }}
         >
           <MenuIcon />
         </IconButton>
-
-        <Typography 
-                 variant="h1"
-                 sx={{
-                   fontWeight: 'bold',
-                   fontSize: {
-                     xs: '1.1rem',    // Increased size for mobile
-                     sm: '1.5rem',    // Tablet size stays the same
-                     md: '2rem'       // Desktop size stays the same
-                   },
-                   textAlign: 'center',
-                   color: 'white',
-                   position: 'absolute',
-                   left: '45%',
-                   transform: 'translateX(-50%)',
-                   width: 'auto',
-                   pointerEvents: 'none'
-                 }}
-               >
-                 Adali Clothing
-               </Typography>
-
-        <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+      
+        <Typography
+            variant="h1"
+            sx={{
+              fontWeight: 'bold',
+              fontSize: {
+                xs: '1.1rem',    
+                sm: '1.5rem', 
+                md: '2rem'     
+              },
+              textAlign: 'center',
+              color: 'white',
+              position: 'absolute',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: 'auto',
+              pointerEvents: 'none'
+          }}
+        >
+          Adali Clothing
+        </Typography>
+          <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
           {isLoggedIn ? (
             <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               <IconButton
@@ -250,7 +253,7 @@ export default function Vinted() {
                 disablePortal
                 sx={{ 
                   zIndex: 1300,
-                  mt: 1, // Margin top for spacing
+                  mt: 1, 
                   '& .MuiPaper-root': {
                     overflow: 'hidden',
                     borderRadius: '12px',
@@ -351,11 +354,11 @@ export default function Vinted() {
                  border: '1px solid #fff',
                  borderRadius: '5px',
                  padding: {
-                   xs: '2px 6px',   // Smaller padding for mobile
+                   xs: '2px 6px',  
                    sm: '5px 10px'
                  },
                  fontSize: {
-                   xs: '0.7rem',    // Smaller font for mobile
+                   xs: '0.7rem',   
                    sm: '1rem'
                  },
                  whiteSpace: 'nowrap',
@@ -376,11 +379,11 @@ export default function Vinted() {
                  border: '1px solid #fff',
                  borderRadius: '5px',
                  padding: {
-                   xs: '2px 6px',   // Smaller padding for mobile
+                   xs: '2px 6px',  
                    sm: '5px 10px'
                  },
                  fontSize: {
-                   xs: '0.7rem',    // Smaller font for mobile
+                   xs: '0.7rem',   
                    sm: '1rem'
                  },
                  whiteSpace: 'nowrap',
