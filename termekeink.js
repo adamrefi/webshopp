@@ -114,8 +114,6 @@ export default function TermekReszletek() {
     }
   };
 
-  
-
   const handleLogout = () => {
     setShowLogoutAlert(true);
     setOpen(false);
@@ -137,13 +135,12 @@ export default function TermekReszletek() {
   };
 
   const getSizeOptions = (product) => {
-    // Ellenőrizzük, hogy a termék zokni-e a képfájl neve vagy kategória alapján
+   
     if (product.imageUrl.toLowerCase().includes('zokni') || 
         product.nev.toLowerCase().includes('zokni') || 
-        product.kategoriaId === 3) { // Feltételezve, hogy a 3-as kategóriaID a zoknikat jelöli
+        product.kategoriaId === 3) {
       return ['36-39', '40-44', '45-50'];
     }
-    // Minden más termék esetén a standard ruhaméretek
     return ['S', 'M', 'L', 'XL', 'XXL'];
   };
   
@@ -201,7 +198,7 @@ export default function TermekReszletek() {
       backgroundSize: '20px 20px',
       color: darkMode ? 'white' : 'black',
       minHeight: '100vh',
-      transition: 'all 0.3s ease-in-out' // Ez adja az átmenetet
+      transition: 'all 0.3s ease-in-out' 
     }}>
       <div
   style={{
@@ -213,9 +210,9 @@ export default function TermekReszletek() {
     position: 'relative',
     width: '100%',
     boxSizing: 'border-box',
-    borderBottom: '3px solid #ffffff', // Add this border style
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Add shadow for better separation
-    marginBottom: '10px', // Add some space below the header
+    borderBottom: '3px solid #ffffff',
+    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+    marginBottom: '10px', 
   }}
 >
   <IconButton
@@ -229,14 +226,14 @@ export default function TermekReszletek() {
            sx={{
              fontWeight: 'bold',
              fontSize: {
-               xs: '1.1rem',    // Increased size for mobile
-               sm: '1.5rem',    // Tablet size stays the same
-               md: '2rem'       // Desktop size stays the same
+               xs: '1.1rem',   
+               sm: '1.5rem',    
+               md: '2rem'       
              },
              textAlign: 'center',
              color: 'white',
              position: 'absolute',
-             left: '45%',
+             left: '50%',
              transform: 'translateX(-50%)',
              width: 'auto',
              pointerEvents: 'none'
@@ -290,7 +287,7 @@ export default function TermekReszletek() {
                         disablePortal
                         sx={{ 
                           zIndex: 1300,
-                          mt: 1, // Margin top for spacing
+                          mt: 1, 
                           '& .MuiPaper-root': {
                             overflow: 'hidden',
                             borderRadius: '12px',
@@ -391,12 +388,11 @@ export default function TermekReszletek() {
               border: '1px solid #fff',
               borderRadius: '5px',
               padding: {
-                xs: '2px 6px',   // Smaller padding for mobile
+                xs: '2px 6px',   
                 sm: '5px 10px'
               },
               fontSize: {
-                xs: '0.7rem',    // Smaller font for mobile
-                sm: '1rem'
+                xs: '0.7rem',  
               },
               whiteSpace: 'nowrap',
               '&:hover': {
@@ -416,11 +412,11 @@ export default function TermekReszletek() {
               border: '1px solid #fff',
               borderRadius: '5px',
               padding: {
-                xs: '2px 6px',   // Smaller padding for mobile
+                xs: '2px 6px',  
                 sm: '5px 10px'
               },
               fontSize: {
-                xs: '0.7rem',    // Smaller font for mobile
+                xs: '0.7rem',  
                 sm: '1rem'
               },
               whiteSpace: 'nowrap',
@@ -470,24 +466,24 @@ export default function TermekReszletek() {
     ? 'radial-gradient(#444 1px, transparent 1px)'
     : 'radial-gradient(#e0e0e0 1px, transparent 1px)',
   backgroundSize: '20px 20px',
-  minHeight: '100%',  // 100vh helyett 100%
+  minHeight: '100%',  
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
-  padding: '1rem',    // 2rem helyett 1rem
-  gap: '1rem',        // 2rem helyett 1rem
+  padding: '1rem',   
+  gap: '1rem',       
   transition: 'all 0.3s ease-in-out'
 }}>
 <Card
   sx={{
-    width: { xs: '100%', sm: '90%', md: '1000px' }, // Reszponzív szélesség
-    maxWidth: '100%', // Biztosítja, hogy ne lógjon ki
-    margin: '0 auto', // Középre igazítás
+    width: { xs: '100%', sm: '90%', md: '1000px' },
+    maxWidth: '100%',
+    margin: '0 auto', 
     background: darkMode
       ? 'linear-gradient(145deg, rgba(51, 51, 51, 0.9), rgba(68, 68, 68, 0.9))'
       : 'linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(245, 245, 245, 0.9))',
     backdropFilter: 'blur(8px)',
-    borderRadius: { xs: '12px', sm: '16px' }, // Kisebb lekerekítés mobilon
+    borderRadius: { xs: '12px', sm: '16px' },
     overflow: 'hidden',
     boxShadow: darkMode
       ? '0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.1)'
@@ -496,283 +492,280 @@ export default function TermekReszletek() {
     transform: 'translateY(0)',
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     '&:hover': {
-      transform: { xs: 'none', md: 'translateY(-4px)' }, // Csak asztali nézeten legyen hover effekt
+      transform: { xs: 'none', md: 'translateY(-4px)' },
       boxShadow: darkMode
         ? '0 12px 40px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.15)'
         : '0 12px 40px rgba(0, 0, 0, 0.15), inset 0 0 0 1px rgba(0, 0, 0, 0.08)'
     }
   }}
 >
-  <CardContent sx={{ p: { xs: 2, sm: 3 } }}> {/* Kisebb padding mobilon */}
+  <CardContent sx={{ p: { xs: 2, sm: 3 } }}> 
     <Box sx={{
       display: 'flex',
-      flexDirection: { xs: 'column', md: 'row' }, // Egymás alatt mobilon, egymás mellett asztali nézeten
-      gap: { xs: 2, sm: 3 }, // Kisebb térköz mobilon
+      flexDirection: { xs: 'column', md: 'row' },
+      gap: { xs: 2, sm: 3 },
       alignItems: 'center'
     }}>
       <Box sx={{
-        width: { xs: '100%', sm: '250px', md: '300px' }, // Teljes szélesség mobilon
-        height: { xs: '250px', sm: '250px', md: '300px' }, // Kisebb magasság mobilon
-        borderRadius: { xs: '8px', sm: '12px' }, // Kisebb lekerekítés mobilon
-        overflow: 'hidden',
-        background: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
-        padding: { xs: '4px', sm: '8px' }, // Kisebb padding mobilon
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        alignSelf: { xs: 'center', md: 'flex-start' } // Középre igazítás mobilon
-      }}>
-        <img
-          src={imageMap[product.imageUrl]}
-          alt={product.nev}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'contain',
-            borderRadius: '8px',
-            transition: 'transform 0.3s ease',
-          }}
-        />
-      </Box>
+  width: { xs: '100%', sm: '250px', md: '300px' },
+  height: { xs: '250px', sm: '250px', md: '300px' },
+  borderRadius: { xs: '8px', sm: '12px' },
+  overflow: 'hidden',
+  background: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
+  padding: { xs: '4px', sm: '8px' },
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  alignSelf: { xs: 'center', md: 'flex-start' }
+}}>
+  <img
+    src={imageMap[product.imageUrl]}
+    alt={product.nev}
+    style={{
+      width: '100%',
+      height: '100%',
+      objectFit: 'contain',
+      borderRadius: '8px',
+      transition: 'transform 0.3s ease',
+    }}
+  />
+</Box>
 
-      <Box sx={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: { xs: 1.5, sm: 2, md: 2.5 }, // Kisebb térköz mobilon
-        width: { xs: '100%', md: 'auto' } // Teljes szélesség mobilon
-      }}>
-        <Typography
-          variant="h5"
-          sx={{
-            fontWeight: 600,
-            fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.8rem' }, // Reszponzív betűméret
-            background: darkMode
-              ? 'linear-gradient(45deg, #fff, #ccc)'
-              : 'linear-gradient(45deg, #333, #666)',
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            textAlign: { xs: 'center', md: 'left' } // Középre igazítás mobilon
-          }}
-        >
-          {product.nev}
-        </Typography>
+<Box sx={{
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  gap: { xs: 1.5, sm: 2, md: 2.5 },
+  width: { xs: '100%', md: 'auto' }
+}}>
+  <Typography
+    variant="h5"
+    sx={{
+      fontWeight: 600,
+      fontSize: { xs: '1.2rem', sm: '1.5rem', md: '1.8rem' },
+      background: darkMode
+        ? 'linear-gradient(45deg, #fff, #ccc)'
+        : 'linear-gradient(45deg, #333, #666)',
+      backgroundClip: 'text',
+      WebkitBackgroundClip: 'text',
+      WebkitTextFillColor: 'transparent',
+      textAlign: { xs: 'center', md: 'left' }
+    }}
+  >
+    {product.nev}
+  </Typography>
 
-        <Typography
-          variant="h6"
-          sx={{
-            color: darkMode ? '#90caf9' : '#1976d2',
-            fontWeight: 600,
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1,
-            fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.5rem' }, // Reszponzív betűméret
-            justifyContent: { xs: 'center', md: 'flex-start' } // Középre igazítás mobilon
-          }}
-        >
-          {product.ar.toLocaleString()} Ft
-        </Typography>
+  <Typography
+    variant="h6"
+    sx={{
+      color: darkMode ? '#90caf9' : '#1976d2',
+      fontWeight: 600,
+      display: 'flex',
+      alignItems: 'center',
+      gap: 1,
+      fontSize: { xs: '1.1rem', sm: '1.3rem', md: '1.5rem' },
+      justifyContent: { xs: 'center', md: 'flex-start' }
+    }}
+  >
+    {product.ar.toLocaleString()} Ft
+  </Typography>
 
-        <Typography
-          variant="body1"
-          sx={{
-            color: darkMode ? '#fff' : '#666',
-            background: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
-            p: { xs: 1.5, sm: 2 }, // Kisebb padding mobilon
-            borderRadius: '8px',
-            lineHeight: 1.6,
-            fontSize: { xs: '0.9rem', sm: '1rem' }, // Kisebb betűméret mobilon
-            maxHeight: { xs: '100px', sm: '150px', md: 'none' }, // Korlátozott magasság mobilon
-            overflow: { xs: 'auto', md: 'visible' } // Görgethető mobilon
-          }}
-        >
-          {product.termekleiras}
-        </Typography>
-       
-        <FormControl fullWidth error={!!sizeError}>
-          <InputLabel sx={{
-            color: darkMode ? '#fff' : 'inherit',
-            fontSize: { xs: '0.9rem', sm: '1rem' } // Kisebb betűméret mobilon
-          }}>
-            Válassz méretet
-          </InputLabel>
-          <Select
-            value={selectedSize}
-            onChange={(e) => {
-              setSelectedSize(e.target.value);
-              setSizeError('');
-            }}
-            sx={{
-              backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
-              borderRadius: '8px',
-              color: darkMode ? '#fff' : 'inherit',
-              fontSize: { xs: '0.9rem', sm: '1rem' }, // Kisebb betűméret mobilon
-              height: { xs: '45px', sm: '56px' }, // Kisebb magasság mobilon
-              '& .MuiOutlinedInput-notchedOutline': {
-                borderColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
-              },
-              '& .MuiSvgIcon-root': {
-                color: darkMode ? '#fff' : 'inherit'
-              }
-            }}
-          >
-            {getSizeOptions(product).map((size) => (
-              <MenuItem key={size} value={size}>{size}</MenuItem>
-            ))}
-          </Select>
-          {sizeError && <FormHelperText>{sizeError}</FormHelperText>}
-        </FormControl>
+  <Typography
+    variant="body1"
+    sx={{
+      color: darkMode ? '#fff' : '#666',
+      background: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
+      p: { xs: 1.5, sm: 2 },
+      borderRadius: '8px',
+      lineHeight: 1.6,
+      fontSize: { xs: '0.9rem', sm: '1rem' },
+      maxHeight: { xs: '100px', sm: '150px', md: 'none' },
+      overflow: { xs: 'auto', md: 'visible' }
+    }}
+  >
+    {product.termekleiras}
+  </Typography>
+ 
+  <FormControl fullWidth error={!!sizeError}>
+    <InputLabel sx={{
+      color: darkMode ? '#fff' : 'inherit',
+      fontSize: { xs: '0.9rem', sm: '1rem' }
+    }}>
+      Válassz méretet
+    </InputLabel>
+    <Select
+      value={selectedSize}
+      onChange={(e) => {
+        setSelectedSize(e.target.value);
+        setSizeError('');
+      }}
+      sx={{
+        backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
+        borderRadius: '8px',
+        color: darkMode ? '#fff' : 'inherit',
+        fontSize: { xs: '0.9rem', sm: '1rem' },
+        height: { xs: '45px', sm: '56px' },
+        '& .MuiOutlinedInput-notchedOutline': {
+          borderColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'
+        },
+        '& .MuiSvgIcon-root': {
+          color: darkMode ? '#fff' : 'inherit'
+        }
+      }}
+    >
+      {getSizeOptions(product).map((size) => (
+        <MenuItem key={size} value={size}>{size}</MenuItem>
+      ))}
+    </Select>
+    {sizeError && <FormHelperText>{sizeError}</FormHelperText>}
+  </FormControl>
 
-        <Button
-          onClick={handleAddToCart}
-          sx={{
-            mt: { xs: 0.5, sm: 1 }, // Kisebb margó mobilon
-            py: { xs: 1, sm: 1.5 }, // Kisebb padding mobilon
-            px: { xs: 2, sm: 3 }, // Kisebb padding mobilon
-            borderRadius: '10px',
-            background: darkMode
-              ? 'linear-gradient(45deg, #90caf9, #42a5f5)'
-              : 'linear-gradient(45deg, #1976d2, #1565c0)',
-            color: '#fff',
-            fontWeight: 600,
-            letterSpacing: '0.5px',
-            fontSize: { xs: '0.9rem', sm: '1rem' }, // Kisebb betűméret mobilon
-            transition: 'all 0.2s ease',
-            '&:hover': {
-              transform: { xs: 'none', md: 'translateY(-2px)' }, // Csak asztali nézeten legyen hover effekt
-              boxShadow: { xs: 'none', md: '0 5px 15px rgba(0,0,0,0.3)' }
-            }
-          }}
-        >
-          Kosárba
-        </Button>
-      </Box>
-    </Box>
-  </CardContent>
+  <Button
+    onClick={handleAddToCart}
+    sx={{
+      mt: { xs: 0.5, sm: 1 },
+      py: { xs: 1, sm: 1.5 },
+      px: { xs: 2, sm: 3 },
+      borderRadius: '10px',
+      background: darkMode
+        ? 'linear-gradient(45deg, #90caf9, #42a5f5)'
+        : 'linear-gradient(45deg, #1976d2, #1565c0)',
+      color: '#fff',
+      fontWeight: 600,
+      letterSpacing: '0.5px',
+      fontSize: { xs: '0.9rem', sm: '1rem' },
+      transition: 'all 0.2s ease',
+      '&:hover': {
+        transform: { xs: 'none', md: 'translateY(-2px)' },
+        boxShadow: { xs: 'none', md: '0 5px 15px rgba(0,0,0,0.3)' }
+      }
+    }}
+  >
+    Kosárba
+  </Button>
+</Box>
+</Box>
+</CardContent>
 </Card>
 
-
-  
 </div>
 
 <Box sx={{
   width: '100%',
   maxWidth: '1000px',
   margin: '0 auto',
-  px: { xs: 1, sm: 2, md: 4 },  // Kisebb padding mobilon
-  py: { xs: 1, sm: 2, md: 3 }   // Kisebb padding mobilon
+  px: { xs: 1, sm: 2, md: 4 },
+  py: { xs: 1, sm: 2, md: 3 }
 }}>
   <Typography
     variant="h5"
     gutterBottom
     sx={{
       textAlign: 'center',
-      mb: { xs: 1, sm: 2, md: 3 },  // Kisebb margó mobilon
-      fontSize: { xs: '1rem', sm: '1.3rem', md: '1.5rem' }  // Kisebb betűméret mobilon
+      mb: { xs: 1, sm: 2, md: 3 },
+      fontSize: { xs: '1rem', sm: '1.3rem', md: '1.5rem' }
     }}
   >
     Termék részletek
   </Typography>
-  
-  <Grid 
-    container 
-    spacing={{ xs: 1, sm: 2, md: 4 }}  // Kisebb térköz mobilon
+
+  <Grid
+    container
+    spacing={{ xs: 1, sm: 2, md: 4 }}
   >
-    {/* Mindkét Grid item xs={6} értéket kap, hogy egymás mellett maradjanak */}
     <Grid item xs={6} md={6}>
       <Box sx={{
-        p: { xs: 1, sm: 2, md: 3 },  // Kisebb padding mobilon
+        p: { xs: 1, sm: 2, md: 3 },
         backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
-        borderRadius: { xs: 1, md: 2 },  // Kisebb lekerekítés mobilon
+        borderRadius: { xs: 1, md: 2 },
         height: '100%',
         display: 'flex',
         flexDirection: 'column'
       }}>
-        <Typography 
-          variant="h6" 
+        <Typography
+          variant="h6"
           gutterBottom
           sx={{
-            fontSize: { xs: '0.75rem', sm: '0.9rem', md: '1.15rem' },  // Sokkal kisebb betűméret mobilon
+            fontSize: { xs: '0.75rem', sm: '0.9rem', md: '1.15rem' },
             fontWeight: 600,
-            mb: { xs: 0.5, sm: 1 }  // Kisebb margó mobilon
+            mb: { xs: 0.5, sm: 1 }
           }}
         >
           Anyagösszetétel
         </Typography>
-        <Typography 
-          sx={{ 
-            fontSize: { xs: '0.7rem', sm: '0.8rem', md: '1rem' },  // Sokkal kisebb betűméret mobilon
-            mb: { xs: 1, sm: 1.5 }  // Kisebb margó mobilon
+        <Typography
+          sx={{
+            fontSize: { xs: '0.7rem', sm: '0.8rem', md: '1rem' },
+            mb: { xs: 1, sm: 1.5 }
           }}
         >
           100% pamut
         </Typography>
-        
-        <Typography 
-          variant="h6" 
-          sx={{ 
-            mt: { xs: 0.5, sm: 1, md: 2 },  // Kisebb margó mobilon
-            mb: { xs: 0.5, sm: 1 },  // Kisebb margó mobilon
-            fontSize: { xs: '0.75rem', sm: '0.9rem', md: '1.15rem' }  // Sokkal kisebb betűméret mobilon
-          }} 
+       
+        <Typography
+          variant="h6"
+          sx={{
+            mt: { xs: 0.5, sm: 1, md: 2 },
+            mb: { xs: 0.5, sm: 1 },
+            fontSize: { xs: '0.75rem', sm: '0.9rem', md: '1.15rem' }
+          }}
           gutterBottom
         >
           Mosási útmutató
         </Typography>
-        <Typography 
-          sx={{ 
-            fontSize: { xs: '0.7rem', sm: '0.8rem', md: '1rem' }  // Sokkal kisebb betűméret mobilon
+        <Typography
+          sx={{
+            fontSize: { xs: '0.7rem', sm: '0.8rem', md: '1rem' }
           }}
         >
           40 fokon mosható
         </Typography>
       </Box>
     </Grid>
-    
+   
     <Grid item xs={6} md={6}>
       <Box sx={{
-        p: { xs: 1, sm: 2, md: 3 },  // Kisebb padding mobilon
+        p: { xs: 1, sm: 2, md: 3 },
         backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
-        borderRadius: { xs: 1, md: 2 },  // Kisebb lekerekítés mobilon
+        borderRadius: { xs: 1, md: 2 },
         height: '100%',
         display: 'flex',
         flexDirection: 'column'
       }}>
-        <Typography 
-          variant="h6" 
+        <Typography
+          variant="h6"
           gutterBottom
           sx={{
-            fontSize: { xs: '0.75rem', sm: '0.9rem', md: '1.15rem' },  // Sokkal kisebb betűméret mobilon
+            fontSize: { xs: '0.75rem', sm: '0.9rem', md: '1.15rem' },
             fontWeight: 600,
-            mb: { xs: 0.5, sm: 1 }  // Kisebb margó mobilon
+            mb: { xs: 0.5, sm: 1 }
           }}
         >
           Szállítási információk
         </Typography>
-        <Typography 
-          sx={{ 
-            fontSize: { xs: '0.7rem', sm: '0.8rem', md: '1rem' },  // Sokkal kisebb betűméret mobilon
-            mb: { xs: 1, sm: 1.5 }  // Kisebb margó mobilon
+        <Typography
+          sx={{
+            fontSize: { xs: '0.7rem', sm: '0.8rem', md: '1rem' },
+            mb: { xs: 1, sm: 1.5 }
           }}
         >
           2-3 munkanapon belül
         </Typography>
-        
-        <Typography 
-          variant="h6" 
-          sx={{ 
-            mt: { xs: 0.5, sm: 1, md: 2 },  // Kisebb margó mobilon
-            mb: { xs: 0.5, sm: 1 },  // Kisebb margó mobilon
-            fontSize: { xs: '0.75rem', sm: '0.9rem', md: '1.15rem' }  // Sokkal kisebb betűméret mobilon
-          }} 
+       
+        <Typography
+          variant="h6"
+          sx={{
+            mt: { xs: 0.5, sm: 1, md: 2 },
+            mb: { xs: 0.5, sm: 1 },
+            fontSize: { xs: '0.75rem', sm: '0.9rem', md: '1.15rem' }
+          }}
           gutterBottom
         >
           Garancia
         </Typography>
-        <Typography 
-          sx={{ 
-            fontSize: { xs: '0.7rem', sm: '0.8rem', md: '1rem' }  // Sokkal kisebb betűméret mobilon
+        <Typography
+          sx={{
+            fontSize: { xs: '0.7rem', sm: '0.8rem', md: '1rem' }
           }}
         >
           30 napos pénzvisszafizetési garancia
@@ -1004,7 +997,7 @@ export default function TermekReszletek() {
             onClick={() => {
               setCartAlert(false);
               navigate('/kosar');
-              // Kosár esetén bezárjuk és navigálunk
+             
             }}
             sx={{
               flex: 1,
@@ -1174,6 +1167,5 @@ export default function TermekReszletek() {
     </div>
   );
 }
-
 
 

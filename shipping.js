@@ -49,7 +49,7 @@ const validateForm = () => {
   const newErrors = {};
   let isValid = true;
 
-  // Check all required fields
+
   Object.keys(orderData).forEach(field => {
     if (!orderData[field].trim()) {
       newErrors[field] = true;
@@ -59,20 +59,20 @@ const validateForm = () => {
     }
   });
 
-  // Validate email format
+
   if (!orderData.email.includes('@')) {
     newErrors.email = true;
     isValid = false;
   }
 
-  // Validate postal code (4 digits)
+
   const irszRegex = /^\d{4}$/;
   if (!irszRegex.test(orderData.irsz)) {
     newErrors.irsz = true;
     isValid = false;
   }
 
-  // Validate phone number format
+ 
   const phoneRegex = /^(\+36|06)[0-9]{9}$/;
   if (!phoneRegex.test(orderData.telefonszam)) {
     newErrors.telefonszam = true;
@@ -82,11 +82,11 @@ const validateForm = () => {
   setErrors(newErrors);
   return isValid;
 };
-// Then calculate discount amounts
+
 const discountAmount = Math.round((totalPrice * discountPercentage) / 100);
 const finalPrice = totalPrice - discountAmount + 1590;
 const handleSubmitOrder = async () => {
-  // Validate form before proceeding
+
   if (!validateForm()) {
     return;
   }
@@ -110,21 +110,20 @@ const handleSubmitOrder = async () => {
     const vevoResult = await vevoResponse.json();
 
 
-      // Rendelések létrehozása minden termékhez
-      for (const item of cartItems) {
-        await fetch('http://localhost:5000/orders/create', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            termek: item.id,
-            statusz: 'Feldolgozás alatt',
-            mennyiseg: item.mennyiseg,
-            vevo_id: vevoResult.id
-          })
-        });
-      }
+    for (const item of cartItems) {
+      await fetch('http://localhost:5000/orders/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          termek: item.id,
+          statusz: 'Feldolgozás alatt',
+          mennyiseg: item.mennyiseg,
+          vevo_id: vevoResult.id,
+          ar: item.ar
+        })
+      });
+    }
 
-        // Email küldés
         const emailResponse = await fetch('http://localhost:4000/send-confirmation', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -145,7 +144,7 @@ const handleSubmitOrder = async () => {
           })
         });
         
-
+           
         const emailResult = await emailResponse.json();
         if (emailResult.success) {
           console.log('Email sikeresen elküldve!');
@@ -153,32 +152,40 @@ const handleSubmitOrder = async () => {
           console.error('Hiba az email küldésekor:', emailResult.error);
         }
   
+        const user = JSON.parse(localStorage.getItem('user'));
+if (user && user.f_azonosito) {
+  await fetch(`http://localhost:5000/api/update-order-stats`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      userId: user.f_azonosito,
+      orderAmount: finalPrice,
+      orderDate: new Date()
+    })
+  });
+}
+
         setOrderSuccess(true);
-      
-        // További kód...
+
         localStorage.removeItem('cartItems');
-      
-       
-  
       } catch (error) {
         console.error('Rendelési hiba:', error);
         alert('Hiba történt a rendelés során!');
       }
       setIsLoading(false);
     };
-
- 
+      
     const saveRatingToDatabase = async (rating, comment) => {
       try {
         const userData = JSON.parse(localStorage.getItem('user'));
-        const response = await fetch('http://localhost:4000/save-rating', {
+        const response = await fetch('http://localhost:5000/save-rating', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
             rating,
-            comment,
+            velemeny: comment || null,
             email: userData.email,
             orderDate: new Date()
           })
@@ -192,7 +199,6 @@ const handleSubmitOrder = async () => {
       }
     };
     
-  // Define textFieldStyle here
   const textFieldStyle = {
     '& .MuiOutlinedInput-root': {
       backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
@@ -234,13 +240,15 @@ const handleSubmitOrder = async () => {
     if (userData) {
       const user = JSON.parse(userData);
       if (user.kupon) {
-        // Extract percentage from coupon string
-        const percentage = parseInt(user.kupon.match(/\d+/)[0]);
-        setDiscountPercentage(percentage);
+        
+        const matches = user.kupon.match(/\d+/);
+        if (matches && matches.length > 0) {
+          const percentage = parseInt(matches[0]);
+          setDiscountPercentage(percentage);
+        }
       }
     }
   }, []);
-
   
 
     return (
@@ -255,10 +263,10 @@ const handleSubmitOrder = async () => {
     color: darkMode ? 'white' : 'black',
     minHeight: '100vh',
     transition: 'all 0.3s ease-in-out',
-    display: 'flex',           // Added for centering
-    alignItems: 'center',      // Added for vertical centering
-    justifyContent: 'center',  // Added for horizontal centering
-    padding: '0rem 0'          // Added for some vertical padding
+    display: 'flex',        
+    alignItems: 'center',      
+    justifyContent: 'center', 
+    padding: '3rem 0'         
   }}
 >
           <Container maxWidth="lg">
@@ -269,7 +277,7 @@ const handleSubmitOrder = async () => {
                 flexDirection: { xs: 'column', md: 'row' }
               }}
             >
-              {/* Bal oldali szállítási űrlap */}
+             
               <Card
                 elevation={8}
                 sx={{
@@ -297,7 +305,7 @@ const handleSubmitOrder = async () => {
                   Szállítási adatok
                 </Typography>
 
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
   <TextField
     fullWidth
     label="Név"
@@ -356,7 +364,7 @@ const handleSubmitOrder = async () => {
   />
 </Box>
               </Card>
-              {/* Jobb oldali összegzés */}
+             
               <Card
                 elevation={8}
                 sx={{
@@ -396,7 +404,7 @@ const handleSubmitOrder = async () => {
                       }}
                     >
            <Typography sx={{ color: '#fff' }}>
-    {item.nev} (x{item.mennyiseg})
+      {item.nev} - Méret: {item.size} (x{item.mennyiseg})
     </Typography>
 
     <Typography sx={{ color: '#fff' }}>
@@ -444,8 +452,8 @@ const handleSubmitOrder = async () => {
     display: 'flex', 
     gap: 2, 
     mt: 3,
-    justifyContent: 'space-between', // Jobb térközök
-    alignItems: 'center' // Függőleges középre igazítás
+    justifyContent: 'space-between',
+    alignItems: 'center' 
     }}>
     <Button
     variant="outlined"
@@ -453,7 +461,7 @@ const handleSubmitOrder = async () => {
     startIcon={<ArrowBackIcon />}
     onClick={() => navigate('/kezdolap')}
     sx={{
-      width: '40%', // Kisebb szélesség
+      width: '40%',
       py: 1.5,
       borderColor: darkMode ? '#666' : '#333',
       color: darkMode ? '#fff' : '#333',
@@ -475,7 +483,7 @@ const handleSubmitOrder = async () => {
     sx={{
       fontSize: '1.1rem',
               fontWeight: 600,
-      width: '55%', // Nagyobb szélesség
+      width: '55%',
       py: 1.5,
       backgroundColor: darkMode ? '#666' : '#333',
       '&:hover': {
@@ -490,8 +498,6 @@ const handleSubmitOrder = async () => {
     </Box>
               </Card>
             </Box>
-  
-            {/* Loading indicator here */}
             {isLoading && (
               <Box sx={{ position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
                 <CircularProgress />
