@@ -17,9 +17,9 @@ import {
   Card,
   Dialog,
   CardContent,
-  Stack,
-  Container,
-  Style
+  
+ 
+ 
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
@@ -53,8 +53,6 @@ import { useNavigate } from 'react-router-dom';
     const [wonPrize, setWonPrize] = useState('')
     const [spinComplete, setSpinComplete] = useState(false);
     const [showLogoutAlert, setShowLogoutAlert] = useState(false);
-    const [averageRating, setAverageRating] = useState(0);
-    const [totalRatings, setTotalRatings] = useState(0);
     const [ratings, setRatings] = useState([]);
     const scrollbarRef = useRef(null);
     const contentRef = useRef(null);
@@ -90,10 +88,6 @@ import { useNavigate } from 'react-router-dom';
       
       fetchRatings();
     }, []);
-      
- 
-    
-    
 
     const [ref, inView] = useInView({
       threshold: 0.2,
@@ -174,10 +168,10 @@ import { useNavigate } from 'react-router-dom';
         clearInterval(interval);
         const finalPrize = prizes[Math.floor(Math.random() * prizes.length)].option;
         
-        // Update user data with both prize and spin status
+    
         const user = JSON.parse(localStorage.getItem('user'));
         user.hasWonPrize = true;
-        user.hasSpun = true; // Add this flag
+        user.hasSpun = true;
         user.kupon = finalPrize;
         delete user.isNewRegistration;
         localStorage.setItem('user', JSON.stringify(user));
@@ -197,8 +191,6 @@ import { useNavigate } from 'react-router-dom';
       }
     }, 100);
   };
-  
-    
       return (
         <Dialog
           open={open}
@@ -269,7 +261,6 @@ import { useNavigate } from 'react-router-dom';
           >
             {isSpinning ? 'Sorsolás...' : 'Sorsol'}
           </Button>
-    
           <IconButton
             onClick={onClose}
             sx={{
@@ -287,67 +278,53 @@ import { useNavigate } from 'react-router-dom';
             <CloseIcon />
           </IconButton>
         </Dialog>
-        
       );
     };
-    
-    
-    
     useEffect(() => {
       const userData = localStorage.getItem('user');
       if (userData) {
         const user = JSON.parse(userData);
-        // Only show welcome dialog if new registration AND hasn't spun yet
         if (user.isNewRegistration && !user.hasSpun) {
           setShowWelcomeDialog(true);
         }
       }
     }, []);
-    
-  
     const handleSpinComplete = (prize) => {
       setSpinComplete(true);
       setShowWelcomeDialog(false);
-      // Itt kezeljük a nyereményt
       const user = JSON.parse(localStorage.getItem('user'));
       user.hasWonPrize = true;
       delete user.isNewRegistration;
       localStorage.setItem('user', JSON.stringify(user));
     };
-  
-   
-    
-    
     const images = [
       {
         img: polok,
-        title: "Friss drip érkezett!",
+        title: "Friss kollekció érkezett!",
         subtitle: "Dobd fel a szettjeid a legújabb kollekcióval! Ne maradj le róluk.",
         imageStyle: {}
       },
       {
         img: gatyak,
-        title: "Nyári szettek",
-        subtitle: "Lazulós cuccok a forró napokra. Válaszd ki a stílusodhoz illőt!",
+        title: "Téli gatyák",
+        subtitle: "Leghidegebb napokon is melegen tart!",
         imageStyle: { transform: 'translateY(-50px)' }
       },
       {
         img: pulcsik,
-        title: "Limited drip",
-        subtitle: "Limitált darabok, egyedi design. Csapj le rájuk, amíg van készleten!",
+        title: "Kényelmes pullover",
+        subtitle: "Ez a pullover minden alkalomra tökéletes, egyedi design. Csapj le rájuk, amíg van készleten!",
         imageStyle: {}
       }
     ];
 
     const styles = {
       root: {
-        overflowX: 'hidden',  // Prevents horizontal scrolling
+        overflowX: 'hidden', 
         width: '100%',
         position: 'relative'
       }
     };
-
-    
 
     const handleToggle = () => {
       setOpen((prevOpen) => !prevOpen);
@@ -425,18 +402,13 @@ import { useNavigate } from 'react-router-dom';
             const textElement = document.getElementById('slideText');
       
             if (imageElement && textElement) {
-              // Kicsúszás
               imageElement.style.animation = 'slideOutLeft 1.5s ease-in-out';
               textElement.style.animation = 'slideOutRight 1.5s ease-in-out';
-        
-              // Váltás és becsúszás
               setTimeout(() => {
                 setCurrentImageIndex(prev => prev === images.length - 1 ? 0 : prev + 1);
-          
                 requestAnimationFrame(() => {
                   imageElement.style.animation = 'slideInLeft 1.5s ease-in-out';
                   textElement.style.animation = 'slideInRight 1.5s ease-in-out';
-            
                   setTimeout(() => {
                     setIsAnimating(false);
                   }, 1500);
@@ -448,24 +420,18 @@ import { useNavigate } from 'react-router-dom';
         
         return () => clearInterval(timer);
       }, [isAnimating]);
-      
 
     return (
-
-// A fő div-nél adjuk hozzá a transition tulajdonságot:
-<div style={{
-  backgroundColor: darkMode ? '#333' : '#f5f5f5',
-  backgroundImage: darkMode 
-    ? 'radial-gradient(#444 1px, transparent 1px)'
-    : 'radial-gradient(#e0e0e0 1px, transparent 1px)',
-  backgroundSize: '20px 20px',
-  color: darkMode ? 'white' : 'black',
-  minHeight: '100vh',
-  transition: 'all 0.3s ease-in-out' // Ez adja az átmenetet
-}}>
-
-
-        
+      <div style={{
+        backgroundColor: darkMode ? '#333' : '#f5f5f5',
+        backgroundImage: darkMode 
+          ? 'radial-gradient(#444 1px, transparent 1px)'
+          : 'radial-gradient(#e0e0e0 1px, transparent 1px)',
+        backgroundSize: '20px 20px',
+        color: darkMode ? 'white' : 'black',
+        minHeight: '100vh',
+        transition: 'all 0.3s ease-in-out' 
+      }}>
 
         <Box
         sx={{
@@ -504,9 +470,9 @@ import { useNavigate } from 'react-router-dom';
         position: 'relative',
         width: '100%',
         boxSizing: 'border-box',
-        borderBottom: '3px solid #ffffff', // Add this border style
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', // Add shadow for better separation
-        marginBottom: '10px', // Add some space below the header
+        borderBottom: '3px solid #ffffff',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', 
+        marginBottom: '10px', 
       }}
     >
       <IconButton
@@ -521,9 +487,9 @@ import { useNavigate } from 'react-router-dom';
            sx={{
              fontWeight: 'bold',
              fontSize: {
-              xs: '1.1rem',    // Increased size for mobile
-              sm: '1.5rem',    // Tablet size stays the same
-              md: '2rem'       // Desktop size stays the same
+              xs: '1.1rem',
+              sm: '1.5rem',   
+              md: '2rem'       
             },
              textAlign: 'center',
              color: 'white',
@@ -548,120 +514,119 @@ import { useNavigate } from 'react-router-dom';
     }
   }}
 >
-  <ShoppingCartIcon />
-</IconButton>
+                <ShoppingCartIcon />
+              </IconButton>
+                                      <Button
+                                      ref={anchorRef}
+                                        onClick={handleToggle}
+                                        sx={{
+                                          color: '#fff',
+                                          zIndex: 1300,
+                                          border: '1px solid #fff',
+                                          borderRadius: '5px',
+                                          padding: '5px 10px',
+                                        }}
+                                      >
+                                        Profil
+                                      </Button>
+                              <Popper
+                open={open}
+                anchorEl={anchorRef.current}
+                placement="bottom-start"
+                transition
+                disablePortal
+                sx={{ 
+                  zIndex: 1300,
+                  mt: 1, 
+                  '& .MuiPaper-root': {
+                    overflow: 'hidden',
+                    borderRadius: '12px',
+                    boxShadow: darkMode 
+                      ? '0 8px 32px rgba(0, 0, 0, 0.4)'
+                      : '0 8px 32px rgba(0, 0, 0, 0.1)',
+                    border: darkMode 
+                      ? '1px solid rgba(255, 255, 255, 0.1)'
+                      : '1px solid rgba(0, 0, 0, 0.05)',
+                  }
+                }}
+              >
+                {({ TransitionProps, placement }) => (
+                  <Grow
+                    {...TransitionProps}
+                    style={{
+                      transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
+                    }}
+                  >
+                    <Paper
+                      sx={{
+                        backgroundColor: darkMode ? '#2d2d2d' : '#ffffff',
+                        minWidth: '200px',
+                      }}
+                    >
+                      <ClickAwayListener onClickAway={handleClose}>
+                        <MenuList 
+                          autoFocusItem={open} 
+                          onKeyDown={handleListKeyDown}
+                          sx={{ py: 1 }}
+                        >
+                          <MenuItem 
+                            onClick={handleClose}
+                            sx={{
+                              py: 1.5,
+                              px: 2,
+                              color: darkMode ? '#fff' : '#333',
+                              '&:hover': {
+                                backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)',
+                              },
+                              gap: 2,
+                            }}
+                          >
+                            <Typography variant="body1" sx={{ fontWeight: 500 }}>
+                              {userName} profilja
+                            </Typography>
+                          </MenuItem>
 
-<Button
-                  ref={anchorRef}
-                  onClick={handleToggle}
-                  sx={{
-                    color: '#fff',
-                    zIndex: 1300,
-                    border: '1px solid #fff',
-                    borderRadius: '5px',
-                    padding: '5px 10px',
-                  }}
-                >
-                  Profil
-                </Button>
-                <Popper
-  open={open}
-  anchorEl={anchorRef.current}
-  placement="bottom-start"
-  transition
-  disablePortal
-  sx={{ 
-    zIndex: 1300,
-    mt: 1, // Margin top for spacing
-    '& .MuiPaper-root': {
-      overflow: 'hidden',
-      borderRadius: '12px',
-      boxShadow: darkMode 
-        ? '0 8px 32px rgba(0, 0, 0, 0.4)'
-        : '0 8px 32px rgba(0, 0, 0, 0.1)',
-      border: darkMode 
-        ? '1px solid rgba(255, 255, 255, 0.1)'
-        : '1px solid rgba(0, 0, 0, 0.05)',
-    }
-  }}
->
-  {({ TransitionProps, placement }) => (
-    <Grow
-      {...TransitionProps}
-      style={{
-        transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
-      }}
-    >
-      <Paper
-        sx={{
-          backgroundColor: darkMode ? '#2d2d2d' : '#ffffff',
-          minWidth: '200px',
-        }}
-      >
-        <ClickAwayListener onClickAway={handleClose}>
-          <MenuList 
-            autoFocusItem={open} 
-            onKeyDown={handleListKeyDown}
-            sx={{ py: 1 }}
-          >
-            <MenuItem 
-              onClick={handleClose}
-              sx={{
-                py: 1.5,
-                px: 2,
-                color: darkMode ? '#fff' : '#333',
-                '&:hover': {
-                  backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)',
-                },
-                gap: 2,
-              }}
-            >
-              <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                {userName} profilja
-              </Typography>
-            </MenuItem>
+                          <MenuItem 
+                            onClick={() => {
+                              handleClose();
+                              navigate('/fiokom');
+                            }}
+                            sx={{
+                              py: 1.5,
+                              px: 2,
+                              color: darkMode ? '#fff' : '#333',
+                              '&:hover': {
+                                backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)',
+                              },
+                              gap: 2,
+                            }}
+                          >
+                            <Typography variant="body1">Fiókom</Typography>
+                          </MenuItem>
 
-            <MenuItem 
-              onClick={() => {
-                handleClose();
-                navigate('/fiokom');
-              }}
-              sx={{
-                py: 1.5,
-                px: 2,
-                color: darkMode ? '#fff' : '#333',
-                '&:hover': {
-                  backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.04)',
-                },
-                gap: 2,
-              }}
-            >
-              <Typography variant="body1">Fiókom</Typography>
-            </MenuItem>
-
-            <MenuItem 
-              onClick={handleLogout}
-              sx={{
-                py: 1.5,
-                px: 2,
-                color: '#ff4444',
-                '&:hover': {
-                  backgroundColor: 'rgba(255,68,68,0.1)',
-                },
-                gap: 2,
-                borderTop: '1px solid',
-                borderColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-                mt: 1,
-              }}
-            >
-              <Typography variant="body1">Kijelentkezés</Typography>
-            </MenuItem>
-          </MenuList>
-        </ClickAwayListener>
-      </Paper>
-    </Grow>
-  )}
-</Popper>
+                          <MenuItem 
+                            onClick={handleLogout}
+                            sx={{
+                              py: 1.5,
+                              px: 2,
+                              color: '#ff4444',
+                              '&:hover': {
+                                backgroundColor: 'rgba(255,68,68,0.1)',
+                              },
+                              gap: 2,
+                              borderTop: '1px solid',
+                              borderColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
+                              mt: 1,
+                            }}
+                          >
+                            <Typography variant="body1">Kijelentkezés</Typography>
+                          </MenuItem>
+                        </MenuList>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </Popper>
 
               </Box>
             ) : (
@@ -669,12 +634,12 @@ import { useNavigate } from 'react-router-dom';
 <Box sx={{ 
   display: 'flex', 
   justifyContent: {
-    xs: 'flex-end',  // Telefonos nézetben jobbra igazítás
-    sm: 'flex-end'   // Nagyobb képernyőkön is jobbra igazítás
+    xs: 'flex-end',  
+    sm: 'flex-end'
   },
   gap: {
-    xs: '5px',       // Telefonos nézetben kisebb távolság a gombok között
-    sm: '10px'       // Nagyobb képernyőkön nagyobb távolság
+    xs: '5px',     
+    sm: '10px'       
   }
 }}>
   <Button
@@ -685,24 +650,24 @@ import { useNavigate } from 'react-router-dom';
       border: '1px solid #fff',
       borderRadius: '5px',
       padding: {
-        xs: '2px 6px',    // Telefonos nézetben még kisebb padding
-        sm: '4px 9px',    // Tablet nézeten közepes padding
-        md: '5px 10px'    // Asztali nézeten eredeti padding
+        xs: '2px 6px',  
+        sm: '4px 9px',    
+        md: '5px 10px'   
       },
       fontSize: {
-        xs: '0.65rem',    // Telefonos nézetben még kisebb betűméret
-        sm: '0.85rem',    // Tablet nézeten közepes betűméret
-        md: '0.875rem'    // Asztali nézeten eredeti betűméret
+        xs: '0.65rem',    
+        sm: '0.85rem',   
+        md: '0.875rem'  
       },
       margin: {
-        xs: '0 2px',      // Telefonos nézetben még kisebb margó
-        sm: '0 7px',      // Tablet nézeten közepes margó
-        md: '0 10px'      // Asztali nézeten nagyobb margó
+        xs: '0 2px',
+        sm: '0 7px',      
+        md: '0 10px'      
       },
       minWidth: {
-        xs: '50px',       // Telefonos nézetben még kisebb minimum szélesség
-        sm: '80px',       // Tablet nézeten közepes minimum szélesség
-        md: '90px'        // Asztali nézeten nagyobb minimum szélesség
+        xs: '50px',       
+        sm: '80px',       
+        md: '90px'        
       },
       '&:hover': {
         backgroundColor: '#fff',
@@ -721,24 +686,24 @@ import { useNavigate } from 'react-router-dom';
       border: '1px solid #fff',
       borderRadius: '5px',
       padding: {
-        xs: '2px 6px',    // Telefonos nézetben még kisebb padding
-        sm: '4px 9px',    // Tablet nézeten közepes padding
-        md: '5px 10px'    // Asztali nézeten eredeti padding
+        xs: '2px 6px',    
+        sm: '4px 9px',   
+        md: '5px 10px'    
       },
       fontSize: {
-        xs: '0.65rem',    // Telefonos nézetben még kisebb betűméret
-        sm: '0.85rem',    // Tablet nézeten közepes betűméret
-        md: '0.875rem'    // Asztali nézeten eredeti betűméret
+        xs: '0.65rem',    
+        sm: '0.85rem',    
+        md: '0.875rem'    
       },
       margin: {
-        xs: '0 2px',      // Telefonos nézetben még kisebb margó
-        sm: '0 7px',      // Tablet nézeten közepes margó
-        md: '0 10px'      // Asztali nézeten nagyobb margó
+        xs: '0 2px',     
+        sm: '0 7px',      
+        md: '0 10px'     
       },
       minWidth: {
-        xs: '50px',       // Telefonos nézetben még kisebb minimum szélesség
-        sm: '80px',       // Tablet nézeten közepes minimum szélesség
-        md: '90px'        // Asztali nézeten nagyobb minimum szélesség
+        xs: '50px',       
+        sm: '80px',       
+        md: '90px'        
       },
       '&:hover': {
         backgroundColor: '#fff',
@@ -749,8 +714,6 @@ import { useNavigate } from 'react-router-dom';
     Sign Up
   </Button>
 </Box>
-
-
               </>
             )}
           </Box>
@@ -789,35 +752,33 @@ import { useNavigate } from 'react-router-dom';
   variant="h1"
   sx={{
     fontSize: {
-      xs: '24px',    // Mobil nézeten kisebb betűméret
-      sm: '30px',    // Tablet nézeten közepes betűméret
-      md: '36px'     // Asztali nézeten eredeti betűméret
+      xs: '24px',   
+      sm: '30px',    
+      md: '36px'    
     },
     textAlign: 'center',
     fontWeight: {
-      xs: 500,       // Mobil nézeten kicsit vékonyabb
-      sm: 600,       // Tablet nézeten közepes
-      md: 600        // Asztali nézeten eredeti
+      xs: 500,      
+      sm: 600,      
+      md: 600
     },
     lineHeight: {
-      xs: 1.3,       // Mobil nézeten sűrűbb
-      sm: 1.4,       // Tablet nézeten közepes
-      md: 1.5        // Asztali nézeten eredeti
+      xs: 1.3,      
+      sm: 1.4,      
+      md: 1.5       
     },
     padding: {
-      xs: '0 15px',  // Mobil nézeten oldalirányú padding
-      sm: '0 10px',  // Tablet nézeten kisebb oldalirányú padding
-      md: '0'        // Asztali nézeten nincs extra padding
+      xs: '0 15px', 
+      sm: '0 10px',  
+      md: '0'      
     },
-    color: darkMode ? 'white' : 'black'  // Sötét/világos mód támogatás
+    color: darkMode ? 'white' : 'black'  
   }}
 >
   Üdvözlünk az Adali Clothing Webáruházban
 </Typography>
 
       </div>
-
-
 
       <div 
   ref={ref}
@@ -836,14 +797,14 @@ import { useNavigate } from 'react-router-dom';
   sx={{
     display: 'flex',
     flexDirection: {
-      xs: 'column',  // Mobil nézeten egymás alatt
-      sm: 'column',  // Tablet nézeten egymás alatt
-      md: 'row'      // Asztali nézeten egymás mellett
+      xs: 'column',  
+      sm: 'column',  
+      md: 'row'      
     },
     justifyContent: 'center',
     alignItems: {
-      xs: 'center',  // Mobil nézeten középre igazítás
-      md: 'stretch'  // Asztali nézeten nyújtás
+      xs: 'center', 
+      md: 'stretch'  
     },
     gap: '20px',
     padding: '20px',
@@ -856,19 +817,19 @@ import { useNavigate } from 'react-router-dom';
   <Card
     sx={{
       flex: {
-        xs: '1 1 auto',   // Mobil nézeten teljes szélesség
-        sm: '1 1 auto',   // Tablet nézeten teljes szélesség
-        md: '1 1 300px'   // Asztali nézeten fix méret
+        xs: '1 1 auto',  
+        sm: '1 1 auto',   
+        md: '1 1 300px'  
       },
       maxWidth: {
-        xs: '90%',        // Mobil nézeten 90% szélesség
-        sm: '450px',      // Tablet nézeten korlátozott szélesség
-        md: '600px'       // Asztali nézeten eredeti szélesség
+        xs: '90%',      
+        sm: '450px',      
+        md: '600px'       
       },
       margin: {
-        xs: '0 auto 20px', // Mobil nézeten középre igazítás és alsó margó
-        sm: '0 auto 20px', // Tablet nézeten középre igazítás és alsó margó
-        md: '0'            // Asztali nézeten nincs extra margó
+        xs: '0 auto 20px',
+        sm: '0 auto 20px',
+        md: '0'           
       },
       transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
       position: 'relative',
@@ -877,9 +838,9 @@ import { useNavigate } from 'react-router-dom';
       borderRadius: '10px',
       '&:hover': {
         transform: {
-          xs: 'none',       // Mobil nézeten nincs animáció (érintőképernyő miatt)
-          sm: 'translateY(-5px)', // Tablet nézeten kisebb animáció
-          md: 'translateY(-8px)'  // Asztali nézeten eredeti animáció
+          xs: 'none',       
+          sm: 'translateY(-5px)',
+          md: 'translateY(-8px)'  
         },
         boxShadow: darkMode
           ? '0 20px 40px rgba(0,0,0,0.4)'
@@ -901,17 +862,17 @@ import { useNavigate } from 'react-router-dom';
           sx={{
             width: '100%',
             height: {
-              xs: '300px',  // Mobil nézeten kisebb magasság
-              sm: '400px',  // Tablet nézeten közepes magasság
-              md: '500px'   // Asztali nézeten eredeti magasság
+              xs: '300px',  
+              sm: '400px', 
+              md: '500px'   
             },
             objectFit: 'cover',
             transition: 'transform 0.3s ease',
             '&:hover': {
               transform: {
-                xs: 'none',    // Mobil nézeten nincs animáció
-                sm: 'scale(1.05)', // Tablet nézeten kisebb nagyítás
-                md: 'scale(1.1)'   // Asztali nézeten eredeti nagyítás
+                xs: 'none',   
+                sm: 'scale(1.05)',
+                md: 'scale(1.1)'   
               }
             }
           }}
@@ -923,51 +884,51 @@ import { useNavigate } from 'react-router-dom';
       variant="body1"
       sx={{
         fontSize: {
-          xs: '14px',     // mobil méret
-          sm: '16px',     // tablet méret
-          md: '18px'      // asztali méret
+          xs: '14px',    
+          sm: '16px',    
+          md: '18px'     
         },
         padding: {
-          xs: '8px',      // mobil méret
-          sm: '10px',     // tablet méret
-          md: '10px'      // asztali méret
+          xs: '8px',     
+          sm: '10px',     
+          md: '10px'    
         },
         color: 'white',
         textAlign: 'center',
         transition: 'transform 0.3s ease',
         marginTop: {
-          xs: '5px',      // mobil méret
-          sm: '8px',      // tablet méret
-          md: '10px'      // asztali méret
+          xs: '5px',     
+          sm: '8px',     
+          md: '10px'      
         },
         lineHeight: {
-          xs: 1.4,        // mobil méret
-          sm: 1.5,        // tablet méret
-          md: 1.6         // asztali méret
+          xs: 1.4,       
+          sm: 1.5,        
+          md: 1.6         
         },
         fontWeight: 400
       }}
     >
-      Csekk a legmenőbb felhasználó cuccokat! Találd meg a következő kedvenc ruhadarabod.
+    Nézd meg a legmenőbb felhasználók által feltöltött cuccokat! Találd meg a következő kedvenc ruhadarabod.
     </Typography>
   </Card>
 
   <Card
     sx={{
       flex: {
-        xs: '1 1 auto',   // Mobil nézeten teljes szélesség
-        sm: '1 1 auto',   // Tablet nézeten teljes szélesség
-        md: '1 1 300px'   // Asztali nézeten fix méret
+        xs: '1 1 auto',  
+        sm: '1 1 auto',   
+        md: '1 1 300px'  
       },
       maxWidth: {
-        xs: '90%',        // Mobil nézeten 90% szélesség
-        sm: '450px',      // Tablet nézeten korlátozott szélesség
-        md: '600px'       // Asztali nézeten eredeti szélesség
+        xs: '90%',        
+        sm: '450px',     
+        md: '600px'     
       },
       margin: {
-        xs: '0 auto 20px', // Mobil nézeten középre igazítás és alsó margó
-        sm: '0 auto 20px', // Tablet nézeten középre igazítás és alsó margó
-        md: '0'            // Asztali nézeten nincs extra margó
+        xs: '0 auto 20px',
+        sm: '0 auto 20px', 
+        md: '0'           
       },
       transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
       position: 'relative',
@@ -976,9 +937,9 @@ import { useNavigate } from 'react-router-dom';
       borderRadius: '10px',
       '&:hover': {
         transform: {
-          xs: 'none',       // Mobil nézeten nincs animáció (érintőképernyő miatt)
-          sm: 'translateY(-5px)', // Tablet nézeten kisebb animáció
-          md: 'translateY(-8px)'  // Asztali nézeten eredeti animáció
+          xs: 'none',      
+          sm: 'translateY(-5px)', 
+          md: 'translateY(-8px)' 
         },
         boxShadow: darkMode
           ? '0 20px 40px rgba(0,0,0,0.4)'
@@ -1000,17 +961,17 @@ import { useNavigate } from 'react-router-dom';
           sx={{
             width: '100%',
             height: {
-              xs: '300px',  // Mobil nézeten kisebb magasság
-              sm: '400px',  // Tablet nézeten közepes magasság
-              md: '500px'   // Asztali nézeten eredeti magasság
+              xs: '300px',  
+              sm: '400px', 
+              md: '500px'  
             },
             objectFit: 'cover',
             transition: 'transform 0.3s ease',
             '&:hover': {
               transform: {
-                xs: 'none',    // Mobil nézeten nincs animáció
-                sm: 'scale(1.05)', // Tablet nézeten kisebb nagyítás
-                md: 'scale(1.1)'   // Asztali nézeten eredeti nagyítás
+                xs: 'none',  
+                sm: 'scale(1.05)', 
+                md: 'scale(1.1)'  
               }
             }
           }}
@@ -1022,27 +983,27 @@ import { useNavigate } from 'react-router-dom';
       variant="body1"
       sx={{
         fontSize: {
-          xs: '14px',     // mobil méret
-          sm: '16px',     // tablet méret
-          md: '18px'      // asztali méret
+          xs: '14px',     
+          sm: '16px',   
+          md: '18px'      
         },
         padding: {
-          xs: '8px',      // mobil méret
-          sm: '10px',     // tablet méret
-          md: '10px'      // asztali méret
+          xs: '8px',     
+          sm: '10px',    
+          md: '10px'     
         },
         color: 'white',
         textAlign: 'center',
         transition: 'transform 0.3s ease',
         marginTop: {
-          xs: '5px',      // mobil méret
-          sm: '8px',      // tablet méret
-          md: '10px'      // asztali méret
+          xs: '5px',     
+          sm: '8px',      
+          md: '10px'     
         },
         lineHeight: {
-          xs: 1.4,        // mobil méret
-          sm: 1.5,        // tablet méret
-          md: 1.6         // asztali méret
+          xs: 1.4,        
+          sm: 1.5,        
+          md: 1.6        
         },
         fontWeight: 400
       }}
@@ -1054,19 +1015,19 @@ import { useNavigate } from 'react-router-dom';
   <Card
     sx={{
       flex: {
-        xs: '1 1 auto',   // Mobil nézeten teljes szélesség
-        sm: '1 1 auto',   // Tablet nézeten teljes szélesség
-        md: '1 1 300px'   // Asztali nézeten fix méret
+        xs: '1 1 auto',  
+        sm: '1 1 auto',
+        md: '1 1 300px'   
       },
       maxWidth: {
-        xs: '90%',        // Mobil nézeten 90% szélesség
-        sm: '450px',      // Tablet nézeten korlátozott szélesség
-        md: '600px'       // Asztali nézeten eredeti szélesség
+        xs: '90%',      
+        sm: '450px',      
+        md: '600px'      
       },
       margin: {
-        xs: '0 auto 20px', // Mobil nézeten középre igazítás és alsó margó
-        sm: '0 auto 20px', // Tablet nézeten középre igazítás és alsó margó
-        md: '0'            // Asztali nézeten nincs extra margó
+        xs: '0 auto 20px', 
+        sm: '0 auto 20px', 
+        md: '0'            
       },
       transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
       position: 'relative',
@@ -1075,9 +1036,9 @@ import { useNavigate } from 'react-router-dom';
       borderRadius: '10px',
       '&:hover': {
         transform: {
-          xs: 'none',       // Mobil nézeten nincs animáció (érintőképernyő miatt)
-          sm: 'translateY(-5px)', // Tablet nézeten kisebb animáció
-          md: 'translateY(-8px)'  // Asztali nézeten eredeti animáció
+          xs: 'none',      
+          sm: 'translateY(-5px)', 
+          md: 'translateY(-8px)' 
         },
         boxShadow: darkMode
           ? '0 20px 40px rgba(0,0,0,0.4)'
@@ -1099,17 +1060,17 @@ import { useNavigate } from 'react-router-dom';
           sx={{
             width: '100%',
             height: {
-              xs: '300px',  // Mobil nézeten kisebb magasság
-              sm: '400px',  // Tablet nézeten közepes magasság
-              md: '500px'   // Asztali nézeten eredeti magasság
+              xs: '300px', 
+              sm: '400px', 
+              md: '500px'  
             },
             objectFit: 'cover',
             transition: 'transform 0.3s ease',
             '&:hover': {
               transform: {
-                xs: 'none',    // Mobil nézeten nincs animáció
-                sm: 'scale(1.05)', // Tablet nézeten kisebb nagyítás
-                md: 'scale(1.1)'   // Asztali nézeten eredeti nagyítás
+                xs: 'none',   
+                sm: 'scale(1.05)', 
+                md: 'scale(1.1)' 
               }
             }
           }}
@@ -1121,27 +1082,27 @@ import { useNavigate } from 'react-router-dom';
       variant="body1"
       sx={{
         fontSize: {
-          xs: '14px',     // mobil méret
-          sm: '16px',     // tablet méret
-          md: '18px'      // asztali méret
+          xs: '14px',    
+          sm: '16px',   
+          md: '18px'     
         },
         padding: {
-          xs: '8px',      // mobil méret
-          sm: '10px',     // tablet méret
-          md: '10px'      // asztali méret
+          xs: '8px',    
+          sm: '10px',    
+          md: '10px'      
         },
         color: 'white',
         textAlign: 'center',
         transition: 'transform 0.3s ease',
         marginTop: {
-          xs: '5px',      // mobil méret
-          sm: '8px',      // tablet méret
-          md: '10px'      // asztali méret
+          xs: '5px',     
+          sm: '8px',      
+          md: '10px'     
         },
         lineHeight: {
-          xs: 1.4,        // mobil méret
-          sm: 1.5,        // tablet méret
-          md: 1.6         // asztali méret
+          xs: 1.4,       
+          sm: 1.5,       
+          md: 1.6         
         },
         fontWeight: 400
       }}
@@ -1158,9 +1119,9 @@ import { useNavigate } from 'react-router-dom';
   sx={{
     textAlign: 'center',
     fontSize: {
-      xs: '1.5rem',    // Mobil nézeten kisebb betűméret
-      sm: '2rem',      // Tablet nézeten közepes betűméret
-      md: '2.5rem'     // Asztali nézeten eredeti betűméret
+      xs: '1.5rem',   
+      sm: '2rem',     
+      md: '2.5rem'    
     },
     fontWeight: 'bold',
     background: darkMode
@@ -1170,18 +1131,18 @@ import { useNavigate } from 'react-router-dom';
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
     margin: {
-      xs: '40px 20px',  // Mobil nézeten kisebb margó és oldalirányú margó
-      sm: '60px 20px',  // Tablet nézeten közepes margó és oldalirányú margó
-      md: '80px 0'      // Asztali nézeten eredeti margó
+      xs: '40px 20px', 
+      sm: '60px 20px', 
+      md: '80px 0'     
     },
     padding: {
-      xs: '0 10px',     // Mobil nézeten kis padding
-      sm: '0',          // Tablet és asztali nézeten nincs padding
+      xs: '0 10px',     
+      sm: '0',         
     },
     lineHeight: {
-      xs: 1.3,          // Mobil nézeten kisebb sormagasság
-      sm: 1.4,          // Tablet nézeten közepes sormagasság
-      md: 1.5           // Asztali nézeten nagyobb sormagasság
+      xs: 1.3,         
+      sm: 1.4,         
+      md: 1.5          
     },
     animation: 'fadeIn 1s ease-out',
     '@keyframes fadeIn': {
@@ -1223,8 +1184,8 @@ import { useNavigate } from 'react-router-dom';
     sx={{
       display: 'flex',
       flexDirection: {
-        xs: 'column',  // Mobil nézeten egymás alatt
-        md: 'row'      // Asztali nézeten egymás mellett
+        xs: 'column', 
+        md: 'row'      
       },
       alignItems: 'center',
       justifyContent: {
@@ -1390,14 +1351,14 @@ import { useNavigate } from 'react-router-dom';
       transform: initialPosition.transform,
       zIndex: 1400,
       width: {
-        xs: '90%',    // Mobil nézeten a képernyő 90%-a
-        sm: '400px',  // Tablet nézeten fix szélesség
-        md: 'auto'    // Asztali nézeten eredeti méret
+        xs: '90%',   
+        sm: '400px', 
+        md: 'auto'    
       },
       maxWidth: {
-        xs: '350px',  // Mobil nézeten maximum 350px
-        sm: '450px',  // Tablet nézeten maximum 450px
-        md: '500px'   // Asztali nézeten maximum 500px
+        xs: '350px',
+        sm: '450px', 
+        md: '500px'   
       },
       animation: 'popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
       '@keyframes popIn': {
@@ -1418,8 +1379,8 @@ import { useNavigate } from 'react-router-dom';
     <Card
       sx={{
         minWidth: {
-          xs: '100%',  // Mobil nézeten teljes szélesség
-          sm: '350px'  // Tablet és asztali nézeten minimum 350px
+          xs: '100%', 
+          sm: '350px'  
         },
         backgroundColor: darkMode ? 'rgba(45, 45, 45, 0.95)' : 'rgba(255, 255, 255, 0.95)',
         backdropFilter: 'blur(10px)',
@@ -1428,8 +1389,8 @@ import { useNavigate } from 'react-router-dom';
           ? '0 8px 32px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.1)' 
           : '0 8px 32px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(0, 0, 0, 0.05)',
         borderRadius: {
-          xs: '15px',  // Mobil nézeten kisebb lekerekítés
-          sm: '20px'   // Tablet és asztali nézeten nagyobb lekerekítés
+          xs: '15px', 
+          sm: '20px'  
         },
         overflow: 'hidden',
       }}
@@ -1452,9 +1413,9 @@ import { useNavigate } from 'react-router-dom';
       <CardContent 
         sx={{ 
           p: {
-            xs: 2.5,  // Mobil nézeten kisebb padding
-            sm: 3,    // Tablet nézeten közepes padding
-            md: 4     // Asztali nézeten nagyobb padding
+            xs: 2.5,  
+            sm: 3,   
+            md: 4     
           }
         }}
       >
@@ -1465,9 +1426,9 @@ import { useNavigate } from 'react-router-dom';
               fontWeight: 600,
               mb: 1,
               fontSize: {
-                xs: '1.2rem',  // Mobil nézeten kisebb betűméret
-                sm: '1.4rem',  // Tablet nézeten közepes betűméret
-                md: '1.5rem'   // Asztali nézeten nagyobb betűméret
+                xs: '1.2rem',  
+                sm: '1.4rem', 
+                md: '1.5rem'   
               },
               background: darkMode 
                 ? 'linear-gradient(45deg, #90caf9, #42a5f5)' 
@@ -1484,8 +1445,8 @@ import { useNavigate } from 'react-router-dom';
             sx={{ 
               color: darkMode ? '#aaa' : '#666',
               fontSize: {
-                xs: '0.9rem',  // Mobil nézeten kisebb betűméret
-                sm: '1rem'     // Tablet és asztali nézeten normál betűméret
+                xs: '0.9rem',  
+                sm: '1rem'    
               }
             }}
           >
@@ -1496,8 +1457,8 @@ import { useNavigate } from 'react-router-dom';
           sx={{ 
             display: 'flex', 
             flexDirection: {
-              xs: 'column',  // Mobil nézeten egymás alatt
-              sm: 'row'      // Tablet és asztali nézeten egymás mellett
+              xs: 'column',  
+              sm: 'row'     
             },
             gap: 2,
             justifyContent: 'space-between'
@@ -1508,8 +1469,8 @@ import { useNavigate } from 'react-router-dom';
             sx={{
               flex: 1,
               py: {
-                xs: 1,    // Mobil nézeten kisebb padding
-                sm: 1.5   // Tablet és asztali nézeten nagyobb padding
+                xs: 1,   
+                sm: 1.5   
               },
               borderRadius: '12px',
               backgroundColor: darkMode ? 'rgba(144, 202, 249, 0.1)' : 'rgba(25, 118, 210, 0.1)',
@@ -1520,8 +1481,8 @@ import { useNavigate } from 'react-router-dom';
                 transform: 'translateY(-2px)',
               },
               mb: {
-                xs: 1,    // Mobil nézeten alsó margó
-                sm: 0     // Tablet és asztali nézeten nincs alsó margó
+                xs: 1,    
+                sm: 0     
               }
             }}
           >
@@ -1532,8 +1493,8 @@ import { useNavigate } from 'react-router-dom';
             sx={{
               flex: 1,
               py: {
-                xs: 1,    // Mobil nézeten kisebb padding
-                sm: 1.5   // Tablet és asztali nézeten nagyobb padding
+                xs: 1,    
+                sm: 1.5   
               },
               borderRadius: '12px',
               background: darkMode 
@@ -1554,18 +1515,11 @@ import { useNavigate } from 'react-router-dom';
     </Card>
   </Box>
 )}
-
- 
-
-
-{/* CouponAlert komponens reszponzív beállításokkal */}
 <CouponAlert
   open={showWelcomeDialog}
   onClose={() => setShowWelcomeDialog(false)}
   darkMode={darkMode}
 />
-
-{/* Sikeres nyeremény dialog reszponzív beállításokkal */}
 <Dialog
   open={showSuccessAlert}
   onClose={() => setShowSuccessAlert(false)}
@@ -1573,21 +1527,21 @@ import { useNavigate } from 'react-router-dom';
     '& .MuiDialog-paper': {
       backgroundColor: darkMode ? '#1E1E1E' : '#fff',
       borderRadius: {
-        xs: '15px',    // Mobil nézeten kisebb lekerekítés
-        sm: '25px'     // Tablet és asztali nézeten eredeti lekerekítés
+        xs: '15px',   
+        sm: '25px'    
       },
       padding: {
-        xs: '1.5rem',  // Mobil nézeten kisebb padding
-        sm: '2rem'     // Tablet és asztali nézeten eredeti padding
+        xs: '1.5rem',  
+        sm: '2rem'    
       },
       minWidth: {
-        xs: '85%',     // Mobil nézeten a képernyő 85%-a
-        sm: '350px',   // Tablet nézeten minimum 350px
-        md: '400px'    // Asztali nézeten eredeti 400px
+        xs: '85%',     
+        sm: '350px',   
+        md: '400px'   
       },
       maxWidth: {
-        xs: '95%',     // Mobil nézeten maximum a képernyő 95%-a
-        sm: '450px'    // Tablet és asztali nézeten maximum 450px
+        xs: '95%',     
+        sm: '450px'
       },
       textAlign: 'center',
       animation: 'popIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
@@ -1604,8 +1558,8 @@ import { useNavigate } from 'react-router-dom';
       color: '#60BA97', 
       mb: 2,
       fontSize: {
-        xs: '1.2rem',  // Mobil nézeten kisebb betűméret
-        sm: '1.5rem'   // Tablet és asztali nézeten eredeti betűméret
+        xs: '1.2rem', 
+        sm: '1.5rem'   
       }
     }}
   >
@@ -1617,8 +1571,8 @@ import { useNavigate } from 'react-router-dom';
       color: darkMode ? '#fff' : '#333', 
       mb: 3,
       fontSize: {
-        xs: '0.9rem',  // Mobil nézeten kisebb betűméret
-        sm: '1rem'     // Tablet és asztali nézeten eredeti betűméret
+        xs: '0.9rem', 
+        sm: '1rem'    
       }
     }}
   >
@@ -1630,12 +1584,12 @@ import { useNavigate } from 'react-router-dom';
       background: 'linear-gradient(45deg, #60BA97, #4e9d7e)',
       color: '#fff',
       padding: {
-        xs: '6px 16px',  // Mobil nézeten kisebb padding
-        sm: '8px 22px'   // Tablet és asztali nézeten nagyobb padding
+        xs: '6px 16px', 
+        sm: '8px 22px'  
       },
       fontSize: {
-        xs: '0.85rem',   // Mobil nézeten kisebb betűméret
-        sm: '0.9rem'     // Tablet és asztali nézeten eredeti betűméret
+        xs: '0.85rem',   
+        sm: '0.9rem'    
       },
       '&:hover': { transform: 'scale(1.05)' }
     }}
@@ -1650,8 +1604,6 @@ import { useNavigate } from 'react-router-dom';
   darkMode={darkMode}
   onSpinComplete={handleSpinComplete}
 />
-
-{/* Vásárlói vélemények cím reszponzív beállításokkal */}
 <Typography 
   variant="h4" 
   sx={{
@@ -1659,45 +1611,44 @@ import { useNavigate } from 'react-router-dom';
     mb: 2,
     color: darkMode ? '#fff' : '#333',
     fontSize: {
-      xs: '1.3rem',   // Mobil nézeten kisebb betűméret
-      sm: '1.6rem',   // Tablet nézeten közepes betűméret
-      md: '2rem'      // Asztali nézeten eredeti betűméret
+      xs: '1.3rem',  
+      sm: '1.6rem',   
+      md: '2rem'      
     },
     padding: {
-      xs: '0 15px',   // Mobil nézeten oldalirányú padding
-      sm: '0'         // Tablet és asztali nézeten nincs extra padding
+      xs: '0 15px',  
+      sm: '0'        
     },
     mt: {
-      xs: 4,          // Mobil nézeten nagyobb felső margó
-      sm: 5           // Tablet és asztali nézeten még nagyobb felső margó
+      xs: 4,          
+      sm: 5         
     }
   }}
 >
   Vásárlói Vélemények
 </Typography>
 
-{/* Scrollbar reszponzív beállításokkal */}
 <Box
   ref={scrollbarRef}
   sx={{
     width: {
-      xs: '90%',      // Mobil nézeten a képernyő 90%-a
-      sm: '95%',      // Tablet nézeten a képernyő 95%-a
-      md: '100%'      // Asztali nézeten teljes szélesség
+      xs: '90%',      
+      sm: '95%',    
+      md: '100%'    
     },
-    margin: '0 auto', // Középre igazítás
+    margin: '0 auto',
     height: {
-      xs: '8px',      // Mobil nézeten kisebb magasság
-      sm: '10px',     // Tablet nézeten közepes magasság
-      md: '12px'      // Asztali nézeten eredeti magasság
+      xs: '8px',      
+      sm: '10px',   
+      md: '12px'     
     },
     mb: 2,
     overflowX: 'auto',
     '&::-webkit-scrollbar': {
       height: {
-        xs: '8px',    // Mobil nézeten kisebb scrollbar
-        sm: '10px',   // Tablet nézeten közepes scrollbar
-        md: '12px'    // Asztali nézeten eredeti scrollbar
+        xs: '8px', 
+        sm: '10px',  
+        md: '12px'   
       },
       backgroundColor: darkMode ? '#444' : '#eee'
     },
@@ -1717,15 +1668,14 @@ import { useNavigate } from 'react-router-dom';
   <Box sx={{ minWidth: '200%' }}></Box>
 </Box>
 
-{/* Vélemények konténer reszponzív beállításokkal */}
 <Box
   ref={contentRef}
   sx={{
     display: 'flex',
     gap: {
-      xs: 2,          // Mobil nézeten kisebb rés
-      sm: 2.5,        // Tablet nézeten közepes rés
-      md: 3           // Asztali nézeten eredeti rés
+      xs: 2,         
+      sm: 2.5,     
+      md: 3          
     },
     overflowX: 'auto',
     scrollbarWidth: 'none',
@@ -1738,16 +1688,16 @@ import { useNavigate } from 'react-router-dom';
       display: 'none'
     },
     padding: {
-      xs: '0 15px 20px',  // Mobil nézeten kisebb padding
-      sm: '0 20px 20px',  // Tablet nézeten közepes padding
-      md: '0 0 20px'      // Asztali nézeten csak alsó padding
+      xs: '0 15px 20px',  
+      sm: '0 20px 20px',
+      md: '0 0 20px'    
     },
     width: {
-      xs: '100%',         // Mobil nézeten teljes szélesség
-      sm: '95%',          // Tablet nézeten 95%
-      md: '100%'          // Asztali nézeten teljes szélesség
+      xs: '100%',        
+      sm: '95%',          
+      md: '100%'        
     },
-    margin: '0 auto'      // Középre igazítás
+    margin: '0 auto'   
   }}
 >
   {Array.isArray(ratings) && ratings.map((rating, index) => (
@@ -1756,27 +1706,27 @@ import { useNavigate } from 'react-router-dom';
       sx={{
         backgroundColor: darkMode ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.02)',
         padding: {
-          xs: 2,           // Mobil nézeten kisebb padding
-          sm: 2.5,         // Tablet nézeten közepes padding
-          md: 3            // Asztali nézeten eredeti padding
+          xs: 2,           
+          sm: 2.5,      
+          md: 3            
         },
         borderRadius: {
-          xs: 3,           // Mobil nézeten kisebb lekerekítés
-          sm: 4,           // Tablet nézeten közepes lekerekítés
-          md: 5            // Asztali nézeten eredeti lekerekítés
+          xs: 3,          
+          sm: 4,        
+          md: 5         
         },
         width: {
-          xs: '250px',     // Mobil nézeten kisebb szélesség
-          sm: '280px',     // Tablet nézeten közepes szélesség
-          md: '300px'      // Asztali nézeten eredeti szélesség
+          xs: '250px',   
+          sm: '280px',    
+          md: '300px'      
         },
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         gap: {
-          xs: 1.5,         // Mobil nézeten kisebb rés
-          sm: 1.8,         // Tablet nézeten közepes rés
-          md: 2            // Asztali nézeten eredeti rés
+          xs: 1.5,       
+          sm: 1.8,         
+          md: 2           
         },
         flexShrink: 0
       }}
@@ -1786,9 +1736,9 @@ import { useNavigate } from 'react-router-dom';
         sx={{ 
           color: darkMode ? '#fff' : '#333',
           fontSize: {
-            xs: '0.95rem',  // Mobil nézeten kisebb betűméret
-            sm: '1.1rem',   // Tablet nézeten közepes betűméret
-            md: '1.25rem'   // Asztali nézeten eredeti betűméret
+            xs: '0.95rem',
+            sm: '1.1rem',   
+            md: '1.25rem'   
           }
         }}
       >
@@ -1797,21 +1747,21 @@ import { useNavigate } from 'react-router-dom';
       <Rating 
         value={rating.rating} 
         readOnly 
-        size={window.innerWidth < 600 ? "medium" : "large"} // Dinamikus méret
+        size={window.innerWidth < 600 ? "medium" : "large"}
       />
       <Typography 
         sx={{ 
           color: darkMode ? '#ccc' : '#666', 
           fontSize: {
-            xs: '0.8rem',   // Mobil nézeten kisebb betűméret
-            sm: '0.85rem',  // Tablet nézeten közepes betűméret
-            md: '0.9rem'    // Asztali nézeten eredeti betűméret
+            xs: '0.8rem',   
+            sm: '0.85rem',  
+            md: '0.9rem'   
           },
           textAlign: 'center',
           maxHeight: {
-            xs: '60px',     // Mobil nézeten kisebb maximális magasság
-            sm: '80px',     // Tablet nézeten közepes maximális magasság
-            md: '100px'     // Asztali nézeten nagyobb maximális magasság
+            xs: '60px',    
+            sm: '80px',    
+            md: '100px'   
           },
           overflow: 'auto'
         }}
@@ -1822,9 +1772,9 @@ import { useNavigate } from 'react-router-dom';
         sx={{ 
           color: darkMode ? '#ccc' : '#666', 
           fontSize: {
-            xs: '0.7rem',   // Mobil nézeten kisebb betűméret
-            sm: '0.75rem',  // Tablet nézeten közepes betűméret
-            md: '0.8rem'    // Asztali nézeten eredeti betűméret
+            xs: '0.7rem',  
+            sm: '0.75rem', 
+            md: '0.8rem' 
           }
         }}
       >
@@ -1833,7 +1783,6 @@ import { useNavigate } from 'react-router-dom';
     </Box>
   ))}
 </Box>
-
 
 <Box sx={{ 
       backgroundColor: darkMode ? '#333' : '#f5f5f5',
@@ -1844,9 +1793,7 @@ import { useNavigate } from 'react-router-dom';
       pb: 8 
     }}>
     </Box>
-
 <Footer />
-
   </div>
     );
 };
