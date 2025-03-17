@@ -622,16 +622,23 @@ const AboutUs = () => {
         Üzleti Igazgató
       </Typography>
       <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
-        <IconButton size="small" sx={{ color: darkMode ? '#aaa' : '#666' }}>
-          <FacebookIcon fontSize="small" />
-        </IconButton>
-        <IconButton size="small" sx={{ color: darkMode ? '#aaa' : '#666' }}>
-          <TwitterIcon fontSize="small" />
-        </IconButton>
-        <IconButton size="small" sx={{ color: darkMode ? '#aaa' : '#666' }}>
-          <LinkedInIcon fontSize="small" />
-        </IconButton>
-      </Box>
+  <IconButton 
+    size="small" 
+    sx={{ color: darkMode ? '#aaa' : '#666' }}
+    component="a"
+    href="https://www.facebook.com/ref.adam_"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <FacebookIcon fontSize="small" />
+  </IconButton>
+  <IconButton size="small" sx={{ color: darkMode ? '#aaa' : '#666' }}>
+    <TwitterIcon fontSize="small" />
+  </IconButton>
+  <IconButton size="small" sx={{ color: darkMode ? '#aaa' : '#666' }}>
+    <LinkedInIcon fontSize="small" />
+  </IconButton>
+</Box>
     </TeamMember>
   </Grid>
 
@@ -667,16 +674,24 @@ const AboutUs = () => {
         Technológiai Vezető
       </Typography>
       <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1 }}>
-        <IconButton size="small" sx={{ color: darkMode ? '#aaa' : '#666' }}>
-          <InstagramIcon fontSize="small" />
-        </IconButton>
-        <IconButton size="small" sx={{ color: darkMode ? '#aaa' : '#666' }}>
-          <TwitterIcon fontSize="small" />
-        </IconButton>
-        <IconButton size="small" sx={{ color: darkMode ? '#aaa' : '#666' }}>
-          <LinkedInIcon fontSize="small" />
-        </IconButton>
-      </Box>
+  <IconButton 
+    size="small" 
+    sx={{ color: darkMode ? '#aaa' : '#666' }}
+    component="a"
+    href="https://www.instagram.com/csl._.mate/"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <InstagramIcon fontSize="small" />
+  </IconButton>
+  <IconButton size="small" sx={{ color: darkMode ? '#aaa' : '#666' }}>
+    <TwitterIcon fontSize="small" />
+  </IconButton>
+  <IconButton size="small" sx={{ color: darkMode ? '#aaa' : '#666' }}>
+    <LinkedInIcon fontSize="small" />
+  </IconButton>
+</Box>
+
     </TeamMember>
   </Grid>
 </Grid>
@@ -1084,7 +1099,7 @@ const AboutUs = () => {
                   height: '100%',
                   position: 'relative',
                   '&::before': {
-                    content: '"""',
+                    content: '"-"',
                     position: 'absolute',
                     top: '10px',
                     left: '15px',
@@ -1142,7 +1157,7 @@ const AboutUs = () => {
                   height: '100%',
                   position: 'relative',
                   '&::before': {
-                    content: '"""',
+                    content: '"-"',
                     position: 'absolute',
                     top: '10px',
                     left: '15px',
@@ -1200,7 +1215,7 @@ const AboutUs = () => {
                   height: '100%',
                   position: 'relative',
                   '&::before': {
-                    content: '"""',
+                    content: '"-"',
                     position: 'absolute',
                     top: '10px',
                     left: '15px',
@@ -1337,7 +1352,7 @@ const AboutUs = () => {
                         lineHeight: 1.7
                       }}
                     >
-                      1052 Budapest, Váci utca 10.
+                     Káptalanfa: 8471 Budapest, Dózsa utca 10.
                     </Typography>
                   </Box>
                   
@@ -1364,7 +1379,7 @@ const AboutUs = () => {
                         mb: 1
                       }}
                     >
-                      Budapest: 1052 Budapest, Váci utca 10.
+                     Káptalanfa: 8471 Budapest, Dózsa utca 10.
                     </Typography>
                     <Typography 
                       variant="body1" 
@@ -1377,7 +1392,7 @@ const AboutUs = () => {
                         lineHeight: 1.7
                       }}
                     >
-                      Debrecen: 4024 Debrecen, Piac utca 25.
+                      Balatonederics: 8312 Balatonederics, Piac utca 25.
                     </Typography>
                   </Box>
                   
@@ -1452,22 +1467,23 @@ const AboutUs = () => {
             </Grid>
 
             <Grid item xs={12} md={6} sx={{ ...fadeIn, animationDelay: '4.9s' }}>
-              <Box
-                component="iframe"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2695.6504865939837!2d19.05039931564576!3d47.49298770364844!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4741dc41c05a9b3d%3A0x4d3d5c0b0c11c0e8!2zVsOhY2kgdXRjYSwgQnVkYXBlc3Q!5e0!3m2!1shu!2shu!4v1648123456789!5m2!1shu!2shu"
-                sx={{
-                  width: '100%',
-                  height: '400px',
-                  border: 0,
-                  borderRadius: '16px',
-                  boxShadow: darkMode
-                    ? '0 8px 32px rgba(0, 0, 0, 0.3)'
-                    : '0 8px 32px rgba(0, 0, 0, 0.1)',
-                }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
+            <Box
+  component="iframe"
+  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2731.0576093774766!2d17.22589631560648!3d47.18967797915868!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x476bd7f5f8e5f8a7%3A0xb5c111a298c5d90!2zS8OhcHRhbGFuZmEsIETDs3pzYSBHecO2cmd5IHV0Y2E!5e0!3m2!1shu!2shu!4v1716212345678!5m2!1shu!2shu"
+  sx={{
+    width: '100%',
+    height: '400px',
+    border: 0,
+    borderRadius: '16px',
+    boxShadow: darkMode
+      ? '0 8px 32px rgba(0, 0, 0, 0.3)'
+      : '0 8px 32px rgba(0, 0, 0, 0.1)',
+  }}
+  allowFullScreen=""
+  loading="lazy"
+  referrerPolicy="no-referrer-when-downgrade"
+/>
+
             </Grid>
           </Grid>
         </Container>
@@ -1480,4 +1496,3 @@ const AboutUs = () => {
 };
 
 export default AboutUs;
-
