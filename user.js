@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, } from 'react-router-dom';
 import { 
   Box, 
   Container,
@@ -13,63 +13,39 @@ import {
   FormGroup,
   FormControlLabel,
   Switch,
-  Popper,
-  Grow,
-  Paper,
-  ClickAwayListener,
-  MenuList,
-  MenuItem
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import MenuIcon from '@mui/icons-material/Menu';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import Menu from '../menu2';
-
 
 export default function User() {
   const [products, setProducts] = useState([]);
   const [darkMode, setDarkMode] = useState(true);
   const navigate = useNavigate();
   const [sideMenuActive, setSideMenuActive] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState('');
-  const anchorRef = useRef(null);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState(null);
+  const [editFormData, setEditFormData] = useState({
+    nev: '',
+    ar: '',
+    leiras: '',
+    meret: '',
+    imageUrl: '',
+    images: []
+  });
 
   const toggleSideMenu = () => {
     setSideMenuActive(!sideMenuActive);
-  };
-
-  const handleCartClick = () => {
-    navigate('/kosar');
-  };
-
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
-
-  const handleClose = (event = {}) => {
-    if (event.target && anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
-    setOpen(false);
-  };
-
-  const handleListKeyDown = (event) => {
-    if (event.key === 'Tab') {
-      event.preventDefault();
-      setOpen(false);
-    } else if (event.key === 'Escape') {
-      setOpen(false);
-    }
-  };
-
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    setIsLoggedIn(false);
-    setOpen(false);
-    navigate('/sign');
   };
 
   useEffect(() => {
@@ -87,38 +63,83 @@ export default function User() {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [navigate]);
   
-
-   
-    useEffect(() => {
-      const fetchProducts = async () => {
-        try {
-          const response = await fetch('http://localhost:5000/products');
-          const data = await response.json();
-          setProducts(data);
-        } catch (error) {
-          console.log('Hiba:', error);
-        }
-      };
-      fetchProducts();
-    }, []);
-
-    const handleDelete = async (productId) => {
-      const megerosites = window.confirm("Biztosan törölni szeretnéd ezt a terméket?");
-    
-      if (megerosites) {
-        try {
-          const response = await fetch(`http://localhost:5000/products/${productId}`, {
-            method: 'DELETE'
-          });
-        
-          if (response.ok) {
-            setProducts(products.filter(product => product.id !== productId));
-          }
-        } catch (error) {
-          console.log('Törlési hiba:', error);
-        }
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/products');
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.log('Hiba:', error);
       }
     };
+    fetchProducts();
+  }, []);
+
+  const handleDelete = async (productId) => {
+    const megerosites = window.confirm("Biztosan törölni szeretnéd ezt a terméket?");
+  
+    if (megerosites) {
+      try {
+        const response = await fetch(`http://localhost:5000/products/${productId}`, {
+          method: 'DELETE'
+        });
+      
+        if (response.ok) {
+          setProducts(products.filter(product => product.id !== productId));
+        }
+      } catch (error) {
+        console.log('Törlési hiba:', error);
+      }
+    }
+  };
+
+  const handleEdit = (product) => {
+    setCurrentProduct(product);
+    setEditFormData({
+      nev: product.nev || '',
+      ar: product.ar || '',
+      leiras: product.leiras || '',
+      meret: product.meret || '',
+      imageUrl: product.imageUrl || '',
+      images: product.images ? (typeof product.images === 'string' ? JSON.parse(product.images) : product.images) : []
+    });
+    setEditDialogOpen(true);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData({
+      ...editFormData,
+      [name]: value
+    });
+  };
+
+  const handleSaveEdit = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/products/${currentProduct.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(editFormData)
+      });
+
+      if (response.ok) {
+        // Frissítjük a termékek listáját
+        const updatedProducts = products.map(product => 
+          product.id === currentProduct.id ? { ...product, ...editFormData } : product
+        );
+        setProducts(updatedProducts);
+        setEditDialogOpen(false);
+      } else {
+        console.log('Hiba a frissítés során');
+      }
+    } catch (error) {
+      console.log('Szerkesztési hiba:', error);
+    }
+  };
+
   return (
     <Box sx={{ 
       backgroundColor: darkMode ? '#333' : '#f5f5f5',
@@ -155,103 +176,8 @@ export default function User() {
         >
           Adali Clothing
         </Typography>
-
-        <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-          {isLoggedIn ? (
-            <Box sx={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-              <IconButton
-                onClick={handleCartClick}
-                sx={{
-                  color: '#fff',
-                  '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  }
-                }}
-              >
-                <ShoppingCartIcon />
-              </IconButton>
-              <Button
-                ref={anchorRef}
-                onClick={handleToggle}
-                sx={{
-                  color: '#fff',
-                  zIndex: 1300,
-                  border: '1px solid #fff',
-                  borderRadius: '5px',
-                  padding: '5px 10px',
-                }}
-              >
-                Profil
-              </Button>
-              <Popper
-                open={open}
-                anchorEl={anchorRef.current}
-                placement="bottom-start"
-                transition
-                disablePortal
-                sx={{ zIndex: 1300 }}
-              >
-                {({ TransitionProps, placement }) => (
-                  <Grow {...TransitionProps}>
-                    <Paper>
-                      <ClickAwayListener onClickAway={handleClose}>
-                        <MenuList autoFocusItem={open} onKeyDown={handleListKeyDown}>
-                          <MenuItem onClick={handleClose}>{userName} profilja</MenuItem>
-                          <MenuItem onClick={handleClose}>Fiókom</MenuItem>
-                          <MenuItem onClick={handleLogout}>Kijelentkezés</MenuItem>
-                        </MenuList>
-                      </ClickAwayListener>
-                    </Paper>
-                  </Grow>
-                )}
-              </Popper>
-            </Box>
-          ) : (
-            <>
-              <Button
-                component={Link}
-                to="/tadmin"
-                sx={{
-                  color: '#fff',
-                  border: '1px solid #fff',
-                  borderRadius: '5px',
-                  padding: '5px 10px',
-                  marginRight: '10px',
-                  '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  }
-                }}
-              >
-                Új termék feltöltése
-              </Button>
-
-              <Button
-                component={Link}
-                to="/termadmin"
-                sx={{
-                  color: '#fff',
-                  border: '1px solid #fff',
-                  borderRadius: '5px',
-                  padding: '5px 10px',
-                  marginRight: '10px',
-                  '&:hover': {
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                  }
-                }}
-              >
-                Termékek szerkesztése
-              </Button>
-              <Button component={Link} to="/sign" sx={{ color: 'white', border: '1px solid white' }}>
-                Sign In
-              </Button>
-              <Button component={Link} to="/signup" sx={{ color: 'white', border: '1px solid white' }}>
-                Sign Up
-              </Button>
-            </>
-          )}
-        </Box>
       </div>
-
+     
       {/* Side Menu */}
       <Box sx={{
         position: 'fixed',
@@ -302,7 +228,7 @@ export default function User() {
                       objectFit: 'contain'
                     }}
                     image={product.imageUrl}
-                    alt={product.title}
+                    alt={product.nev}
                   />
                   <Box sx={{ 
                     position: 'absolute',
@@ -321,6 +247,7 @@ export default function User() {
                       <DeleteIcon />
                     </IconButton>
                     <IconButton
+                      onClick={() => handleEdit(product)}
                       sx={{
                         backgroundColor: 'rgba(255, 255, 255, 0.9)',
                         '&:hover': { backgroundColor: 'blue', color: 'white' }
@@ -332,20 +259,103 @@ export default function User() {
                 </Box>
                 <CardContent>
                   <Typography variant="h6">
-                    {product.title}
+                    {product.nev}
                   </Typography>
                   <Typography variant="h6" color="primary">
-                    {product.price} Ft
+                    {product.ar} Ft
                   </Typography>
                   <Typography variant="body2">
-                    {product.description}
+                    {product.leiras}
+                  </Typography>
+                  <Typography variant="body2">
+                    Méret: {product.meret}
                   </Typography>
                 </CardContent>
               </Card>
             </Grid>
           ))}
         </Grid>
+        <Button
+          onClick={() => navigate('/admin')}
+          variant="contained"
+          sx={{ 
+            mt: 4,
+            mb: 3,
+            bgcolor: '#333',
+            '&:hover': {
+              bgcolor: '#555'
+            }
+          }}
+        >
+          Vissza az admin felületre
+        </Button>
       </Container>
+
+      {/* Szerkesztő dialógus */}
+      <Dialog 
+        open={editDialogOpen} 
+        onClose={() => setEditDialogOpen(false)}
+        fullWidth
+        maxWidth="md"
+      >
+        <DialogTitle>Termék szerkesztése</DialogTitle>
+        <DialogContent>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
+            <TextField
+              label="Termék neve"
+              name="nev"
+              value={editFormData.nev}
+              onChange={handleInputChange}
+              fullWidth
+            />
+            <TextField
+              label="Ár (Ft)"
+              name="ar"
+              type="number"
+              value={editFormData.ar}
+              onChange={handleInputChange}
+              fullWidth
+            />
+            <TextField
+              label="Leírás"
+              name="leiras"
+              value={editFormData.leiras}
+              onChange={handleInputChange}
+              multiline
+              rows={4}
+              fullWidth
+            />
+            <TextField
+              label="Méret"
+              name="meret"
+              value={editFormData.meret}
+              onChange={handleInputChange}
+              fullWidth
+            />
+            <TextField
+              label="Kép URL"
+              name="imageUrl"
+              value={editFormData.imageUrl}
+              onChange={handleInputChange}
+              fullWidth
+            />
+            {editFormData.imageUrl && (
+              <Box sx={{ mt: 2, textAlign: 'center' }}>
+                <Typography variant="subtitle1">Előnézet:</Typography>
+                <img 
+                  src={editFormData.imageUrl} 
+                  alt="Előnézet" 
+                  style={{ maxWidth: '100%', maxHeight: '200px', objectFit: 'contain' }} 
+                />
+              </Box>
+            )}
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditDialogOpen(false)}>Mégse</Button>
+          <Button onClick={handleSaveEdit} variant="contained" color="primary">Mentés</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
